@@ -1,0 +1,68 @@
+/* App B — Noms absurdes */
+
+.generator { display: grid; gap: var(--sp-6); align-items: start; }
+@media (min-width: 56rem) { .generator { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); } }
+.generator__controls { display: grid; gap: var(--sp-5); }
+.generator__go { width: 100%; }
+
+/* Catégories : vrais boutons radio, stylés en pastilles */
+.cats { border: 0; padding: 0; margin: 0; min-width: 0; }
+.cats legend { margin-bottom: var(--sp-3); padding: 0; }
+.cats__list { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.cat { position: relative; }
+.cat input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.cat > span {
+  display: inline-flex; align-items: center; gap: 0.4em;
+  padding: var(--sp-2) var(--sp-4);
+  border: 2px solid var(--border); border-radius: var(--radius-pill);
+  background: var(--surface); font-weight: 700; font-size: var(--fs-sm);
+  transition: transform var(--dur-fast) var(--ease-pop), background var(--dur-fast);
+}
+.cat:hover > span { transform: translateY(-2px); }
+.cat input:checked + span { background: var(--accent); color: var(--c-on-accent); border-color: var(--c-ink); box-shadow: var(--shadow-sm); transform: rotate(-2deg); }
+.cat input:focus-visible + span { outline: 3px solid var(--focus); outline-offset: 3px; }
+
+/* Résultat */
+.result { min-height: 22rem; display: flex; flex-direction: column; gap: var(--sp-4); overflow: hidden; }
+.result__top { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); }
+.result__emoji {
+  display: grid; place-items: center; width: 4.4rem; height: 4.4rem; font-size: 2.4rem;
+  background: var(--c-paper); border: var(--bw) solid var(--c-ink); border-radius: 50%;
+  box-shadow: var(--shadow-sm); transform: rotate(-8deg);
+}
+.result__cat { background: var(--c-paper); color: var(--c-ink); border-color: var(--c-ink); font-size: var(--fs-sm); }
+.result__name {
+  font-size: var(--fs-2xl); line-height: 1.02; letter-spacing: -0.03em;
+  overflow-wrap: anywhere; hyphens: auto;
+}
+.result__name.is-spinning { opacity: 0.55; filter: blur(0.5px); }
+.result__name.is-landed { animation: land var(--dur-slow) var(--ease-pop); }
+@keyframes land { 0% { transform: scale(0.85) rotate(-3deg); } 60% { transform: scale(1.06) rotate(1deg); } }
+.result__lines { display: grid; gap: var(--sp-3); }
+.result__lines div {
+  background: color-mix(in srgb, var(--c-paper) 70%, transparent);
+  border: 2px solid var(--c-ink); border-radius: var(--radius-sm);
+  padding: var(--sp-2) var(--sp-3);
+}
+.result__lines dt { font-size: var(--fs-xs); font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; }
+.result__lines dd { margin: 0; font-weight: 600; }
+.result__actions { margin-top: auto; }
+.result__actions .btn { --btn-bg: var(--c-paper); --btn-fg: var(--c-ink); border-color: var(--c-ink); }
+#fav-btn[aria-pressed="true"] { --btn-bg: var(--c-lemon); }
+
+/* Favoris */
+.favs { margin-top: var(--sp-7); }
+.favs__head { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; justify-content: space-between; margin-bottom: var(--sp-4); }
+.favs__head .block__title { margin: 0; font-size: var(--fs-xl); display: flex; align-items: center; gap: var(--sp-3); }
+.favs__empty { color: var(--text-soft); }
+.favs__list { list-style: none; padding: 0; display: grid; gap: var(--sp-3); grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr)); }
+.fav {
+  display: grid; grid-template-columns: auto 1fr; gap: var(--sp-2) var(--sp-3); align-items: center;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--surface); border: 2px solid var(--border); border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+}
+.fav__emoji { font-size: 1.6rem; }
+.fav__name { font-weight: 800; font-family: var(--font-display); font-size: var(--fs-md); overflow-wrap: anywhere; }
+.fav__cat { font-size: var(--fs-xs); color: var(--text-soft); }
+.fav__actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: var(--sp-2); }

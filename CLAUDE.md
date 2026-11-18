@@ -168,8 +168,23 @@ posés via JS (`el.style.x = …`) restent autorisés.
 - **ce-jour-la/main.js** : formulaire (date + heure facultative, `?d=AAAA-MM-JJ&h=HH:MM`),
   rendu une fois, puis `tick()` chaque seconde qui met à jour les éléments `[data-live]`.
   La frise est repliée (3 jalons passés + 5 à venir). Exports : lien, PNG (`renderCard`), .ics.
-- **noms/names.logic.js** : moteur de gabarits avec accords (genre et nombre), une fonction par
-  catégorie et le pitch associé.
+- **noms/dictionnaires.js** (✅ étape 3) : listes en **format compact** (une chaîne séparée par `|`).
+  Noms `m:fromage`, `f:sardine`, `m:chou/choux` (pluriel irrégulier), `m:!hamster` (`!` après les
+  deux-points = h aspiré, donc pas d'élision). Adjectifs `furieux` (formes régulières calculées),
+  `fou/folle/fous/folles` (formes explicites), `fluo*` (invariable). Les adjectifs sont toujours
+  **postposés** : n'ajoute pas beau, vieux, petit…
+  Listes de vocabulaire ≥ 80 (vérifié par les tests) : NOUNS, ADJECTIVES, FIRST_NAMES, INGREDIENTS, TECH,
+  PLACES, MUSIC_STYLES, CREATURE_STARTS/ENDS, VERBS (infinitifs transitifs), VILLAIN_TITLES (genrés).
+  Listes structurelles plus courtes : STARTUP_SUFFIXES, BOAT_TYPES, MEASURES.
+- **noms/names.logic.js** : `parseNoun`, `parseAdjective`, `feminize`, `pluralize`, `agree(adj, g, n)`,
+  `withArticle(noun, n, 'def'|'indef'|'de'|'a')` (le/la/l'/les, du/de la/des, au/aux…), `phrase`,
+  `de(mot)` (élision), `fromPlace`/`inPlace` (du Mans, au Havre), `titleCase`. Une fonction par
+  catégorie (rock, startup, creature, cocktail, vilain, bateau, wifi) qui renvoie `{name, emoji, lines:[[label, texte]]}`.
+  `generate(cat, seed)` : RNG = `createRng(seed normalisée + '#' + cat)`, donc même graine = même résultat.
+  `toText` sert à la copie.
+- **noms/main.js** : catégories en vrais boutons radio, effet machine à sous (désactivé si reduced-motion),
+  URL `?c=cat&s=graine` (graine aléatoire numérique si le champ est vide), favoris dans
+  `zinzin:noms:favoris` (60 maximum), copie, lien, image PNG.
 - **jeu/game.logic.js** : choix du puzzle du jour, normalisation et comparaison des réponses
   (sans accents ni casse), état de la partie, statistiques et texte de partage.
 - **jeu/geo.logic.js** : distance haversine, cap initial → flèche (8 directions), % de proximité.
@@ -219,6 +234,8 @@ Déploiement : `git push` puis `npm run deploy` (voir §8). Le déploiement auto
 | D16 | Hébergement Cloudflare **Workers + assets statiques** (`wrangler.jsonc`) au lieu de Pages | C'est ce que l'utilisateur a créé dans le tableau de bord ; même résultat (statique, `_headers` et `_redirects` gérés), et c'est la voie recommandée par Cloudflare |
 | D18 | Nouvel An chinois calculé (solstice + nouvelles lunes, heure de Pékin) plutôt qu'une table | Pas de données à saisir ; la règle « 21 janv.-20 févr. » est fausse en 1985 et 1966, la vraie règle passe tous les tests |
 | D19 | Python absent de la machine : scripts utilitaires en Node uniquement | Node est déjà requis ; une dépendance de moins |
+| D20 | Les noms générés sont « fuzzés » (1 500 par catégorie dans les tests, 35 000 pendant le développement) | Les fautes d'accord n'apparaissent qu'au hasard des combinaisons ; c'est le seul moyen fiable de les débusquer |
+| D21 | `[hidden] { display: none !important }` global | Sinon `.btn` (`display: inline-flex`) annule l'attribut `hidden` |
 | D17 | `404.html` avancée dès le branchement de Cloudflare | `not_found_handling: 404-page` l'exige ; évite que les apps pas encore codées renvoient l'accueil |
 
 ---
@@ -257,13 +274,13 @@ Déploiement : `git push` puis `npm run deploy` (voir §8). Le déploiement auto
 - [x] Vérification navigateur + commit
 
 ### Étape 3 — App B « Générateur de noms absurdes »
-- [ ] Dictionnaires FR (≥ 80 éléments par liste) avec genre et nombre
-- [ ] Moteur de gabarits avec accords
-- [ ] 7 catégories + pitch par catégorie
-- [ ] Mode graine (prénom → résultat stable)
-- [ ] Favoris (localStorage), copie, carte PNG
-- [ ] Tests : accords, déterminisme de la graine, tailles des dictionnaires
-- [ ] Vérification navigateur + commit
+- [x] Dictionnaires FR (≥ 80 éléments par liste) avec genre et nombre
+- [x] Moteur de gabarits avec accords
+- [x] 7 catégories + pitch par catégorie
+- [x] Mode graine (prénom → résultat stable)
+- [x] Favoris (localStorage), copie, carte PNG
+- [x] Tests : accords, déterminisme de la graine, tailles des dictionnaires
+- [x] Vérification navigateur + commit
 
 ### Étape 4 — App C « Le jeu du jour »
 - [ ] Base ≥ 200 films (titre FR, émojis, année, genre, réalisateur)
@@ -357,3 +374,4 @@ il faut le faire dans le tableau de bord, car l'installation de l'app GitHub ne 
 - **2026-11-18** : l'utilisateur a créé un **Worker** Cloudflare (https://zinzin.johan-saez-craponne.workers.dev/) qui servait « Hello world » (pas relié à Git). Ajout de `wrangler.jsonc` (assets statiques) et de `404.html`, `SITE.url` mis à jour. Reste à relier le Worker au repo dans Settings → Builds.
 - **2026-11-18** : diagnostic : le Worker n'avait reçu que les envois du modèle « Hello world », sans build Git. `wrangler login` puis `wrangler deploy` : **site en ligne et vérifié**. Script `npm run deploy` ajouté.
 - **2026-11-18** : **Étape 2 terminée : app A « Ce jour-là »** en ligne. 18 tests (Meeus, Nouvel An chinois 1900-2026, ICS…), parcours testé dans Edge (clavier, .ics, PNG, lien). Prochaine étape : **app B « Noms absurdes »**.
+- **2026-11-18** : **Étape 3 terminée : app B « Noms absurdes »** en ligne. Accords corrigés grâce au fuzzing (h aspiré, « toutes les », « le nouvel », « d'avaler », « du Mans »). 44 tests au total. Prochaine étape : **app C « Le jeu du jour »**.

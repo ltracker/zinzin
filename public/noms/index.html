@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Générateur de noms absurdes · Zinzin</title>
+  <meta name="description" content="Groupe de rock, startup, créature de poche, cocktail, super-vilain, bateau ou wifi : des noms absurdes en français, avec pitch offert. Mode graine pour retrouver toujours le même.">
+  <meta name="theme-color" content="#fff6e5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#160b2e" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="/assets/fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/shared/tokens.css">
+  <link rel="stylesheet" href="/shared/base.css">
+  <link rel="stylesheet" href="/noms/style.css">
+  <script type="module" src="/noms/main.js"></script>
+</head>
+<body data-app="noms">
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="logo" href="/" aria-label="Zinzin, accueil"><span class="logo__mark" aria-hidden="true">Z</span><span>Zinzin</span></a>
+      <nav class="site-nav" aria-label="Applications">
+        <ul>
+          <li><a href="/ce-jour-la/"><span class="site-nav__emoji" aria-hidden="true">🎂</span><span class="site-nav__label">Ce jour-là</span></a></li>
+          <li><a href="/noms/" aria-current="page"><span class="site-nav__emoji" aria-hidden="true">🤪</span><span class="site-nav__label">Noms</span></a></li>
+          <li><a href="/jeu/"><span class="site-nav__emoji" aria-hidden="true">🧩</span><span class="site-nav__label">Jeu du jour</span></a></li>
+          <li><a href="/roue/"><span class="site-nav__emoji" aria-hidden="true">🎡</span><span class="site-nav__label">Roue</span></a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenu" class="container">
+    <header class="page-head">
+      <span class="page-head__kicker">🤪 Noms absurdes</span>
+      <h1>La machine à noms qui n'a peur de rien</h1>
+      <p>Choisis une catégorie, appuie sur le gros bouton, récupère un nom ridicule… et son pitch, offert par la maison.</p>
+    </header>
+
+    <div class="generator">
+      <form class="generator__controls card" id="gen-form">
+        <fieldset class="cats">
+          <legend class="label">Catégorie</legend>
+          <div class="cats__list" id="cats"></div>
+        </fieldset>
+        <div class="field">
+          <label for="seed">Graine <span class="field__hint">(facultatif)</span></label>
+          <input class="input" id="seed" name="s" type="text" maxlength="60" autocomplete="off" placeholder="ton prénom, ton chat, ta ville…">
+          <p class="field__hint">Même graine = même nom, à chaque fois. Laisse vide pour du pur hasard.</p>
+        </div>
+        <button class="btn btn--primary btn--big generator__go" type="submit">Générer ✨</button>
+      </form>
+
+      <section class="result card card--accent" id="result" aria-live="polite" aria-atomic="true" aria-labelledby="result-name">
+        <div class="result__top">
+          <span class="result__emoji" id="result-emoji" aria-hidden="true">🤪</span>
+          <span class="chip result__cat" id="result-cat">Prêt·e ?</span>
+        </div>
+        <h2 class="result__name" id="result-name">Appuie sur « Générer »</h2>
+        <dl class="result__lines" id="result-lines"></dl>
+        <div class="result__actions row" id="result-actions" hidden>
+          <button class="btn btn--small" type="button" id="fav-btn" aria-pressed="false">☆ Favori</button>
+          <button class="btn btn--small" type="button" id="copy-btn">📋 Copier</button>
+          <button class="btn btn--small" type="button" id="img-btn">🖼️ Image</button>
+          <button class="btn btn--small" type="button" id="link-btn">🔗 Lien</button>
+        </div>
+      </section>
+    </div>
+
+    <section class="favs" aria-labelledby="favs-title">
+      <div class="favs__head">
+        <h2 id="favs-title" class="block__title">⭐ Mes favoris <span class="chip" id="favs-count">0</span></h2>
+        <button class="btn btn--small" type="button" id="favs-clear" hidden>🧹 Tout effacer</button>
+      </div>
+      <p class="favs__empty" id="favs-empty">Aucun favori pour l'instant. Clique sur « ☆ Favori » pour garder une pépite (elle restera sur cet appareil).</p>
+      <ul class="favs__list" id="favs-list" role="list"></ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>© Zinzin · fait main, sans cookie ni tracker</p>
+      <p><a href="/a-propos/">À propos &amp; vie privée</a></p>
+    </div>
+  </footer>
+</body>
+</html>

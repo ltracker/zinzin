@@ -29,6 +29,9 @@ h1, h2, h3, h4 { font-family: var(--font-display); line-height: var(--lh-tight);
 p { text-wrap: pretty; }
 ::selection { background: var(--c-lemon); color: var(--c-ink); }
 
+/* L'attribut hidden doit toujours gagner sur les display des composants (.btn, .row…). */
+[hidden] { display: none !important; }
+
 /* ---------- Accessibilité ---------- */
 :focus { outline: none; }
 :focus-visible {
