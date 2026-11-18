@@ -156,9 +156,18 @@ modèle : `<body data-app="slug">`, CSS `tokens → base → style.css de l'app`
 posés via JS (`el.style.x = …`) restent autorisés.
 
 **Apps (à venir)**
-- **ce-jour-la/life.logic.js** : âge décomposé, jalons (10 000 jours, 10⁹ s, 10⁶ min…),
-  âges planétaires, pleines lunes (cycle synodique réel), estimations, zodiaque
-  occidental et chinois, prochain anniversaire, génération ICS.
+- **ce-jour-la/life.logic.js** (✅ étape 2) : `parseBirth`/`validateBirth` (heure locale),
+  `addMonths`/`addDays`, `ageBreakdown` (a/m/j/h/min/s calendaires + totaux), `MILESTONE_DEFS`
+  (jours, heures, minutes, secondes, semaines, mois) → `milestones`/`nextMilestone`, `nextBirthday`
+  (29/02 fêté le 28/02), `planetAges` (périodes sidérales), **Lune via Meeus chap. 49**
+  (`lunarPhaseTime(k)` : k entier = nouvelle lune, k+0,5 = pleine lune, précision ≈ minute),
+  `countFullMoons`, `nextFullMoon`, `moonPhase`, `estimates` (taux dans `ESTIMATE_RATES`),
+  `weekdayOf`, `westernZodiac`, **`decemberSolstice` (Meeus chap. 27) + `chineseNewYear`**
+  (11ᵉ mois = celui du solstice, heure de Pékin ; vérifié 1900-2026), `chineseZodiac`
+  (animal + élément), `buildIcs` (RFC 5545 : CRLF, échappement, `foldLine` à 75 octets, rappel).
+- **ce-jour-la/main.js** : formulaire (date + heure facultative, `?d=AAAA-MM-JJ&h=HH:MM`),
+  rendu une fois, puis `tick()` chaque seconde qui met à jour les éléments `[data-live]`.
+  La frise est repliée (3 jalons passés + 5 à venir). Exports : lien, PNG (`renderCard`), .ics.
 - **noms/names.logic.js** : moteur de gabarits avec accords (genre et nombre), une fonction par
   catégorie et le pitch associé.
 - **jeu/game.logic.js** : choix du puzzle du jour, normalisation et comparaison des réponses
@@ -197,7 +206,7 @@ Déploiement : `git push` puis `npm run deploy` (voir §8). Le déploiement auto
 | D3 | Logique métier dans `*.logic.js` sans DOM | Testable avec `node --test` sans jsdom ni dépendance |
 | D4 | RNG mulberry32 et hash de chaîne cyrb53 | Rapide, déterministe, identique navigateur/Node, domaine public |
 | D5 | Puzzle du jour = permutation fixe (graine constante) indexée par le n° du jour à Paris | Même puzzle pour tout le monde, pas de répétition avant d'avoir épuisé la liste |
-| D6 | Pleines lunes : nouvelle lune de référence 2000-01-06 18:14 UTC + cycle synodique moyen 29,530588853 j | Calcul astronomique réel, précis à quelques heures près, documenté dans l'UI |
+| D6 | Pleines lunes : algorithme de Meeus (chap. 49, termes principaux) au lieu du cycle moyen | Vrai calcul astronomique, précis à la minute ; réutilisé pour le Nouvel An chinois |
 | D7 | Données pays pré-traitées une fois par `scripts/` puis commitées en JSON | Le site n'a aucune étape de build et Cloudflare sert le fichier statique |
 | D8 | Police display auto-hébergée (OFL) | Identité visuelle forte, sans CDN (contrainte perf et vie privée) |
 | D9 | Outils manquants (Node, git, gh) installés via winget | Absents de la machine au démarrage (2026-11-18) |
@@ -208,6 +217,8 @@ Déploiement : `git push` puis `npm run deploy` (voir §8). Le déploiement auto
 | D14 | Pas de style ni de script inline dans le HTML | Permet une CSP stricte (`script-src 'self'`, `style-src 'self'`) dans `_headers` |
 | D15 | `.gitattributes` force les fins de ligne LF | Environnement Windows ; diffs propres et identiques sur Cloudflare |
 | D16 | Hébergement Cloudflare **Workers + assets statiques** (`wrangler.jsonc`) au lieu de Pages | C'est ce que l'utilisateur a créé dans le tableau de bord ; même résultat (statique, `_headers` et `_redirects` gérés), et c'est la voie recommandée par Cloudflare |
+| D18 | Nouvel An chinois calculé (solstice + nouvelles lunes, heure de Pékin) plutôt qu'une table | Pas de données à saisir ; la règle « 21 janv.-20 févr. » est fausse en 1985 et 1966, la vraie règle passe tous les tests |
+| D19 | Python absent de la machine : scripts utilitaires en Node uniquement | Node est déjà requis ; une dépendance de moins |
 | D17 | `404.html` avancée dès le branchement de Cloudflare | `not_found_handling: 404-page` l'exige ; évite que les apps pas encore codées renvoient l'accueil |
 
 ---
@@ -232,18 +243,18 @@ Déploiement : `git push` puis `npm run deploy` (voir §8). Le déploiement auto
 - [x] Vérification navigateur + commit
 
 ### Étape 2 — App A « Ce jour-là »
-- [ ] Formulaire date (+ heure optionnelle), lecture et écriture des paramètres d'URL
-- [ ] Âge exact avec compteur en temps réel
-- [ ] Jalons (passés/futurs) + compte à rebours du prochain
-- [ ] Âge sur chaque planète
-- [ ] Pleines lunes vécues
-- [ ] Estimations (cœur, respirations, nuits, km Terre/Soleil), présentées comme telles
-- [ ] Jour de la semaine, signe astrologique, signe chinois
-- [ ] Compte à rebours jusqu'au prochain anniversaire
-- [ ] Export .ics du prochain jalon
-- [ ] Carte PNG partageable (canvas)
-- [ ] Tests : âges, jalons, pleines lunes, zodiaques, ICS
-- [ ] Vérification navigateur + commit
+- [x] Formulaire date (+ heure optionnelle), lecture et écriture des paramètres d'URL
+- [x] Âge exact avec compteur en temps réel
+- [x] Jalons (passés/futurs) + compte à rebours du prochain
+- [x] Âge sur chaque planète
+- [x] Pleines lunes vécues
+- [x] Estimations (cœur, respirations, nuits, km Terre/Soleil), présentées comme telles
+- [x] Jour de la semaine, signe astrologique, signe chinois
+- [x] Compte à rebours jusqu'au prochain anniversaire
+- [x] Export .ics du prochain jalon
+- [x] Carte PNG partageable (canvas)
+- [x] Tests : âges, jalons, pleines lunes, zodiaques, ICS
+- [x] Vérification navigateur + commit
 
 ### Étape 3 — App B « Générateur de noms absurdes »
 - [ ] Dictionnaires FR (≥ 80 éléments par liste) avec genre et nombre
@@ -344,4 +355,5 @@ il faut le faire dans le tableau de bord, car l'installation de l'app GitHub ne 
 - **2026-11-18** : Étape 1 terminée. Design system, modules partagés, accueil et À propos en place. 17 tests verts, `npm run check` propre sur `/` et `/a-propos/`. Prochaine étape : **App A « Ce jour-là »**.
 - **2026-11-18** : gh connecté (compte `ltracker`). Repo https://github.com/ltracker/zinzin créé et poussé (avancé depuis l'étape 7 à la demande de l'utilisateur). Cloudflare Pages pas encore branché.
 - **2026-11-18** : l'utilisateur a créé un **Worker** Cloudflare (https://zinzin.johan-saez-craponne.workers.dev/) qui servait « Hello world » (pas relié à Git). Ajout de `wrangler.jsonc` (assets statiques) et de `404.html`, `SITE.url` mis à jour. Reste à relier le Worker au repo dans Settings → Builds.
-- **2026-11-18** : diagnostic : le Worker n'avait reçu que les envois du modèle « Hello world », sans build Git. `wrangler login` puis `wrangler deploy` : **site en ligne et vérifié**. Script `npm run deploy` ajouté. Prochaine étape : **App A « Ce jour-là »**.
+- **2026-11-18** : diagnostic : le Worker n'avait reçu que les envois du modèle « Hello world », sans build Git. `wrangler login` puis `wrangler deploy` : **site en ligne et vérifié**. Script `npm run deploy` ajouté.
+- **2026-11-18** : **Étape 2 terminée : app A « Ce jour-là »** en ligne. 18 tests (Meeus, Nouvel An chinois 1900-2026, ICS…), parcours testé dans Edge (clavier, .ics, PNG, lien). Prochaine étape : **app B « Noms absurdes »**.
