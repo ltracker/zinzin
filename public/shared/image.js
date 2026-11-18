@@ -1,5 +1,7 @@
 // Génération de cartes partageables en PNG (canvas 2D), à l'identité Zinzin.
 
+import { SITE } from './site.js';
+
 const INK = '#24104f';
 const PAPER = '#fff6e5';
 
@@ -50,7 +52,7 @@ function roundRect(ctx, x, y, w, h, r) {
  * @param {string} [o.footer] texte de pied (URL du site)
  * @returns {Promise<HTMLCanvasElement>}
  */
-export async function renderCard({ kicker, title, emoji, lines = [], accent = '#ffd23f', footer = 'zinzin.pages.dev' }) {
+export async function renderCard({ kicker, title, emoji, lines = [], accent = '#ffd23f', footer = new URL(SITE.url).hostname }) {
   await ensureFonts();
   const S = 1080;
   const canvas = document.createElement('canvas');

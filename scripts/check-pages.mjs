@@ -42,7 +42,11 @@ for (const path of paths) {
       const ctx = await browser.newContext({ ...vp, viewport: { width: vp.width, height: vp.height }, colorScheme: scheme, locale: 'fr-FR', timezoneId: 'Europe/Paris' });
       const page = await ctx.newPage();
       const issues = [];
-      page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') issues.push(`console.${m.type()}: ${m.text()}`); });
+      page.on('console', (m) => {
+        // « Failed to load resource » fait doublon avec le contrôle HTTP ci-dessous.
+        if (m.text().startsWith('Failed to load resource')) return;
+        if (m.type() === 'error' || m.type() === 'warning') issues.push(`console.${m.type()}: ${m.text()}`);
+      });
       page.on('pageerror', (e) => issues.push(`pageerror: ${e.message}`));
       page.on('response', (r) => {
         const expected404 = path.includes('inexistante') && r.url().endsWith(path);

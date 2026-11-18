@@ -2,8 +2,8 @@
 
 export const SITE = {
   name: 'Zinzin',
-  // URL de production (à mettre à jour après le déploiement si elle diffère).
-  url: 'https://zinzin.pages.dev',
+  // URL de production (Cloudflare Workers, assets statiques).
+  url: 'https://zinzin.johan-saez-craponne.workers.dev',
   // Jour n° 1 du jeu quotidien (clé de date Europe/Paris).
   launchKey: '2026-11-18',
 };

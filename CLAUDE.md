@@ -76,7 +76,8 @@ Autres noms proposés : Bric-à-Broc, Le Bazar Cosmique, Turbobidule.
 /
 ├── CLAUDE.md               ← ce fichier (mémoire du projet)
 ├── README.md               ← présentation humaine
-├── package.json            ← scripts npm (test, serve, data) ; "type": "module"
+├── package.json            ← scripts npm (test, serve, data, check) ; "type": "module"
+├── wrangler.jsonc          ← config Cloudflare Workers : sert ./public en statique, 404-page
 ├── .gitignore
 ├── scripts/
 │   ├── build-countries.mjs ← pré-traitement world-atlas → public/jeu/data/pays.json (à lancer une fois)
@@ -205,6 +206,8 @@ Déploiement : `git push origin main` → Cloudflare Pages redéploie automatiqu
 | D13 | En-tête et pied de page dupliqués dans chaque HTML | Contrainte « zéro build » ; HTML complet dès le premier octet (SEO, sans JS) |
 | D14 | Pas de style ni de script inline dans le HTML | Permet une CSP stricte (`script-src 'self'`, `style-src 'self'`) dans `_headers` |
 | D15 | `.gitattributes` force les fins de ligne LF | Environnement Windows ; diffs propres et identiques sur Cloudflare |
+| D16 | Hébergement Cloudflare **Workers + assets statiques** (`wrangler.jsonc`) au lieu de Pages | C'est ce que l'utilisateur a créé dans le tableau de bord ; même résultat (statique, `_headers` et `_redirects` gérés), et c'est la voie recommandée par Cloudflare |
+| D17 | `404.html` avancée dès le branchement de Cloudflare | `not_found_handling: 404-page` l'exige ; évite que les apps pas encore codées renvoient l'accueil |
 
 ---
 
@@ -283,27 +286,38 @@ Déploiement : `git push origin main` → Cloudflare Pages redéploie automatiqu
 
 ### Étape 7 — Déploiement
 - [x] `gh auth login` (compte `ltracker`) + création du repo GitHub public `ltracker/zinzin` + push sur `main`
-- [ ] Cloudflare Pages : connexion au repo (guidée pas à pas)
-- [ ] Vérification de l'URL de production et report ci-dessous
+- [x] Worker Cloudflare `zinzin` créé (URL workers.dev) + `wrangler.jsonc` (assets statiques `./public`)
+- [ ] Brancher le Worker sur le repo GitHub (Settings → Builds), voir §8
+- [ ] Vérification de l'URL de production (doit servir l'accueil Zinzin, pas « Hello world »)
 
 ---
 
 ## 8. Déploiement (procédure)
 
-1. **GitHub** : `gh auth login` (une fois), puis `gh repo create zinzin --public --source . --remote origin --push`.
-2. **Cloudflare Pages** (tableau de bord) : *Workers & Pages* → *Créer* → *Pages* →
-   *Connecter à Git* → autoriser GitHub → choisir le repo `zinzin`.
-   - Branche de production : `main`
-   - Préréglage de framework : **None**
+> **Hébergement réel : Cloudflare Workers (assets statiques), pas Cloudflare Pages.**
+> L'utilisateur a créé un Worker `zinzin` (URL `*.workers.dev`). Un Worker sans script qui
+> sert `./public` équivaut à Pages pour un site statique : `_headers` et `_redirects` sont
+> pris en charge de la même façon. La config se trouve dans **`wrangler.jsonc`** à la racine :
+> `assets.directory = ./public`, `html_handling = auto-trailing-slash` et
+> `not_found_handling = 404-page` (sert `public/404.html` avec un statut 404).
+
+1. **GitHub** : `gh auth login` (une fois), puis `gh repo create zinzin --public --source . --remote origin --push`. ✅ Fait.
+2. **Cloudflare** (tableau de bord) : *Workers & Pages* → Worker **zinzin** → *Settings* →
+   *Builds* → *Connect* (Git repository) → GitHub `ltracker/zinzin`.
+   - Branche : `main`
    - Commande de build : **(vide)**
-   - Répertoire de sortie : **`public`**
-3. Chaque `git push` sur `main` redéploie automatiquement. Les autres branches donnent des URL de prévisualisation.
-4. `public/_headers` définit le cache (long pour `/assets/*`, court pour le HTML) et les
+   - Commande de déploiement : `npx wrangler deploy` (valeur par défaut)
+   - Répertoire racine : `/` (valeur par défaut)
+3. Chaque `git push` sur `main` lance un build Cloudflare (`npx wrangler deploy`), qui envoie `public/`.
+   Le site lui-même n'a aucune étape de build : wrangler ne fait qu'envoyer les fichiers.
+4. Vérifier la config en local sans déployer : `npx wrangler@4 deploy --dry-run --outdir %TEMP%\wrangler-dry`.
+5. `public/_headers` (étape 6) définira le cache (long pour `/assets/*`, court pour le HTML) et les
    en-têtes de sécurité (CSP, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`).
+6. Alternative possible : un projet **Pages** (framework None, build vide, sortie `public`). Ignore `wrangler.jsonc` si non utilisé.
 
 **Repo GitHub : https://github.com/ltracker/zinzin** (public, branche `main`, remote `origin`)
 
-**URL de production : _(à renseigner après déploiement)_**
+**URL de production : https://zinzin.johan-saez-craponne.workers.dev/** (aussi dans `public/shared/site.js` → `SITE.url`)
 
 ---
 
@@ -318,3 +332,4 @@ Déploiement : `git push origin main` → Cloudflare Pages redéploie automatiqu
 - **2026-11-18** : Étape 0. Nom choisi, CLAUDE.md rédigé. Node, git et gh absents de la machine, puis installés via winget. Dépôt git initialisé sur `main`. gh n'est pas encore connecté (`gh auth login` à faire avant l'étape 7).
 - **2026-11-18** : Étape 1 terminée. Design system, modules partagés, accueil et À propos en place. 17 tests verts, `npm run check` propre sur `/` et `/a-propos/`. Prochaine étape : **App A « Ce jour-là »**.
 - **2026-11-18** : gh connecté (compte `ltracker`). Repo https://github.com/ltracker/zinzin créé et poussé (avancé depuis l'étape 7 à la demande de l'utilisateur). Cloudflare Pages pas encore branché.
+- **2026-11-18** : l'utilisateur a créé un **Worker** Cloudflare (https://zinzin.johan-saez-craponne.workers.dev/) qui servait « Hello world » (pas relié à Git). Ajout de `wrangler.jsonc` (assets statiques) et de `404.html`, `SITE.url` mis à jour. Reste à relier le Worker au repo dans Settings → Builds.

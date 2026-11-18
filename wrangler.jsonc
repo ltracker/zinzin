@@ -1,0 +1,13 @@
+// Configuration Cloudflare Workers : site 100 % statique (aucun code Worker).
+// Cloudflare sert directement le contenu de ./public, sans étape de build.
+{
+  "name": "zinzin",
+  "compatibility_date": "2025-09-01",
+  "assets": {
+    "directory": "./public",
+    // /dossier → /dossier/ puis dossier/index.html (comme Cloudflare Pages)
+    "html_handling": "auto-trailing-slash",
+    // Page introuvable → public/404.html avec un vrai statut 404
+    "not_found_handling": "404-page"
+  }
+}
