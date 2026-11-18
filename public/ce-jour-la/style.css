@@ -1,0 +1,123 @@
+/* App A — Ce jour-là */
+
+.birth-form { max-width: 40rem; display: grid; gap: var(--sp-4); }
+.birth-form__fields { display: grid; gap: var(--sp-4); grid-template-columns: 1fr; }
+@media (min-width: 30rem) { .birth-form__fields { grid-template-columns: 3fr 2fr; } }
+.birth-form__error { color: var(--danger); font-weight: 700; min-height: 0; }
+.birth-form__error:empty { display: none; }
+
+.results { margin-top: var(--sp-7); display: grid; gap: var(--sp-6); }
+.results > * { min-width: 0; }
+
+/* Âge en vedette */
+.age-hero { text-align: center; padding-block: var(--sp-6); overflow: hidden; }
+.age-hero__label { font-size: var(--fs-lg); font-weight: 700; }
+.age-hero__main {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: var(--fs-hero); line-height: 1; letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.age-hero__sub { font-size: var(--fs-lg); font-weight: 700; font-variant-numeric: tabular-nums; margin-top: var(--sp-2); }
+.age-hero__seconds { margin-top: var(--sp-3); font-size: var(--fs-md); }
+.age-hero__seconds strong { font-family: var(--font-display); font-size: var(--fs-xl); font-variant-numeric: tabular-nums; display: inline-block; }
+.totals {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-3);
+  margin-top: var(--sp-5);
+}
+@media (min-width: 40rem) { .totals { grid-template-columns: repeat(4, 1fr); } }
+.totals > div {
+  background: var(--c-paper); color: var(--c-ink);
+  border: var(--bw) solid var(--c-ink); border-radius: var(--radius-sm);
+  padding: var(--sp-2) var(--sp-3);
+}
+.totals dt { font-size: var(--fs-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+.totals dd { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: var(--fs-lg); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+
+/* Cartes « prochain » */
+.duo { display: grid; gap: var(--sp-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); }
+.next-card { display: flex; flex-direction: column; gap: var(--sp-3); align-items: flex-start; }
+.next-card--milestone { background: var(--surface-2); }
+.next-card__what { font-weight: 650; }
+.countdown {
+  font-family: var(--font-display); font-weight: 800; font-size: var(--fs-xl);
+  font-variant-numeric: tabular-nums; line-height: 1.1;
+}
+
+/* Blocs */
+.block__title { font-size: var(--fs-xl); margin-bottom: var(--sp-4); }
+.block__intro { color: var(--text-soft); margin: calc(var(--sp-2) * -1) 0 var(--sp-4); }
+
+/* Frise des jalons */
+.timeline { list-style: none; padding: 0; display: grid; gap: var(--sp-2); position: relative; }
+.timeline li {
+  display: grid; grid-template-columns: 2.4rem 1fr auto; gap: var(--sp-3); align-items: center;
+  padding: var(--sp-2) var(--sp-4);
+  border: 2px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+.timeline li.is-past { opacity: 0.72; }
+.timeline li.is-past .timeline__emoji { filter: grayscale(0.4); }
+.timeline li.is-next { background: var(--accent); color: var(--c-on-accent); border-width: var(--bw); box-shadow: var(--shadow-sm); opacity: 1; transform: rotate(-0.5deg); }
+.timeline__emoji { font-size: 1.4rem; text-align: center; }
+.timeline__label { font-weight: 750; }
+.timeline__date { font-size: var(--fs-sm); }
+.timeline__status { font-size: var(--fs-xs); font-weight: 800; text-align: right; white-space: nowrap; }
+@media (max-width: 30rem) {
+  .timeline li { grid-template-columns: 2rem 1fr; }
+  .timeline__status { grid-column: 2; text-align: left; }
+}
+.timeline-toggle { margin-top: var(--sp-3); }
+
+/* Planètes */
+.planets { list-style: none; padding: 0; display: grid; gap: var(--sp-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 9.5rem), 1fr)); }
+.planet {
+  --planet: #999;
+  height: 100%;
+  text-align: center;
+  padding: var(--sp-4) var(--sp-3);
+  display: flex; flex-direction: column; align-items: center; gap: var(--sp-1);
+}
+.planet__ball {
+  width: 3.2rem; height: 3.2rem; border-radius: 50%;
+  background: radial-gradient(circle at 32% 30%, rgba(255,255,255,0.75), transparent 38%), var(--planet);
+  border: var(--bw) solid var(--c-ink);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--sp-2);
+  transition: transform var(--dur-slow) var(--ease-pop);
+}
+.planet:hover .planet__ball { transform: rotate(25deg) scale(1.1); }
+.planet[data-planet="saturne"] .planet__ball { box-shadow: var(--shadow-sm), 0 0 0 0.35rem color-mix(in srgb, var(--planet) 55%, transparent); }
+.planet[data-planet="mercure"] { --planet: #b3a99a; }
+.planet[data-planet="venus"]   { --planet: #f2c46d; }
+.planet[data-planet="terre"]   { --planet: #4cc3ff; }
+.planet[data-planet="mars"]    { --planet: #ff7a45; }
+.planet[data-planet="jupiter"] { --planet: #e0a96d; }
+.planet[data-planet="saturne"] { --planet: #ffd23f; }
+.planet[data-planet="uranus"]  { --planet: #8fe3e0; }
+.planet[data-planet="neptune"] { --planet: #5b7cff; }
+.planet__name { font-weight: 800; font-family: var(--font-display); font-size: var(--fs-lg); }
+.planet__age { font-family: var(--font-display); font-weight: 800; font-size: var(--fs-xl); font-variant-numeric: tabular-nums; line-height: 1.1; }
+.planet__next { font-size: var(--fs-xs); color: var(--text-soft); }
+
+/* Lune, identité */
+.moon-card { display: grid; gap: var(--sp-2); align-content: start; }
+.identity__list { list-style: none; padding: 0; display: grid; gap: var(--sp-3); }
+.identity__list li { display: grid; grid-template-columns: 2.6rem 1fr; gap: var(--sp-3); align-items: center; }
+.identity__emoji {
+  display: grid; place-items: center; width: 2.6rem; height: 2.6rem;
+  font-size: 1.4rem; background: var(--accent); color: var(--c-on-accent);
+  border: 2px solid var(--c-ink); border-radius: 50%;
+}
+.identity__main { font-weight: 800; }
+.identity__sub { font-size: var(--fs-sm); color: var(--text-soft); }
+
+/* Estimations */
+.estimates { list-style: none; padding: 0; display: grid; gap: var(--sp-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); }
+.estimate { height: 100%; display: flex; flex-direction: column; gap: var(--sp-1); }
+.estimate__emoji { font-size: 1.8rem; }
+.estimate__value { font-family: var(--font-display); font-weight: 800; font-size: var(--fs-lg); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.estimate__label { font-weight: 650; }
+.estimate:nth-child(3n + 1) { transform: rotate(-0.5deg); }
+.estimate:nth-child(3n + 2) { transform: rotate(0.4deg); }
+
+.share-bar { display: grid; gap: var(--sp-3); }

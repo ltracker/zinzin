@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ce jour-là — ta vie en chiffres zinzins · Zinzin</title>
+  <meta name="description" content="Ton âge à la seconde près, sur Mars et en pleines lunes, tes jalons (10 000 jours, 1 milliard de secondes…), ton signe chinois et plein d'estimations rigolotes.">
+  <meta name="theme-color" content="#fff6e5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#160b2e" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="/assets/fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/shared/tokens.css">
+  <link rel="stylesheet" href="/shared/base.css">
+  <link rel="stylesheet" href="/ce-jour-la/style.css">
+  <script type="module" src="/ce-jour-la/main.js"></script>
+</head>
+<body data-app="ce-jour-la">
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="logo" href="/" aria-label="Zinzin, accueil"><span class="logo__mark" aria-hidden="true">Z</span><span>Zinzin</span></a>
+      <nav class="site-nav" aria-label="Applications">
+        <ul>
+          <li><a href="/ce-jour-la/" aria-current="page"><span class="site-nav__emoji" aria-hidden="true">🎂</span><span class="site-nav__label">Ce jour-là</span></a></li>
+          <li><a href="/noms/"><span class="site-nav__emoji" aria-hidden="true">🤪</span><span class="site-nav__label">Noms</span></a></li>
+          <li><a href="/jeu/"><span class="site-nav__emoji" aria-hidden="true">🧩</span><span class="site-nav__label">Jeu du jour</span></a></li>
+          <li><a href="/roue/"><span class="site-nav__emoji" aria-hidden="true">🎡</span><span class="site-nav__label">Roue</span></a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenu" class="container">
+    <header class="page-head">
+      <span class="page-head__kicker">🎂 Ce jour-là</span>
+      <h1>Ta vie en chiffres zinzins</h1>
+      <p>Donne ta date de naissance : on calcule ton âge à la seconde, sur Mars, en pleines lunes… et la date de ton milliardième de seconde.</p>
+    </header>
+
+    <form class="birth-form card" id="birth-form" novalidate>
+      <div class="birth-form__fields">
+        <div class="field">
+          <label for="birth-date">Date de naissance</label>
+          <input class="input" type="date" id="birth-date" name="d" required min="1900-01-01" autocomplete="bday">
+        </div>
+        <div class="field">
+          <label for="birth-time">Heure <span class="field__hint">(facultatif)</span></label>
+          <input class="input" type="time" id="birth-time" name="h">
+        </div>
+      </div>
+      <p class="birth-form__error" id="form-error" role="alert"></p>
+      <div class="row">
+        <button class="btn btn--primary btn--big" type="submit">Calculer 🎂</button>
+        <button class="btn btn--small" type="button" id="random-date">🎲 Une date au hasard</button>
+      </div>
+      <p class="field__hint">🔒 Rien n'est envoyé : tout est calculé dans ton navigateur.</p>
+    </form>
+
+    <div id="results" class="results" hidden>
+      <p class="visually-hidden" id="results-summary" aria-live="polite"></p>
+
+      <section class="card card--accent age-hero pop-in" aria-labelledby="age-title">
+        <h2 id="age-title" class="age-hero__label">Tu as exactement</h2>
+        <p class="age-hero__main"><span data-live="years">0</span> ans</p>
+        <p class="age-hero__sub" data-live="ymd"></p>
+        <p class="age-hero__seconds">soit <strong data-live="totalSeconds">0</strong> secondes</p>
+        <dl class="totals">
+          <div><dt>jours</dt><dd data-live="totalDays"></dd></div>
+          <div><dt>semaines</dt><dd data-live="totalWeeks"></dd></div>
+          <div><dt>heures</dt><dd data-live="totalHours"></dd></div>
+          <div><dt>minutes</dt><dd data-live="totalMinutes"></dd></div>
+        </dl>
+      </section>
+
+      <div class="duo">
+        <section class="card next-card pop-in" aria-labelledby="bday-title">
+          <h2 id="bday-title" class="card__title">🎉 Prochain anniversaire</h2>
+          <p class="next-card__what" id="bday-what"></p>
+          <p class="countdown" data-live="bdayCountdown"></p>
+        </section>
+
+        <section class="card next-card next-card--milestone pop-in" aria-labelledby="ms-title">
+          <h2 id="ms-title" class="card__title">🚀 Prochain jalon</h2>
+          <p class="next-card__what" id="ms-what"></p>
+          <p class="countdown" data-live="msCountdown"></p>
+          <button class="btn btn--small" type="button" id="ics-btn">📅 Ajouter à mon calendrier</button>
+        </section>
+      </div>
+
+      <section class="block" aria-labelledby="timeline-title">
+        <h2 id="timeline-title" class="block__title">🏁 Tes jalons</h2>
+        <ol class="timeline" id="timeline"></ol>
+        <button class="btn btn--small timeline-toggle" type="button" id="timeline-toggle" aria-controls="timeline" aria-expanded="false">Voir tous les jalons</button>
+      </section>
+
+      <section class="block" aria-labelledby="planets-title">
+        <h2 id="planets-title" class="block__title">🪐 Ton âge dans le système solaire</h2>
+        <ul class="planets" id="planets" role="list"></ul>
+      </section>
+
+      <div class="duo">
+        <section class="card moon-card" aria-labelledby="moon-title">
+          <h2 id="moon-title" class="card__title">🌕 La Lune et toi</h2>
+          <p class="card__big" id="moon-count"></p>
+          <p id="moon-birth"></p>
+          <p class="card__note" id="moon-next"></p>
+        </section>
+
+        <section class="card identity" aria-labelledby="id-title">
+          <h2 id="id-title" class="card__title">🪪 Ta carte d'identité cosmique</h2>
+          <ul class="identity__list" id="identity" role="list"></ul>
+        </section>
+      </div>
+
+      <section class="block" aria-labelledby="est-title">
+        <h2 id="est-title" class="block__title">🧮 Estimations (pour rire)</h2>
+        <p class="block__intro">Des moyennes au doigt mouillé, pas des données médicales : ton cœur et tes poumons font bien ce qu'ils veulent.</p>
+        <ul class="estimates" id="estimates" role="list"></ul>
+      </section>
+
+      <section class="share-bar card" aria-labelledby="share-title">
+        <h2 id="share-title" class="card__title">📣 Partager</h2>
+        <div class="row">
+          <button class="btn btn--primary" type="button" id="share-link">🔗 Copier le lien</button>
+          <button class="btn" type="button" id="share-image">🖼️ Télécharger l'image</button>
+          <button class="btn" type="button" id="share-native" hidden>📤 Partager…</button>
+        </div>
+        <p class="field__hint">Le lien contient ta date de naissance : partage-le en connaissance de cause.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>© Zinzin · fait main, sans cookie ni tracker</p>
+      <p><a href="/a-propos/">À propos &amp; vie privée</a></p>
+    </div>
+  </footer>
+</body>
+</html>
