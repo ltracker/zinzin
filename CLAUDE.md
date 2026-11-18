@@ -55,7 +55,8 @@ Autres noms proposés : Bric-à-Broc, Le Bazar Cosmique, Turbobidule.
 - Animations : toujours désactivées ou réduites sous `@media (prefers-reduced-motion: reduce)`.
 - Langue : interface, commentaires utilisateur et messages de commit **en français**.
 - Commits : un commit par étape livrable, message clair au format `type(portée): description`
-  (ex. `feat(roue): tirage pondéré et confettis`).
+  (ex. `feat(roue): tirage pondéré et confettis`). Après chaque commit d'étape : `git push`
+  (le repo GitHub existe déjà ; une fois Cloudflare branché, chaque push sur `main` déploie).
 
 ### Design system (identité « Zinzin »)
 - Ambiance : **pop, sticker, rétro-néon**. Cartes à bords épais façon autocollant, ombres
@@ -281,7 +282,7 @@ Déploiement : `git push origin main` → Cloudflare Pages redéploie automatiqu
 - [ ] Commit
 
 ### Étape 7 — Déploiement
-- [ ] `gh auth login` + création du repo GitHub `zinzin` + push sur `main`
+- [x] `gh auth login` (compte `ltracker`) + création du repo GitHub public `ltracker/zinzin` + push sur `main`
 - [ ] Cloudflare Pages : connexion au repo (guidée pas à pas)
 - [ ] Vérification de l'URL de production et report ci-dessous
 
@@ -300,6 +301,8 @@ Déploiement : `git push origin main` → Cloudflare Pages redéploie automatiqu
 4. `public/_headers` définit le cache (long pour `/assets/*`, court pour le HTML) et les
    en-têtes de sécurité (CSP, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`).
 
+**Repo GitHub : https://github.com/ltracker/zinzin** (public, branche `main`, remote `origin`)
+
 **URL de production : _(à renseigner après déploiement)_**
 
 ---
@@ -314,3 +317,4 @@ Déploiement : `git push origin main` → Cloudflare Pages redéploie automatiqu
 
 - **2026-11-18** : Étape 0. Nom choisi, CLAUDE.md rédigé. Node, git et gh absents de la machine, puis installés via winget. Dépôt git initialisé sur `main`. gh n'est pas encore connecté (`gh auth login` à faire avant l'étape 7).
 - **2026-11-18** : Étape 1 terminée. Design system, modules partagés, accueil et À propos en place. 17 tests verts, `npm run check` propre sur `/` et `/a-propos/`. Prochaine étape : **App A « Ce jour-là »**.
+- **2026-11-18** : gh connecté (compte `ltracker`). Repo https://github.com/ltracker/zinzin créé et poussé (avancé depuis l'étape 7 à la demande de l'utilisateur). Cloudflare Pages pas encore branché.
