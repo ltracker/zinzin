@@ -9,7 +9,8 @@
     "test": "node --test tests/",
     "serve": "node scripts/serve.mjs 3000",
     "data": "node scripts/build-countries.mjs",
-    "check": "node scripts/check-pages.mjs"
+    "check": "node scripts/check-pages.mjs",
+    "deploy": "npx --yes wrangler@4 deploy"
   },
   "engines": {
     "node": ">=20"

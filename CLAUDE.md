@@ -177,9 +177,10 @@ npm run serve            # serveur local → http://localhost:3000 (scripts/serv
 npm run check            # vérif. navigateur de toutes les pages (Edge headless) + captures dans tmp/screens/
 node scripts/check-pages.mjs / /roue/   # vérifier seulement certaines pages
 npm run data             # (re)génère public/jeu/data/pays.json depuis world-atlas
+npm run deploy           # envoie public/ sur le Worker Cloudflare (wrangler, déjà connecté)
 ```
 
-Déploiement : `git push origin main` → Cloudflare Pages redéploie automatiquement.
+Déploiement : `git push` puis `npm run deploy` (voir §8). Le déploiement auto au push n'est pas encore branché.
 
 > Environnement : Windows 11, PowerShell 5.1. Si `node`, `git` ou `gh` sont « introuvables »
 > dans un terminal ouvert avant l'installation, recharger le PATH :
@@ -287,8 +288,9 @@ Déploiement : `git push origin main` → Cloudflare Pages redéploie automatiqu
 ### Étape 7 — Déploiement
 - [x] `gh auth login` (compte `ltracker`) + création du repo GitHub public `ltracker/zinzin` + push sur `main`
 - [x] Worker Cloudflare `zinzin` créé (URL workers.dev) + `wrangler.jsonc` (assets statiques `./public`)
-- [ ] Brancher le Worker sur le repo GitHub (Settings → Builds), voir §8
-- [ ] Vérification de l'URL de production (doit servir l'accueil Zinzin, pas « Hello world »)
+- [x] wrangler connecté (`wrangler login`) + premier `npm run deploy` réussi
+- [x] Vérification de l'URL de production (accueil 200, 404 OK, police OK, aucune erreur console)
+- [ ] (Optionnel) Déploiement auto à chaque push : Worker → Settings → Builds → Connect, voir §8
 
 ---
 
@@ -300,6 +302,15 @@ Déploiement : `git push origin main` → Cloudflare Pages redéploie automatiqu
 > pris en charge de la même façon. La config se trouve dans **`wrangler.jsonc`** à la racine :
 > `assets.directory = ./public`, `html_handling = auto-trailing-slash` et
 > `not_found_handling = 404-page` (sert `public/404.html` avec un statut 404).
+
+**Méthode actuelle (en place) : déploiement direct avec wrangler depuis cette machine.**
+wrangler est connecté au compte Cloudflare de l'utilisateur (`npx wrangler@4 login` fait le 2026-11-18,
+jeton OAuth stocké localement). À la fin de chaque étape : `git push`, puis **`npm run deploy`**,
+puis vérification de l'URL de prod (curl + navigateur). Si wrangler demande à se reconnecter,
+relancer `npx wrangler@4 login` (le navigateur s'ouvre, l'utilisateur clique sur « Allow »).
+
+**Optionnel : déploiement automatique à chaque push** (non branché à ce jour). Voir les étapes 2 et 3 ci-dessous ;
+il faut le faire dans le tableau de bord, car l'installation de l'app GitHub ne passe pas par la CLI.
 
 1. **GitHub** : `gh auth login` (une fois), puis `gh repo create zinzin --public --source . --remote origin --push`. ✅ Fait.
 2. **Cloudflare** (tableau de bord) : *Workers & Pages* → Worker **zinzin** → *Settings* →
@@ -333,3 +344,4 @@ Déploiement : `git push origin main` → Cloudflare Pages redéploie automatiqu
 - **2026-11-18** : Étape 1 terminée. Design system, modules partagés, accueil et À propos en place. 17 tests verts, `npm run check` propre sur `/` et `/a-propos/`. Prochaine étape : **App A « Ce jour-là »**.
 - **2026-11-18** : gh connecté (compte `ltracker`). Repo https://github.com/ltracker/zinzin créé et poussé (avancé depuis l'étape 7 à la demande de l'utilisateur). Cloudflare Pages pas encore branché.
 - **2026-11-18** : l'utilisateur a créé un **Worker** Cloudflare (https://zinzin.johan-saez-craponne.workers.dev/) qui servait « Hello world » (pas relié à Git). Ajout de `wrangler.jsonc` (assets statiques) et de `404.html`, `SITE.url` mis à jour. Reste à relier le Worker au repo dans Settings → Builds.
+- **2026-11-18** : diagnostic : le Worker n'avait reçu que les envois du modèle « Hello world », sans build Git. `wrangler login` puis `wrangler deploy` : **site en ligne et vérifié**. Script `npm run deploy` ajouté. Prochaine étape : **App A « Ce jour-là »**.
