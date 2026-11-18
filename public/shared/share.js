@@ -29,7 +29,9 @@ export async function copyText(text) {
  * @returns {Promise<'shared'|'copied'|'failed'|'cancelled'>}
  */
 export async function shareOrCopy({ title, text, url }) {
-  if (navigator.share) {
+  // Partage natif seulement sur écran tactile (mobile) ; sur ordinateur, la copie est plus pratique.
+  const touch = globalThis.matchMedia?.('(pointer: coarse)').matches;
+  if (navigator.share && touch) {
     try {
       await navigator.share({ title, text, url });
       return 'shared';

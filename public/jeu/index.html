@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Le jeu du jour : Émojifilm et Silhouette · Zinzin</title>
+  <meta name="description" content="Chaque jour, un film à deviner en émojis et un pays à reconnaître à sa silhouette. Six essais, le même puzzle pour tout le monde, des séries à défendre.">
+  <meta name="theme-color" content="#fff6e5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#160b2e" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="/assets/fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/shared/tokens.css">
+  <link rel="stylesheet" href="/shared/base.css">
+  <link rel="stylesheet" href="/jeu/style.css">
+  <script type="module" src="/jeu/main.js"></script>
+</head>
+<body data-app="jeu">
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="logo" href="/" aria-label="Zinzin, accueil"><span class="logo__mark" aria-hidden="true">Z</span><span>Zinzin</span></a>
+      <nav class="site-nav" aria-label="Applications">
+        <ul>
+          <li><a href="/ce-jour-la/"><span class="site-nav__emoji" aria-hidden="true">🎂</span><span class="site-nav__label">Ce jour-là</span></a></li>
+          <li><a href="/noms/"><span class="site-nav__emoji" aria-hidden="true">🤪</span><span class="site-nav__label">Noms</span></a></li>
+          <li><a href="/jeu/" aria-current="page"><span class="site-nav__emoji" aria-hidden="true">🧩</span><span class="site-nav__label">Jeu du jour</span></a></li>
+          <li><a href="/roue/"><span class="site-nav__emoji" aria-hidden="true">🎡</span><span class="site-nav__label">Roue</span></a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenu" class="container game">
+    <header class="game__head">
+      <div>
+        <span class="page-head__kicker">🧩 Puzzle n° <span id="puzzle-number">1</span></span>
+        <h1 class="game__title">Le jeu du jour</h1>
+      </div>
+      <div class="game__meta">
+        <p class="game__next">Prochain dans <time id="countdown" class="tabular">--:--:--</time></p>
+        <button class="btn btn--small" type="button" id="stats-btn">📊 Stats</button>
+      </div>
+    </header>
+
+    <div class="tabs" role="tablist" aria-label="Mode de jeu">
+      <button class="tab" role="tab" type="button" id="tab-film" aria-controls="panel-film" aria-selected="true">🎬 Émojifilm</button>
+      <button class="tab" role="tab" type="button" id="tab-pays" aria-controls="panel-pays" aria-selected="false" tabindex="-1">🗺️ Silhouette</button>
+    </div>
+
+    <!-- Mode Émojifilm -->
+    <section class="panel" role="tabpanel" id="panel-film" aria-labelledby="tab-film">
+      <div class="board card">
+        <p class="board__rules">Devine le film caché derrière ces émojis. Six essais ; chaque erreur débloque un indice.</p>
+        <p class="emoji-clue" id="film-emojis" aria-label="Émojis du film">🎬</p>
+        <ul class="hints" id="film-hints" role="list" aria-live="polite"></ul>
+        <form class="guess" id="film-form" autocomplete="off">
+          <label class="visually-hidden" for="film-input">Titre du film</label>
+          <div class="guess__field">
+            <input class="input" id="film-input" type="text" placeholder="Tape un titre de film…" spellcheck="false">
+          </div>
+          <button class="btn btn--primary" type="submit">Valider</button>
+        </form>
+        <ol class="attempts" id="film-attempts" aria-label="Tes essais"></ol>
+        <div class="outcome" id="film-outcome" hidden aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- Mode Silhouette -->
+    <section class="panel" role="tabpanel" id="panel-pays" aria-labelledby="tab-pays" hidden>
+      <div class="board card">
+        <p class="board__rules">Quel pays a cette forme ? À chaque erreur : distance, direction et proximité.</p>
+        <figure class="silhouette">
+          <svg id="pays-shape" viewBox="0 0 100 100" role="img" aria-label="Silhouette du pays mystère"><path d=""/></svg>
+        </figure>
+        <form class="guess" id="pays-form" autocomplete="off">
+          <label class="visually-hidden" for="pays-input">Nom du pays</label>
+          <div class="guess__field">
+            <input class="input" id="pays-input" type="text" placeholder="Tape un nom de pays…" spellcheck="false">
+          </div>
+          <button class="btn btn--primary" type="submit">Valider</button>
+        </form>
+        <ol class="attempts attempts--geo" id="pays-attempts" aria-label="Tes essais"></ol>
+        <div class="outcome" id="pays-outcome" hidden aria-live="polite"></div>
+      </div>
+    </section>
+
+    <dialog class="stats card" id="stats-dialog" aria-labelledby="stats-title">
+      <form method="dialog" class="stats__close"><button class="btn btn--small btn--icon" aria-label="Fermer">✕</button></form>
+      <h2 id="stats-title" class="stats__title">📊 Statistiques <span id="stats-mode"></span></h2>
+      <dl class="stats__numbers" id="stats-numbers"></dl>
+      <h3 class="stats__sub">Répartition des essais</h3>
+      <ol class="histogram" id="histogram"></ol>
+      <p class="stats__next">Prochain puzzle dans <time id="countdown-2" class="tabular">--:--:--</time></p>
+    </dialog>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>© Zinzin · fait main, sans cookie ni tracker · formes des pays : Natural Earth</p>
+      <p><a href="/a-propos/">À propos &amp; vie privée</a></p>
+    </div>
+  </footer>
+</body>
+</html>

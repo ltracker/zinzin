@@ -185,9 +185,28 @@ posés via JS (`el.style.x = …`) restent autorisés.
 - **noms/main.js** : catégories en vrais boutons radio, effet machine à sous (désactivé si reduced-motion),
   URL `?c=cat&s=graine` (graine aléatoire numérique si le champ est vide), favoris dans
   `zinzin:noms:favoris` (60 maximum), copie, lien, image PNG.
-- **jeu/game.logic.js** : choix du puzzle du jour, normalisation et comparaison des réponses
-  (sans accents ni casse), état de la partie, statistiques et texte de partage.
-- **jeu/geo.logic.js** : distance haversine, cap initial → flèche (8 directions), % de proximité.
+- **jeu/data/films.js** (✅ étape 4) : 221 films `[titre FR, émojis, année, genre, réalisation, [alias]]`.
+  ⚠️ Ajouter ou retirer un film change la permutation, donc tous les puzzles à venir : ajouter en fin de liste,
+  en connaissance de cause. Les tests vérifient : ≥ 200 films, aucune ambiguïté de titre ou d'alias après normalisation.
+- **jeu/data/pays.json** : généré par `npm run data` (`scripts/build-countries.mjs`, Natural Earth 1:50m via
+  world-atlas, codes ISO via i18n-iso-countries, noms FR via `Intl.DisplayNames` + `NAME_OVERRIDES`).
+  229 pays `{c, n, lat, lon, a (km²), p (tracé SVG 100×100), pool}`, 268 Ko. Les parties lointaines sont
+  écartées (outre-mer français…) : on ne garde que ce qui est à moins de max(15°, diagonale du polygone
+  principal). L'antiméridien est géré (Russie, Fidji). `pool` = aire ≥ 20 000 km² (152 pays tirables).
+  Pour les codes en double (AU), on garde la plus grande aire.
+- **jeu/geo.logic.js** : `haversine`, `bearing`, `direction8` (8 flèches), `proximity` (% par rapport aux antipodes),
+  `compareCountries`, `proximitySquares` (5 cases), plus les outils du script : `ringArea`, `ringCentroid`,
+  `simplify` (Douglas-Peucker).
+- **jeu/game.logic.js** : `puzzleNumber`, `permutation(length, salt)` (fixe, graine `zinzin-jeu-<mode>`),
+  `dailyIndex(dateKey, length, salt)` = permutation[(jour − lancement) mod length] ; `normalize` (accents,
+  ligatures, ponctuation, article initial), `matches`, `findEntry`, `suggest` ; `newGame`/`restoreGame`/`addGuess`
+  (6 essais), `recordResult` (idempotent par jour, série = victoires sur des jours consécutifs), `currentStreak`,
+  `shareText` (sans spoiler), `filmHints` (année → genre → réalisation → nombre de mots → première lettre).
+- **jeu/main.js** : onglets ARIA (flèches gauche et droite, `#emojifilm` / `#silhouette`), `pays.json` chargé à la demande,
+  parties dans `zinzin:jeu:<film|pays>:partie`, stats dans `…:stats`, `<dialog>` des statistiques avec histogramme,
+  changement de jour détecté à la volée.
+- **shared/autocomplete.js** : `attachAutocomplete(input, {source, onSelect})`, motif ARIA combobox/listbox complet.
+- **shared/share.js** : `shareOrCopy` n'utilise le partage natif que sur écran tactile (`pointer: coarse`).
 - **roue/wheel.logic.js** : tirage pondéré, angle cible, courbe de décélération, (dé)sérialisation des listes dans l'URL.
 
 ---
@@ -236,6 +255,8 @@ Déploiement : `git push` puis `npm run deploy` (voir §8). Le déploiement auto
 | D19 | Python absent de la machine : scripts utilitaires en Node uniquement | Node est déjà requis ; une dépendance de moins |
 | D20 | Les noms générés sont « fuzzés » (1 500 par catégorie dans les tests, 35 000 pendant le développement) | Les fautes d'accord n'apparaissent qu'au hasard des combinaisons ; c'est le seul moyen fiable de les débusquer |
 | D21 | `[hidden] { display: none !important }` global | Sinon `.btn` (`display: inline-flex`) annule l'attribut `hidden` |
+| D22 | Partage natif réservé au tactile | Sur ordinateur, Edge ouvre le panneau de partage Windows au lieu de copier : pas pratique pour coller un score façon Wordle |
+| D23 | Silhouettes en SVG (tracés pré-calculés) plutôt qu'en canvas | Net à toutes les tailles, stylable en CSS (thème sombre), aucun calcul au chargement |
 | D17 | `404.html` avancée dès le branchement de Cloudflare | `not_found_handling: 404-page` l'exige ; évite que les apps pas encore codées renvoient l'accueil |
 
 ---
@@ -283,15 +304,15 @@ Déploiement : `git push` puis `npm run deploy` (voir §8). Le déploiement auto
 - [x] Vérification navigateur + commit
 
 ### Étape 4 — App C « Le jeu du jour »
-- [ ] Base ≥ 200 films (titre FR, émojis, année, genre, réalisateur)
-- [ ] `scripts/build-countries.mjs` → `public/jeu/data/pays.json` (contours simplifiés + centroïdes)
-- [ ] Choix du puzzle du jour (Europe/Paris), compte à rebours jusqu'à minuit
-- [ ] Mode Émojifilm : 6 essais, indices progressifs, autocomplétion, tolérance accents/casse
-- [ ] Mode Silhouette : rendu de la forme en SVG/canvas, distance, flèche, % de proximité
-- [ ] Sauvegarde de la partie en cours, statistiques, série, histogramme
-- [ ] Partage émojis sans spoiler
-- [ ] Tests : puzzle du jour, comparaison avec accents, distance/direction
-- [ ] Vérification navigateur + commit
+- [x] Base ≥ 200 films (titre FR, émojis, année, genre, réalisateur)
+- [x] `scripts/build-countries.mjs` → `public/jeu/data/pays.json` (contours simplifiés + centroïdes)
+- [x] Choix du puzzle du jour (Europe/Paris), compte à rebours jusqu'à minuit
+- [x] Mode Émojifilm : 6 essais, indices progressifs, autocomplétion, tolérance accents/casse
+- [x] Mode Silhouette : rendu de la forme en SVG/canvas, distance, flèche, % de proximité
+- [x] Sauvegarde de la partie en cours, statistiques, série, histogramme
+- [x] Partage émojis sans spoiler
+- [x] Tests : puzzle du jour, comparaison avec accents, distance/direction
+- [x] Vérification navigateur + commit
 
 ### Étape 5 — App D « Roue de la décision »
 - [ ] Roue canvas + physique (accélération puis décélération)
@@ -375,3 +396,4 @@ il faut le faire dans le tableau de bord, car l'installation de l'app GitHub ne 
 - **2026-11-18** : diagnostic : le Worker n'avait reçu que les envois du modèle « Hello world », sans build Git. `wrangler login` puis `wrangler deploy` : **site en ligne et vérifié**. Script `npm run deploy` ajouté.
 - **2026-11-18** : **Étape 2 terminée : app A « Ce jour-là »** en ligne. 18 tests (Meeus, Nouvel An chinois 1900-2026, ICS…), parcours testé dans Edge (clavier, .ics, PNG, lien). Prochaine étape : **app B « Noms absurdes »**.
 - **2026-11-18** : **Étape 3 terminée : app B « Noms absurdes »** en ligne. Accords corrigés grâce au fuzzing (h aspiré, « toutes les », « le nouvel », « d'avaler », « du Mans »). 44 tests au total. Prochaine étape : **app C « Le jeu du jour »**.
+- **2026-11-18** : **Étape 4 terminée : app C « Le jeu du jour »** en ligne (221 films, 229 pays). Parties complètes jouées dans Edge (essai raté, indice, autocomplétion au clavier sans accents, victoire, stats, rechargement, partage). 60 tests. Prochaine étape : **app D « Roue de la décision »**.
