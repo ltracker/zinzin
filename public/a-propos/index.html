@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>À propos et vie privée — Zinzin</title>
+  <meta name="description" content="Zinzin ne pose aucun cookie et n'envoie rien à aucun serveur : tout reste dans ton navigateur. Voici comment ça marche.">
+  <meta name="theme-color" content="#fff6e5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#160b2e" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="/assets/fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/shared/tokens.css">
+  <link rel="stylesheet" href="/shared/base.css">
+  <link rel="stylesheet" href="/a-propos/style.css">
+  <script type="module" src="/a-propos/main.js"></script>
+</head>
+<body data-app="a-propos">
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="logo" href="/" aria-label="Zinzin, accueil"><span class="logo__mark" aria-hidden="true">Z</span><span>Zinzin</span></a>
+      <nav class="site-nav" aria-label="Applications">
+        <ul>
+          <li><a href="/ce-jour-la/"><span class="site-nav__emoji" aria-hidden="true">🎂</span><span class="site-nav__label">Ce jour-là</span></a></li>
+          <li><a href="/noms/"><span class="site-nav__emoji" aria-hidden="true">🤪</span><span class="site-nav__label">Noms</span></a></li>
+          <li><a href="/jeu/"><span class="site-nav__emoji" aria-hidden="true">🧩</span><span class="site-nav__label">Jeu du jour</span></a></li>
+          <li><a href="/roue/"><span class="site-nav__emoji" aria-hidden="true">🎡</span><span class="site-nav__label">Roue</span></a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenu" class="container about">
+    <header class="page-head">
+      <span class="page-head__kicker">À propos</span>
+      <h1>Tout reste chez toi.</h1>
+      <p>Zinzin est un petit site pour rigoler, pas pour te pister. Voici ce qui se passe (et surtout ce qui ne se passe pas).</p>
+    </header>
+
+    <div class="about__grid">
+      <section class="card" aria-labelledby="h-nocookie">
+        <h2 id="h-nocookie" class="card__title">🍪 Aucun cookie, aucun tracker</h2>
+        <p>Pas de statistiques de visite, pas de publicité, pas de bouton « J'aime » espion, pas de police ni de script chargés depuis un autre site. Le site est composé de fichiers statiques et c'est tout.</p>
+      </section>
+
+      <section class="card" aria-labelledby="h-local">
+        <h2 id="h-local" class="card__title">💾 Ton navigateur fait tout le travail</h2>
+        <p>Les calculs (âges, noms, puzzles, tirages) sont faits par ton appareil. Rien n'est envoyé à un serveur. Ta date de naissance ne quitte jamais ton écran… sauf si tu partages toi-même le lien.</p>
+      </section>
+
+      <section class="card" aria-labelledby="h-storage">
+        <h2 id="h-storage" class="card__title">📦 Ce qui est gardé en mémoire</h2>
+        <p>Pour retrouver tes favoris, tes statistiques de jeu et tes listes de roue, Zinzin utilise le <em>stockage local</em> de ton navigateur (localStorage). Ces données restent sur cet appareil.</p>
+        <p class="about__keys" id="storage-summary" aria-live="polite">Calcul en cours…</p>
+        <button type="button" class="btn btn--small" id="clear-data">🧹 Effacer mes données Zinzin</button>
+      </section>
+
+      <section class="card" aria-labelledby="h-share">
+        <h2 id="h-share" class="card__title">🔗 Les liens de partage</h2>
+        <p>Quand tu partages un résultat, les infos nécessaires sont placées <strong>dans l'adresse</strong> du lien (par exemple la date de naissance pour « Ce jour-là »). Partage-les en connaissance de cause !</p>
+      </section>
+
+      <section class="card" aria-labelledby="h-credits">
+        <h2 id="h-credits" class="card__title">🙏 Crédits</h2>
+        <ul class="about__list">
+          <li>Police <strong>Bricolage Grotesque</strong> — Atelier Triay, licence SIL Open Font License 1.1 (<a href="/assets/fonts/OFL.txt">texte de la licence</a>).</li>
+          <li>Formes des pays : <strong>Natural Earth</strong> (domaine public), via le paquet <em>world-atlas</em>.</li>
+          <li>Émojis : ceux de ton système d'exploitation.</li>
+        </ul>
+      </section>
+
+      <section class="card" aria-labelledby="h-fun">
+        <h2 id="h-fun" class="card__title">🤓 Petits caractères</h2>
+        <p>Les estimations (battements de cœur, respirations…) sont des moyennes rigolotes, pas des données médicales. Les noms générés sont absurdes par construction : toute ressemblance avec une vraie startup serait vraiment très drôle.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>© Zinzin · fait main, sans cookie ni tracker</p>
+      <p><a href="/" >Retour à l'accueil</a></p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zinzin — 4 mini-apps pour rigoler un bon coup</title>
+  <meta name="description" content="Stats marrantes sur ta vie, générateur de noms absurdes, jeu quotidien et roue de la décision. 100 % gratuit, sans cookie, tout reste dans ton navigateur.">
+  <meta name="theme-color" content="#fff6e5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#160b2e" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="/assets/fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/shared/tokens.css">
+  <link rel="stylesheet" href="/shared/base.css">
+  <link rel="stylesheet" href="/home.css">
+  <script type="module" src="/home.js"></script>
+</head>
+<body data-app="home">
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="logo" href="/" aria-label="Zinzin, accueil"><span class="logo__mark" aria-hidden="true">Z</span><span>Zinzin</span></a>
+      <nav class="site-nav" aria-label="Applications">
+        <ul>
+          <li><a href="/ce-jour-la/"><span class="site-nav__emoji" aria-hidden="true">🎂</span><span class="site-nav__label">Ce jour-là</span></a></li>
+          <li><a href="/noms/"><span class="site-nav__emoji" aria-hidden="true">🤪</span><span class="site-nav__label">Noms</span></a></li>
+          <li><a href="/jeu/"><span class="site-nav__emoji" aria-hidden="true">🧩</span><span class="site-nav__label">Jeu du jour</span></a></li>
+          <li><a href="/roue/"><span class="site-nav__emoji" aria-hidden="true">🎡</span><span class="site-nav__label">Roue</span></a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenu" class="container">
+    <section class="hero" aria-labelledby="hero-title">
+      <h1 id="hero-title" class="hero__title" aria-label="Zinzin">
+        <span aria-hidden="true" class="hero__word">
+          <span>Z</span><span>i</span><span>n</span><span>z</span><span>i</span><span>n</span>
+        </span>
+      </h1>
+      <p class="hero__tagline">Quatre petites machines à bonne humeur.<br>Pas de compte, pas de cookie, que du n'importe quoi bien calculé.</p>
+      <p class="hero__daily">
+        <a class="daily-pill" href="/jeu/">
+          <span aria-hidden="true">🧩</span>
+          <span>Puzzle n°&nbsp;<strong id="daily-number">1</strong></span>
+          <span class="daily-pill__sep" aria-hidden="true">·</span>
+          <span>prochain dans <time id="daily-countdown" class="tabular">--:--:--</time></span>
+        </a>
+      </p>
+    </section>
+
+    <section aria-labelledby="apps-title">
+      <h2 id="apps-title" class="visually-hidden">Les applications</h2>
+      <ul class="apps" role="list">
+        <li class="pop-in">
+          <a class="app-card card card--hover" href="/ce-jour-la/" data-accent="ce-jour-la">
+            <span class="app-card__emoji" aria-hidden="true">🎂</span>
+            <span class="app-card__body">
+              <span class="app-card__title">Ce jour-là</span>
+              <span class="app-card__desc">Ton âge à la seconde près, sur Mars, en pleines lunes et en battements de cœur. Plus tes prochains jalons zinzins.</span>
+              <span class="app-card__tags"><span class="chip">⏱️ Temps réel</span><span class="chip">📅 .ics</span><span class="chip">🖼️ Image</span></span>
+            </span>
+            <span class="app-card__go" aria-hidden="true">→</span>
+          </a>
+        </li>
+        <li class="pop-in">
+          <a class="app-card card card--hover" href="/noms/" data-accent="noms">
+            <span class="app-card__emoji" aria-hidden="true">🤪</span>
+            <span class="app-card__body">
+              <span class="app-card__title">Noms absurdes</span>
+              <span class="app-card__desc">Groupe de rock, startup, créature de poche, cocktail, super-vilain, bateau, wifi… avec pitch offert.</span>
+              <span class="app-card__tags"><span class="chip">🎲 7 catégories</span><span class="chip">⭐ Favoris</span><span class="chip">🌱 Graine</span></span>
+            </span>
+            <span class="app-card__go" aria-hidden="true">→</span>
+          </a>
+        </li>
+        <li class="pop-in">
+          <a class="app-card card card--hover" href="/jeu/" data-accent="jeu">
+            <span class="app-card__emoji" aria-hidden="true">🧩</span>
+            <span class="app-card__body">
+              <span class="app-card__title">Le jeu du jour</span>
+              <span class="app-card__desc">Un film en émojis, un pays en silhouette. Six essais, le même puzzle pour tout le monde, chaque jour.</span>
+              <span class="app-card__tags"><span class="chip">🎬 Émojifilm</span><span class="chip">🗺️ Silhouette</span><span class="chip">🔥 Séries</span></span>
+            </span>
+            <span class="app-card__go" aria-hidden="true">→</span>
+          </a>
+        </li>
+        <li class="pop-in">
+          <a class="app-card card card--hover" href="/roue/" data-accent="roue">
+            <span class="app-card__emoji" aria-hidden="true">🎡</span>
+            <span class="app-card__body">
+              <span class="app-card__title">La roue de la décision</span>
+              <span class="app-card__desc">On mange quoi ? Qui fait la vaisselle ? Laisse la roue trancher, avec cliquetis et confettis.</span>
+              <span class="app-card__tags"><span class="chip">⚖️ Pondérée</span><span class="chip">🔗 Partage</span><span class="chip">🎉 Confettis</span></span>
+            </span>
+            <span class="app-card__go" aria-hidden="true">→</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <section class="promise card" aria-labelledby="promise-title">
+      <h2 id="promise-title" class="promise__title">🍪 Zéro cookie. Vraiment.</h2>
+      <p>Aucun compte, aucun tracker, aucun serveur qui stocke quoi que ce soit : tout se passe dans ton navigateur. <a href="/a-propos/">En savoir plus</a></p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>© Zinzin · fait main, sans cookie ni tracker</p>
+      <p><a href="/a-propos/">À propos &amp; vie privée</a></p>
+    </div>
+  </footer>
+</body>
+</html>

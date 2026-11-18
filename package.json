@@ -1,0 +1,23 @@
+{
+  "name": "zinzin",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Zinzin — 4 mini-apps fun, 100 % statiques et en français.",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test tests/",
+    "serve": "node scripts/serve.mjs 3000",
+    "data": "node scripts/build-countries.mjs",
+    "check": "node scripts/check-pages.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "playwright-core": "^1.65.1",
+    "topojson-client": "^3.1.0",
+    "world-atlas": "^2.0.2"
+  }
+}

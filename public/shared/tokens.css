@@ -1,0 +1,120 @@
+/* ==========================================================================
+   Zinzin — Design tokens
+   Ambiance : pop / sticker / rétro-néon. Toutes les couleurs du site
+   passent par ces variables. Les couleurs d'accent sont toujours utilisées
+   avec --c-on-accent (texte foncé) pour garantir un contraste AA.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Bricolage";
+  src: url("/assets/fonts/bricolage.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
+
+  /* Palette brute */
+  --c-ink: #24104f;        /* violet très profond : texte, bords */
+  --c-ink-soft: #4a3a78;
+  --c-paper: #fff6e5;      /* crème */
+  --c-paper-2: #ffecc7;
+  --c-white: #ffffff;
+  --c-lemon: #ffd23f;
+  --c-candy: #ff6fae;
+  --c-mint: #3ddc97;
+  --c-pool: #4cc3ff;
+  --c-tomato: #ff7a45;
+  --c-grape: #b28dff;
+
+  /* Rôles (thème clair) */
+  --bg: var(--c-paper);
+  --bg-pattern: rgba(36, 16, 79, 0.07);
+  --surface: var(--c-white);
+  --surface-2: var(--c-paper-2);
+  --text: var(--c-ink);
+  --text-soft: var(--c-ink-soft);
+  --border: var(--c-ink);
+  --shadow-color: var(--c-ink);
+  --c-on-accent: #24104f;
+  --focus: #0057ff;
+  --success: #138a52;
+  --danger: #c4282f;
+
+  /* Couleurs signature des apps */
+  --app-ce-jour-la: var(--c-lemon);
+  --app-noms: var(--c-candy);
+  --app-jeu: var(--c-mint);
+  --app-roue: var(--c-pool);
+  --accent: var(--c-grape); /* redéfini par page via body[data-app] */
+
+  /* Typographie */
+  --font-display: "Bricolage", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", "Segoe UI Mono", Menlo, Consolas, monospace;
+  --fs-xs: 0.8125rem;
+  --fs-sm: 0.9375rem;
+  --fs-md: 1.0625rem;
+  --fs-lg: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --fs-xl: clamp(1.6rem, 1.3rem + 1.4vw, 2.25rem);
+  --fs-2xl: clamp(2.2rem, 1.6rem + 3vw, 3.75rem);
+  --fs-hero: clamp(3.2rem, 2rem + 7vw, 7rem);
+  --lh-tight: 1.05;
+  --lh-body: 1.55;
+
+  /* Espacements (échelle ×1.5 environ) */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4.5rem;
+
+  /* Formes */
+  --radius-sm: 10px;
+  --radius: 18px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+  --bw: 3px;               /* épaisseur des bords « sticker » */
+  --shadow-sm: 3px 3px 0 var(--shadow-color);
+  --shadow: 6px 6px 0 var(--shadow-color);
+  --shadow-lg: 10px 10px 0 var(--shadow-color);
+
+  /* Mouvement */
+  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 120ms;
+  --dur: 220ms;
+  --dur-slow: 480ms;
+
+  --container: 72rem;
+  --gutter: clamp(1rem, 4vw, 2rem);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #160b2e;
+    --bg-pattern: rgba(255, 246, 229, 0.06);
+    --surface: #241448;
+    --surface-2: #2f1c5c;
+    --text: #fff6e5;
+    --text-soft: #d9cdf5;
+    --border: #0a0418;
+    --shadow-color: #0a0418;
+    --focus: #8fd3ff;
+    --success: #5ef0a8;
+    --danger: #ff8a8f;
+  }
+}
+
+body[data-app="ce-jour-la"] { --accent: var(--app-ce-jour-la); }
+body[data-app="noms"]       { --accent: var(--app-noms); }
+body[data-app="jeu"]        { --accent: var(--app-jeu); }
+body[data-app="roue"]       { --accent: var(--app-roue); }

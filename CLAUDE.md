@@ -109,14 +109,51 @@ Autres noms proposés : Bric-à-Broc, Le Bazar Cosmique, Turbobidule.
 
 *(À compléter et préciser au fil des étapes.)*
 
-- **shared/rng.js** : `hashString(str) → uint32` et `mulberry32(seed) → () => [0,1)`.
-  Helpers `pick(rng, arr)`, `shuffle(rng, arr)`, `int(rng, min, max)`. Sert aux puzzles
-  du jour, au générateur de noms à graine et aux tirages.
-- **shared/dates.js** : `parisDateKey(date) → 'AAAA-MM-JJ'`, `msUntilParisMidnight(date)`,
-  `dayNumber(key)` (nombre de jours depuis l'époque, pour indexer les puzzles).
-- **shared/storage.js** : `load(key, fallback)` et `save(key, value)` en JSON, avec try/catch et fallback mémoire.
-- **shared/share.js** : `copyText`, `shareOrCopy` (Web Share API si dispo), `buildUrl(params)`.
-- **shared/image.js** : `renderCard(options) → canvas` et `downloadCanvas(canvas, filename)`.
+**Socle (étape 1, en place)**
+- **shared/tokens.css** : `@font-face` Bricolage + toutes les variables (couleurs brutes, rôles
+  `--bg/--surface/--text/--border`, couleurs d'apps `--app-*`, typo, espacements, rayons,
+  ombres pleines, easings). `body[data-app="…"]` fixe `--accent` pour la page.
+  Thème sombre par `prefers-color-scheme` : seuls les rôles changent ; les accents restent
+  vifs avec du texte `--c-on-accent` (violet foncé).
+- **shared/base.css** : reset, `.container`, `.site-header` (sticky) et `.site-nav` (émojis seuls
+  sur mobile, libellés lus par les lecteurs d'écran), `.site-footer`, `.page-head` (+ `__kicker`),
+  `.card` (`--accent`, `--hover`), `.btn` (`--primary`, `--ink`, `--small`, `--big`, `--icon`),
+  `.field/.input/.select/.checkbox`, `.chip`, `.toast`, `.pop-in`, `.wiggle`, `.visually-hidden`,
+  `.skip-link`, et un bloc reduced-motion global.
+- **shared/site.js** : `SITE` (nom, URL de prod, `launchKey` = jour n° 1 du jeu = 2026-11-18) et `APPS`.
+- **shared/rng.js** : `hashString(str, seed) → uint32` (cyrb53), `mulberry32(seed)`,
+  `createRng(nombre|chaîne)` (normalise la casse et les espaces), `int`, `pick`, `chance`,
+  `shuffle` (non mutant), `randomSeed`. ⚠️ Les valeurs de référence sont figées dans les tests :
+  modifier l'algorithme change tous les puzzles et tous les noms à graine.
+- **shared/dates.js** : `MS`, `parisParts`, `parisOffsetMs`, `parisDateKey(date) → 'AAAA-MM-JJ'`,
+  `parseKey`, `dayNumber(key)`, `addDaysToKey`, `parisMidnight(key) → Date`,
+  `msUntilParisMidnight(now)`, `formatHMS`, `formatNumber` (fr-FR), `formatLongDate`.
+- **shared/storage.js** : `load(key, fallback)`, `save(key, value)`, `remove`, `keys`, `clearAll`.
+  Préfixe automatique `zinzin:`, try/catch partout, repli en mémoire.
+- **shared/share.js** : `copyText`, `shareOrCopy({title,text,url})`, `shareCanvas`, `buildUrl(params)`,
+  `replaceUrlParams`, `readParams`, `downloadText(content, filename, mime)` (pour le .ics).
+- **shared/image.js** : `renderCard({kicker, title, emoji, lines, accent, footer}) → Promise<canvas 1080×1080>`
+  façon sticker, `downloadCanvas`, `wrapText`, `ensureFonts`.
+- **shared/ui.js** : `$`, `$$`, `el(tag, attrs, ...children)`, `toast(msg)` (aria-live),
+  `prefersReducedMotion()`, `everySecond(fn)` (calé sur la seconde, renvoie une fonction d'arrêt).
+- **index.html + home.css + home.js** : hub. Logo « Zinzin » en lettres stickers animées, pastille
+  « Puzzle n° X · prochain dans HH:MM:SS », 4 cartes d'apps (`data-accent`), encart vie privée.
+- **a-propos/** : explications sur la vie privée, résumé des clés stockées et bouton « Effacer mes données ».
+- **scripts/serve.mjs** : serveur statique sans dépendance qui imite Pages (redirection 308 vers `/`, 404.html). Exporte `startServer(port)`.
+- **scripts/check-pages.mjs** : lance le serveur sur le port 4173 et pilote Edge (ou Chrome) en headless via
+  `playwright-core`. Chaque page est testée en mobile 390 px et desktop 1280 px, en clair et en sombre.
+  Il remonte les erreurs console et JS, les HTTP ≥ 400, les débordements horizontaux, les contrôles sans nom
+  accessible et une police non chargée. Captures dans `tmp/screens/` (ignoré par git).
+
+**Gabarit de page** : en-tête et pied de page sont **dupliqués en HTML statique** dans chaque
+page (pas de build ni d'injection JS, meilleur pour le SEO). Pour modifier la navigation, il
+faut mettre à jour toutes les pages `public/**/index.html` et `404.html`. Une page d'app suit ce
+modèle : `<body data-app="slug">`, CSS `tokens → base → style.css de l'app`, puis
+`<script type="module" src="/slug/main.js">`. Le lien actif de la nav porte `aria-current="page"`.
+**Aucun attribut `style="…"` ni script inline** dans le HTML (CSP stricte prévue) ; les styles
+posés via JS (`el.style.x = …`) restent autorisés.
+
+**Apps (à venir)**
 - **ce-jour-la/life.logic.js** : âge décomposé, jalons (10 000 jours, 10⁹ s, 10⁶ min…),
   âges planétaires, pleines lunes (cycle synodique réel), estimations, zodiaque
   occidental et chinois, prochain anniversaire, génération ICS.
@@ -134,7 +171,9 @@ Autres noms proposés : Bric-à-Broc, Le Bazar Cosmique, Turbobidule.
 ```bash
 npm install              # une seule fois (devDependencies pour /scripts)
 npm test                 # node --test tests/
-npx serve public         # serveur local → http://localhost:3000
+npm run serve            # serveur local → http://localhost:3000 (scripts/serve.mjs ; `npx serve public` marche aussi)
+npm run check            # vérif. navigateur de toutes les pages (Edge headless) + captures dans tmp/screens/
+node scripts/check-pages.mjs / /roue/   # vérifier seulement certaines pages
 npm run data             # (re)génère public/jeu/data/pays.json depuis world-atlas
 ```
 
@@ -159,6 +198,12 @@ Déploiement : `git push origin main` → Cloudflare Pages redéploie automatiqu
 | D7 | Données pays pré-traitées une fois par `scripts/` puis commitées en JSON | Le site n'a aucune étape de build et Cloudflare sert le fichier statique |
 | D8 | Police display auto-hébergée (OFL) | Identité visuelle forte, sans CDN (contrainte perf et vie privée) |
 | D9 | Outils manquants (Node, git, gh) installés via winget | Absents de la machine au démarrage (2026-11-18) |
+| D10 | Police Bricolage Grotesque (variable, sous-ensemble latin, `@fontsource-variable`) copiée dans `public/assets/fonts/` | Caractère « bricolé » qui colle au ton, 41 Ko, licence OFL |
+| D11 | Serveur maison `scripts/serve.mjs` plutôt que `npx serve` | Fonctionne hors ligne, imite le routage de Cloudflare Pages (slash final, 404) |
+| D12 | Vérification navigateur par `playwright-core` + Edge installé | Pas de navigateur à télécharger ; contrôles reproductibles (console, débordement, a11y de base) |
+| D13 | En-tête et pied de page dupliqués dans chaque HTML | Contrainte « zéro build » ; HTML complet dès le premier octet (SEO, sans JS) |
+| D14 | Pas de style ni de script inline dans le HTML | Permet une CSP stricte (`script-src 'self'`, `style-src 'self'`) dans `_headers` |
+| D15 | `.gitattributes` force les fins de ligne LF | Environnement Windows ; diffs propres et identiques sur Cloudflare |
 
 ---
 
@@ -172,13 +217,14 @@ Déploiement : `git push origin main` → Cloudflare Pages redéploie automatiqu
 - [x] `git init` (branche `main`) + premier commit
 
 ### Étape 1 — Socle et design system
-- [ ] `package.json` (`"type": "module"`, scripts `test`, `serve`, `data`)
-- [ ] `shared/tokens.css` + `shared/base.css` (reset, layout mobile-first, cartes, boutons, formulaires, toasts, mode sombre, reduced-motion)
-- [ ] Police display auto-hébergée + `favicon.svg`
-- [ ] `shared/rng.js`, `shared/dates.js`, `shared/storage.js`, `shared/share.js`, `shared/image.js`, `shared/ui.js`
-- [ ] Tests : RNG à graine, `parisDateKey`, n° du jour
-- [ ] Page d'accueil (hub des 4 apps) + page À propos
-- [ ] Vérification navigateur + commit
+- [x] `package.json` (`"type": "module"`, scripts `test`, `serve`, `data`, `check`)
+- [x] `shared/tokens.css` + `shared/base.css` (reset, layout mobile-first, cartes, boutons, formulaires, toasts, mode sombre, reduced-motion)
+- [x] Police display auto-hébergée (Bricolage Grotesque, 41 Ko) + `favicon.svg`
+- [x] `shared/rng.js`, `shared/dates.js`, `shared/storage.js`, `shared/share.js`, `shared/image.js`, `shared/ui.js`, `shared/site.js`
+- [x] Tests : RNG à graine (valeurs figées), `parisDateKey`, minuit Paris et changements d'heure, n° du jour, storage
+- [x] Page d'accueil (hub des 4 apps + puzzle du jour + compte à rebours) + page À propos (résumé et effacement des données)
+- [x] Outils de vérification : `scripts/serve.mjs` (imite Pages) + `scripts/check-pages.mjs` (Edge headless)
+- [x] Vérification navigateur + commit
 
 ### Étape 2 — App A « Ce jour-là »
 - [ ] Formulaire date (+ heure optionnelle), lecture et écriture des paramètres d'URL
@@ -267,3 +313,4 @@ Déploiement : `git push origin main` → Cloudflare Pages redéploie automatiqu
 ## 10. Journal
 
 - **2026-11-18** : Étape 0. Nom choisi, CLAUDE.md rédigé. Node, git et gh absents de la machine, puis installés via winget. Dépôt git initialisé sur `main`. gh n'est pas encore connecté (`gh auth login` à faire avant l'étape 7).
+- **2026-11-18** : Étape 1 terminée. Design system, modules partagés, accueil et À propos en place. 17 tests verts, `npm run check` propre sur `/` et `/a-propos/`. Prochaine étape : **App A « Ce jour-là »**.
