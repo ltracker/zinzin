@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>La roue de la décision · Zinzin</title>
+  <meta name="description" content="On mange quoi ? Qui fait la vaisselle ? Une roue à faire tourner, avec options pondérées, listes perso partageables, cliquetis et confettis.">
+  <meta name="theme-color" content="#fff6e5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#160b2e" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="/assets/fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/shared/tokens.css">
+  <link rel="stylesheet" href="/shared/base.css">
+  <link rel="stylesheet" href="/roue/style.css">
+  <script type="module" src="/roue/main.js"></script>
+</head>
+<body data-app="roue">
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="logo" href="/" aria-label="Zinzin, accueil"><span class="logo__mark" aria-hidden="true">Z</span><span>Zinzin</span></a>
+      <nav class="site-nav" aria-label="Applications">
+        <ul>
+          <li><a href="/ce-jour-la/"><span class="site-nav__emoji" aria-hidden="true">🎂</span><span class="site-nav__label">Ce jour-là</span></a></li>
+          <li><a href="/noms/"><span class="site-nav__emoji" aria-hidden="true">🤪</span><span class="site-nav__label">Noms</span></a></li>
+          <li><a href="/jeu/"><span class="site-nav__emoji" aria-hidden="true">🧩</span><span class="site-nav__label">Jeu du jour</span></a></li>
+          <li><a href="/roue/" aria-current="page"><span class="site-nav__emoji" aria-hidden="true">🎡</span><span class="site-nav__label">Roue</span></a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenu" class="container">
+    <header class="page-head">
+      <span class="page-head__kicker">🎡 La roue de la décision</span>
+      <h1 id="wheel-title">On mange quoi ?</h1>
+      <p>Indécis·e ? Laisse la roue trancher. Elle est impartiale (sauf si tu joues avec les poids).</p>
+    </header>
+
+    <div class="roue">
+      <section class="stage" aria-label="Roue">
+        <div class="wheel">
+          <canvas id="wheel" aria-hidden="true"></canvas>
+          <div class="wheel__pointer" id="pointer" aria-hidden="true"></div>
+          <button class="wheel__spin" type="button" id="spin">Lancer</button>
+        </div>
+        <p class="result card" id="result" aria-live="polite">Appuie sur « Lancer » !</p>
+      </section>
+
+      <section class="editor card" aria-labelledby="editor-title">
+        <h2 id="editor-title" class="editor__title">✏️ Les options</h2>
+
+        <div class="field">
+          <label for="preset">Liste</label>
+          <select class="select" id="preset"></select>
+        </div>
+
+        <div class="field">
+          <label for="title-input">Titre de la roue</label>
+          <input class="input" id="title-input" type="text" maxlength="60">
+        </div>
+
+        <ul class="options" id="options" role="list" aria-label="Options de la roue"></ul>
+
+        <form class="add" id="add-form">
+          <label class="visually-hidden" for="add-input">Nouvelle option</label>
+          <input class="input" id="add-input" type="text" maxlength="40" placeholder="Nouvelle option…">
+          <button class="btn btn--primary" type="submit">Ajouter</button>
+        </form>
+
+        <div class="settings">
+          <label class="checkbox"><input type="checkbox" id="sound"> 🔊 Son de cliquetis</label>
+          <label class="checkbox"><input type="checkbox" id="eliminate"> 🗑️ Éliminer l'option tirée</label>
+        </div>
+
+        <div class="row editor__actions">
+          <button class="btn btn--small" type="button" id="save-list">💾 Enregistrer</button>
+          <button class="btn btn--small" type="button" id="share-list">🔗 Partager</button>
+          <button class="btn btn--small" type="button" id="restore" hidden>♻️ Remettre les éliminées</button>
+          <button class="btn btn--small" type="button" id="delete-list" hidden>🗑️ Supprimer cette liste</button>
+        </div>
+        <p class="field__hint">Le poids (1 à 10) agrandit la part : plus elle est grande, plus elle a de chances de sortir.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>© Zinzin · fait main, sans cookie ni tracker</p>
+      <p><a href="/a-propos/">À propos &amp; vie privée</a></p>
+    </div>
+  </footer>
+</body>
+</html>

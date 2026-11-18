@@ -207,7 +207,19 @@ posés via JS (`el.style.x = …`) restent autorisés.
   changement de jour détecté à la volée.
 - **shared/autocomplete.js** : `attachAutocomplete(input, {source, onSelect})`, motif ARIA combobox/listbox complet.
 - **shared/share.js** : `shareOrCopy` n'utilise le partage natif que sur écran tactile (`pointer: coarse`).
-- **roue/wheel.logic.js** : tirage pondéré, angle cible, courbe de décélération, (dé)sérialisation des listes dans l'URL.
+- **roue/wheel.logic.js** (✅ étape 5) : convention : rotation dans le sens horaire, pointeur en haut (−π/2). La taille d'une part
+  est proportionnelle à son poids, donc ce qu'on voit = la probabilité réelle. `sanitizeOption(s)` (40 options max, libellé
+  de 40 caractères max, poids entier de 1 à 10, couleur #hex), `segments`, `weightedIndex(options, r)`, `indexAtRotation`,
+  `targetRotation(options, index, offset, current, turns)` (s'arrête dans les 80 % centraux de la part tirée),
+  `spinProgress(t)` (vitesse : montée linéaire jusqu'à t = 0,12, puis décroissance quadratique, continue),
+  `removeAt`, `probabilities`, `encodeList`/`decodeList` (JSON compact → base64url, compatible UTF-8).
+- **roue/presets.js** : 8 listes prêtes à l'emploi (On mange quoi ?, Qui fait la vaisselle ?, Film ou série ?, Action ou vérité…).
+- **roue/main.js** : canvas net sur écrans haute densité (ResizeObserver), libellés retournés sur la moitié gauche, réduits puis
+  tronqués s'ils sont trop longs. Tirage par `crypto.getRandomValues`, cliquetis Web Audio à chaque changement de part et
+  petite fanfare. Mode « éliminer » (minimum 2 options, bouton pour les remettre). Clés : `zinzin:roue:courante`,
+  `zinzin:roue:listes` (30 max), `zinzin:roue:reglages`. URL `?l=…` pour une roue partagée (le paramètre est retiré
+  après chargement). Espace = lancer.
+- **roue/confetti.js** : confettis en canvas plein écran, ignorés si reduced-motion.
 
 ---
 
@@ -257,6 +269,7 @@ Déploiement : `git push` puis `npm run deploy` (voir §8). Le déploiement auto
 | D21 | `[hidden] { display: none !important }` global | Sinon `.btn` (`display: inline-flex`) annule l'attribut `hidden` |
 | D22 | Partage natif réservé au tactile | Sur ordinateur, Edge ouvre le panneau de partage Windows au lieu de copier : pas pratique pour coller un score façon Wordle |
 | D23 | Silhouettes en SVG (tracés pré-calculés) plutôt qu'en canvas | Net à toutes les tailles, stylable en CSS (thème sombre), aucun calcul au chargement |
+| D24 | Après un déploiement, attendre 1 à 2 min avant de vérifier la prod | Les nouveaux fichiers se propagent progressivement sur le réseau Cloudflare (404 temporaires constatés) |
 | D17 | `404.html` avancée dès le branchement de Cloudflare | `not_found_handling: 404-page` l'exige ; évite que les apps pas encore codées renvoient l'accueil |
 
 ---
@@ -315,14 +328,14 @@ Déploiement : `git push` puis `npm run deploy` (voir §8). Le déploiement auto
 - [x] Vérification navigateur + commit
 
 ### Étape 5 — App D « Roue de la décision »
-- [ ] Roue canvas + physique (accélération puis décélération)
-- [ ] Cliquetis Web Audio optionnel
-- [ ] Édition des options (ajout, suppression, couleur, poids)
-- [ ] Listes prêtes à l'emploi
-- [ ] Listes perso (localStorage) + partage URL
-- [ ] Mode « éliminer l'option tirée » + confettis
-- [ ] Tests : tirage pondéré, angle cible, sérialisation URL
-- [ ] Vérification navigateur + commit
+- [x] Roue canvas + physique (accélération puis décélération)
+- [x] Cliquetis Web Audio optionnel
+- [x] Édition des options (ajout, suppression, couleur, poids)
+- [x] Listes prêtes à l'emploi
+- [x] Listes perso (localStorage) + partage URL
+- [x] Mode « éliminer l'option tirée » + confettis
+- [x] Tests : tirage pondéré, angle cible, sérialisation URL
+- [x] Vérification navigateur + commit
 
 ### Étape 6 — SEO et finitions
 - [ ] Meta, Open Graph et Twitter card par page + images OG (stockées dans le repo)
@@ -397,3 +410,4 @@ il faut le faire dans le tableau de bord, car l'installation de l'app GitHub ne 
 - **2026-11-18** : **Étape 2 terminée : app A « Ce jour-là »** en ligne. 18 tests (Meeus, Nouvel An chinois 1900-2026, ICS…), parcours testé dans Edge (clavier, .ics, PNG, lien). Prochaine étape : **app B « Noms absurdes »**.
 - **2026-11-18** : **Étape 3 terminée : app B « Noms absurdes »** en ligne. Accords corrigés grâce au fuzzing (h aspiré, « toutes les », « le nouvel », « d'avaler », « du Mans »). 44 tests au total. Prochaine étape : **app C « Le jeu du jour »**.
 - **2026-11-18** : **Étape 4 terminée : app C « Le jeu du jour »** en ligne (221 films, 229 pays). Parties complètes jouées dans Edge (essai raté, indice, autocomplétion au clavier sans accents, victoire, stats, rechargement, partage). 60 tests. Prochaine étape : **app D « Roue de la décision »**.
+- **2026-11-18** : **Étape 5 terminée : app D « Roue de la décision »** en ligne. Vérifié dans Edge : la part sous le pointeur = le résultat annoncé, édition, élimination, enregistrement, lien partagé. 69 tests. **Les 4 apps sont en ligne.** Prochaine étape : **étape 6, SEO et finitions** (OG, manifest, sitemap, _headers, Lighthouse, README, PWA).
