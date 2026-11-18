@@ -1,0 +1,26 @@
+# Dépendances
+node_modules/
+
+# Logs
+npm-debug.log*
+*.log
+
+# Système
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Éditeurs
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Environnement / secrets
+.env
+.env.*
+.claude/settings.local.json
+
+# Divers
+coverage/
+.wrangler/
+tmp/
