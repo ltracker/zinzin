@@ -4,7 +4,7 @@
 // hors ligne, tout le site précaché reste utilisable.
 // ⚠️ Ajouter ici tout nouveau fichier servi (le test tests/sw.test.js le vérifie).
 
-const VERSION = 'zinzin-v2';
+const VERSION = 'zinzin-v3';
 
 const PRECACHE = [
   '/',
@@ -59,6 +59,10 @@ const PRECACHE = [
   '/avent/main.js',
   '/avent/avent.logic.js',
   '/avent/calendrier.js',
+  '/pere-noel-secret/',
+  '/pere-noel-secret/style.css',
+  '/pere-noel-secret/main.js',
+  '/pere-noel-secret/santa.logic.js',
 ];
 
 self.addEventListener('install', (event) => {

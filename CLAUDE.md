@@ -235,6 +235,18 @@ posés via JS (`el.style.x = …`) restent autorisés.
   La case du jour pulse en continu : il faut `click({ force: true })` dans les tests.
 - Accueil : nouvelle section **« Encore plus de zinzin »** (`.more` + `.mini-card[data-accent]`), où ajouter les apps secondaires.
 
+**Père Noël secret (✅ étape 9, `/pere-noel-secret/`)**
+- **pere-noel-secret/santa.logic.js** : `sanitizeNames` (doublons insensibles à la casse et aux accents, 50 personnes maximum),
+  `draw(n, exclusions, rng)` (retour arrière randomisé, donneurs les plus contraints d'abord, plafond de 200 000 étapes ;
+  renvoie `null` si c'est impossible), `isValidDraw`, `encodeTicket`/`decodeTicket` (AES-GCM Web Crypto ; jeton base64url =
+  clé 16 octets + IV 12 octets + texte chiffré ; un jeton modifié est rejeté), `inviteMessage`.
+- **Sécurité, à dire honnêtement :** la clé est dans le lien, ce qui protège contre le spoiler accidentel, pas contre un curieux.
+  Le jeton est dans le fragment `#` : il n'est jamais envoyé au serveur. Le tirage lui-même n'est stocké nulle part ; seul le
+  brouillon (noms, exclusions, infos) est gardé dans `zinzin:pns:brouillon`.
+- **pere-noel-secret/main.js** : mode révélation si `location.hash` fait plus de 20 caractères (paquet cadeau, confettis, idée de
+  cadeau absurde via `absurdGift`), sinon mode organisateur (collage d'une liste « a, b; c », exclusions dans les deux sens,
+  copie des messages un par un ou tous ensemble, retirage avec confirmation).
+
 **Finitions (✅ étape 6)**
 - **scripts/build-og.mjs** : génère (une fois, résultat commité) les images OG 1200×630 `public/assets/og/<slug>.png`
   (liste `OG_PAGES`, déjà prévue pour avent, pere-noel-secret et album) et les icônes `public/assets/icons/`
@@ -412,10 +424,10 @@ précache du service worker, vérif. `check-pages`, commit, `git push`, `npm run
 - [x] Tests : déverrouillage selon la date de Paris, complétude des 24 contenus
 
 ### Étape 9 — Père Noël secret sans serveur (`/pere-noel-secret/`)
-- [ ] Saisie des participants + exclusions (couples), tirage en dérangement valide (personne ne se tire soi-même)
-- [ ] Un lien par participant qui ne révèle que SON destinataire (chiffré dans le fragment `#`, jamais envoyé au serveur)
-- [ ] Budget, date de l'échange, message ; copie et partage des liens
-- [ ] Tests : tirage valide avec exclusions, cas impossibles détectés, chiffrement aller-retour
+- [x] Saisie des participants + exclusions (couples), tirage en dérangement valide (personne ne se tire soi-même)
+- [x] Un lien par participant qui ne révèle que SON destinataire (chiffré dans le fragment `#`, jamais envoyé au serveur)
+- [x] Budget, date de l'échange, message ; copie et partage des liens
+- [x] Tests : tirage valide avec exclusions, cas impossibles détectés, chiffrement aller-retour
 
 ### Étape 10 — Album d'autocollants (succès transverses, `/album/`)
 - [ ] Module `shared/stickers.js` : catalogue + `unlock(id)` (localStorage) + toast « Nouvel autocollant ! »
@@ -525,3 +537,4 @@ L'ordre réel suit d'abord les échéances : l'Avent avant le 1er décembre, le 
 - **2026-11-18** : **Étape 5 terminée : app D « Roue de la décision »** en ligne. Vérifié dans Edge : la part sous le pointeur = le résultat annoncé, édition, élimination, enregistrement, lien partagé. 69 tests. **Les 4 apps sont en ligne.** Prochaine étape : **étape 6, SEO et finitions** (OG, manifest, sitemap, _headers, Lighthouse, README, PWA).
 - **2026-11-23** : ROADMAP V2 ajoutée (toutes les idées validées). **Étape 6 terminée** : OG, Twitter card, manifest, icônes, sitemap, robots, _headers (CSP stricte vérifiée en prod), _redirects, service worker (hors ligne vérifié), README avec captures. Lighthouse ≥ 90 partout. wrangler désormais local. Prochaine étape : **8, Calendrier de l'Avent** (avant le 1er décembre).
 - **2026-11-23** : **Étape 8 terminée : Calendrier de l'Avent** (`/avent/`) en ligne, prêt pour le 1er décembre. Vérifié par voyage dans le temps (avant, pendant, après) : les 24 cases s'ouvrent sans erreur. 79 tests. Prochaine étape : **9, Père Noël secret**.
+- **2026-11-23** : **Étape 9 terminée : Père Noël secret** en ligne. Vérifié de bout en bout : collage d'une liste, exclusion d'un couple, 6 liens ouverts un à un, tirage valide, lien falsifié rejeté. 86 tests. Prochaine étape : **10, Album d'autocollants**.

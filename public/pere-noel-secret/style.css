@@ -1,0 +1,63 @@
+/* Étape 9 — Père Noël secret */
+body[data-app="pere-noel-secret"] { --accent: var(--c-candy); }
+
+.santa { display: grid; gap: var(--sp-5); max-width: 46rem; }
+.santa__block { display: grid; gap: var(--sp-4); }
+.santa__two { display: grid; gap: var(--sp-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); }
+.block-title { font-size: var(--fs-lg); display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
+textarea.input { resize: vertical; min-height: 4rem; }
+
+.add { display: flex; gap: var(--sp-2); }
+.add .input { flex: 1; min-width: 0; }
+.people { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.person {
+  display: inline-flex; align-items: center; gap: var(--sp-1);
+  padding: var(--sp-1) var(--sp-1) var(--sp-1) var(--sp-3);
+  background: var(--accent); color: var(--c-on-accent);
+  border: 2px solid var(--c-ink); border-radius: var(--radius-pill); font-weight: 700;
+}
+.person button {
+  width: 1.9rem; height: 1.9rem; border-radius: 50%;
+  border: 2px solid var(--c-ink); background: var(--c-paper); color: var(--c-ink); font-weight: 800;
+}
+
+.ex-form { display: flex; flex-wrap: wrap; gap: var(--sp-2); align-items: center; }
+.ex-form .select { width: auto; flex: 1 1 8rem; }
+.exclusions { list-style: none; padding: 0; display: grid; gap: var(--sp-2); }
+.exclusions li { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); padding: var(--sp-2) var(--sp-3); background: var(--surface-2); border: 2px solid var(--border); border-radius: var(--radius-sm); font-weight: 600; }
+
+.santa__go { display: grid; justify-items: start; gap: var(--sp-2); }
+.birth-form__error { color: var(--danger); font-weight: 700; }
+.birth-form__error:empty { display: none; }
+
+.results { border-color: var(--c-ink); }
+.warn { padding: var(--sp-3); background: var(--c-lemon); color: var(--c-ink); border: 2px solid var(--c-ink); border-radius: var(--radius-sm); }
+.links { list-style: none; padding: 0; display: grid; gap: var(--sp-2); }
+.links li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-2); padding: var(--sp-2) var(--sp-3); border: 2px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); }
+.links__name { font-weight: 800; font-family: var(--font-display); font-size: var(--fs-md); }
+.links li.is-copied { background: color-mix(in srgb, var(--c-mint) 30%, var(--surface)); }
+
+/* Révélation */
+.reveal-mode { max-width: 34rem; margin-inline: auto; display: grid; gap: var(--sp-5); }
+.gift { text-align: center; display: grid; gap: var(--sp-4); justify-items: center; padding-block: var(--sp-6); }
+.gift__hello { font-size: var(--fs-2xl); }
+.gift__intro { color: var(--text-soft); }
+.gift__box {
+  font-size: 6rem; line-height: 1; background: none; border: 0; padding: var(--sp-2);
+  animation: wobble 1.8s ease-in-out infinite;
+}
+.gift__box:hover { animation-duration: 0.6s; }
+@keyframes wobble { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-8deg) scale(1.05); } 75% { transform: rotate(8deg) scale(1.05); } }
+.gift__result { display: grid; gap: var(--sp-3); justify-items: center; animation: pop-in var(--dur-slow) var(--ease-pop); }
+.gift__name {
+  font-family: var(--font-display); font-weight: 800; font-size: var(--fs-hero); line-height: 1;
+  padding: var(--sp-2) var(--sp-5); background: var(--accent); color: var(--c-on-accent);
+  border: var(--bw) solid var(--c-ink); border-radius: var(--radius); box-shadow: var(--shadow); transform: rotate(-2deg);
+  overflow-wrap: anywhere;
+}
+.gift__info { display: grid; gap: var(--sp-2); width: 100%; text-align: left; }
+.gift__info div { padding: var(--sp-2) var(--sp-3); background: var(--surface-2); border: 2px solid var(--border); border-radius: var(--radius-sm); }
+.gift__info dt { font-size: var(--fs-xs); font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; }
+.gift__info dd { margin: 0; font-weight: 600; }
+.gift__idea { font-size: var(--fs-sm); color: var(--text-soft); }
+.reveal-mode__new { text-align: center; font-weight: 700; }
