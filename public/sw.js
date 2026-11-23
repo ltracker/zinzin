@@ -4,7 +4,7 @@
 // hors ligne, tout le site précaché reste utilisable.
 // ⚠️ Ajouter ici tout nouveau fichier servi (le test tests/sw.test.js le vérifie).
 
-const VERSION = 'zinzin-v6';
+const VERSION = 'zinzin-v7';
 
 const PRECACHE = [
   '/',
@@ -35,6 +35,7 @@ const PRECACHE = [
   '/shared/site.js',
   '/shared/autocomplete.js',
   '/shared/stickers.js',
+  '/shared/theme.js',
   '/a-propos/style.css',
   '/a-propos/main.js',
   '/ce-jour-la/style.css',

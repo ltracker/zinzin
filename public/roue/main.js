@@ -9,6 +9,7 @@ import { load, save } from '../shared/storage.js';
 import { readParams, buildUrl, copyText } from '../shared/share.js';
 import { $, el, toast, prefersReducedMotion } from '../shared/ui.js';
 import { unlock, bump, collect, trackVisit } from '../shared/stickers.js';
+import { makeTeams, teamName } from '../equipes/equipes.logic.js';
 
 trackVisit('roue');
 
@@ -25,7 +26,7 @@ let state = { title: PRESETS[0].title, options: sanitizeOptions(PRESETS[0].optio
 let eliminated = [];
 let rotation = 0;
 let spinning = false;
-const settings = { sound: true, eliminate: false, ...load(SETTINGS_KEY, {}) };
+const settings = { sound: true, eliminate: false, tournoi: false, soundTheme: 'cliquetis', ...load(SETTINGS_KEY, {}) };
 
 /* ================================================================== */
 /* Dessin                                                             */
@@ -153,16 +154,24 @@ function tick() {
     const t = audio.currentTime;
     const osc = audio.createOscillator();
     const gain = audio.createGain();
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(1900, t);
-    osc.frequency.exponentialRampToValueAtTime(600, t + 0.03);
-    gain.gain.setValueAtTime(0.18, t);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+    // Thèmes sonores : cliquetis (triangle descendant), bulles (sinus montant), arcade (carré 8-bit)
+    const theme = SOUND_THEMES[settings.soundTheme] || SOUND_THEMES.cliquetis;
+    osc.type = theme.type;
+    osc.frequency.setValueAtTime(theme.from, t);
+    osc.frequency.exponentialRampToValueAtTime(theme.to, t + theme.dur * 0.75);
+    gain.gain.setValueAtTime(theme.gain, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + theme.dur);
     osc.connect(gain).connect(audio.destination);
     osc.start(t);
-    osc.stop(t + 0.05);
+    osc.stop(t + theme.dur + 0.01);
   } catch { /* son indisponible */ }
 }
+
+const SOUND_THEMES = {
+  cliquetis: { type: 'triangle', from: 1900, to: 600, gain: 0.18, dur: 0.04 },
+  bulles: { type: 'sine', from: 420, to: 1250, gain: 0.22, dur: 0.07 },
+  arcade: { type: 'square', from: 880, to: 870, gain: 0.07, dur: 0.035 },
+};
 
 function fanfare() {
   if (!settings.sound || !audio) return;
@@ -192,7 +201,7 @@ function secureRandom() {
 
 function spin() {
   if (spinning) return;
-  if (state.options.length < 2) { toast('Il faut au moins 2 options 🙂'); return; }
+  if (state.options.length < 2) { toast(settings.tournoi ? 'Le tournoi est terminé : remets les éliminées pour rejouer ♻️' : 'Il faut au moins 2 options 🙂'); return; }
   spinning = true;
   spinBtn.disabled = true;
   resultEl.classList.remove('is-winner');
@@ -223,12 +232,31 @@ function done(index) {
   rotation %= TAU;
   bump('roue', 1, { 1: 'roue-1', 100: 'roue-100' });
   const winner = state.options[index];
+  spinning = false;
+  spinBtn.disabled = false;
+  if (settings.tournoi) {
+    // Tournoi : l'option tirée est éliminée ; la dernière restante est championne.
+    resultEl.textContent = `❌ ${winner.label} est éliminé·e`;
+    resultEl.classList.remove('is-winner');
+    eliminated.push(winner);
+    state.options = removeAt(state.options, index);
+    persist();
+    setTimeout(() => {
+      renderEditor();
+      draw();
+      if (state.options.length === 1) {
+        resultEl.textContent = `🏆 Champion·ne : ${state.options[0].label} !`;
+        resultEl.classList.add('is-winner');
+        confetti();
+        fanfare();
+      } else toast(`Encore ${state.options.length} en lice 🏟️`);
+    }, 900);
+    return;
+  }
   resultEl.textContent = `🎉 ${winner.label} !`;
   resultEl.classList.add('is-winner');
   confetti();
   fanfare();
-  spinning = false;
-  spinBtn.disabled = false;
   if (settings.eliminate && state.options.length > 2) {
     setTimeout(() => {
       eliminated.push(winner);
@@ -369,7 +397,7 @@ $('#share-list').addEventListener('click', async () => {
 
 /* ---------- Réglages ---------- */
 
-for (const k of ['sound', 'eliminate']) {
+for (const k of ['sound', 'eliminate', 'tournoi']) {
   const box = $(`#${k}`);
   box.checked = settings[k];
   box.addEventListener('change', () => {
@@ -377,6 +405,32 @@ for (const k of ['sound', 'eliminate']) {
     save(SETTINGS_KEY, settings);
   });
 }
+
+$('#sound-theme').value = settings.soundTheme;
+$('#sound-theme').addEventListener('change', () => {
+  settings.soundTheme = $('#sound-theme').value;
+  save(SETTINGS_KEY, settings);
+  const was = settings.sound;
+  settings.sound = true;
+  tick();
+  settings.sound = was;
+});
+
+/* ---------- Tirage d'équipes à partir des options ---------- */
+
+$('#teams-btn').addEventListener('click', () => {
+  const k = Math.max(2, Math.min(10, Number($('#teams-n').value) || 2));
+  if (state.options.length < k) { toast(`Il faut au moins ${k} options`); return; }
+  const rand = () => secureRandom();
+  const taken = new Set();
+  const teams = makeTeams(state.options.map((o) => o.label), k, rand).map((m) => ({ name: teamName(rand, taken), members: m }));
+  $('#roue-teams').replaceChildren(...teams.map((t) => el('div', { class: 'roue-team' },
+    el('strong', {}, t.name), el('span', {}, t.members.join(', ')))));
+  unlock('equipes-1');
+});
+
+// Le thème (clair/sombre) a changé : on relit les couleurs et on redessine.
+document.addEventListener('zinzin:theme', () => resize());
 
 /* ================================================================== */
 /* Démarrage                                                          */

@@ -121,3 +121,14 @@
 .estimate:nth-child(3n + 2) { transform: rotate(0.4deg); }
 
 .share-bar { display: grid; gap: var(--sp-3); }
+
+/* Étape 13 : retraite et mode duo */
+.retire-row { gap: var(--sp-2); }
+.retire-row label { font-weight: 700; font-size: var(--fs-sm); }
+.retire-age { width: 5.5rem; text-align: center; }
+.duo-card { display: grid; gap: var(--sp-3); align-content: start; }
+.duo-date { width: auto; flex: 1; }
+.duo-results dl { display: grid; gap: var(--sp-2); }
+.duo-results dl > div { padding: var(--sp-2) var(--sp-3); background: var(--surface-2); border: 2px solid var(--border); border-radius: var(--radius-sm); }
+.duo-results dt { font-weight: 800; font-size: var(--fs-sm); }
+.duo-results dd { margin: 0; }

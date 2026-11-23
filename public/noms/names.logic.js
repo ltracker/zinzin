@@ -340,3 +340,36 @@ export function generate(categoryId, seed) {
 export function toText(result) {
   return [`${result.emoji} ${result.name}`, ...result.lines.map(([k, v]) => `${k} : ${v}`)].join('\n');
 }
+
+
+/* ------------------------------------------------------------------ */
+/* Étape 13 : « ton nom de pirate / catcheur / elfe » (prénom + date)   */
+/* ------------------------------------------------------------------ */
+
+const WRESTLER_TITLES = ['The', 'El', 'Mister', 'Lady', 'Big', 'Iron'];
+const ELF_ENDINGS = ['iel', 'wen', 'ion', 'ael', 'ith', 'or', 'ïa', 'ëa', 'anor', 'ilwë'];
+const ELF_PLACES = ['du Bois-Dormant', 'de la Lune-Pâle', 'de la Rivière-Claire', "de la Feuille-d'Argent", 'de la Brume-Douce', "de l'Étoile-Filante", 'du Val-Tranquille', 'des Monts-Brumeux'];
+
+/** « de la Tartiflette », « du Pingouin », « de l'Ananas » (nom en majuscule). */
+const fromNoun = (n) => { const w = withArticle(n, 's', 'de'); return w.slice(0, w.length - n.s.length) + cap(n.s); };
+
+/** Trois noms de personnage stables pour un prénom et une date de naissance. */
+export function personaNames(firstName, dateStr = '') {
+  const who = cap(String(firstName).trim().replace(/\s+/g, ' ')) || 'Anonyme';
+  const base = `${who.toLowerCase()}#${dateStr}`;
+  const r1 = createRng(`pirate#${base}`);
+  const n1 = pick(r1, nouns);
+  const pirate = pick(r1, [
+    () => `Capitaine ${who} ${fromNoun(n1)}`,
+    () => `${who} Barbe-${cap(agree(pick(r1, adjectives), 'f'))}`,
+    () => `${who} le Terrible ${fromNoun(n1)}`,
+    () => `${who} ${pick(r1, ['Œil', 'Jambe', 'Main', 'Dent'])}-de-${cap(n1.s)}`,
+  ])();
+  const r2 = createRng(`catcheur#${base}`);
+  const n2 = pick(r2, nouns);
+  const catcheur = `${pick(r2, WRESTLER_TITLES)} ${cap(n2.s)} ${cap(agree(pick(r2, adjectives), n2.g))}`;
+  const r3 = createRng(`elfe#${base}`);
+  const root = stripAccents(who).replace(/[^a-zA-Z]/g, '').slice(0, 4) || 'Ael';
+  const elfe = `${cap(root.toLowerCase())}${pick(r3, ELF_ENDINGS)} ${pick(r3, ELF_PLACES)}`;
+  return { pirate, catcheur, elfe };
+}

@@ -66,3 +66,16 @@
 .fav__name { font-weight: 800; font-family: var(--font-display); font-size: var(--fs-md); overflow-wrap: anywhere; }
 .fav__cat { font-size: var(--fs-xs); color: var(--text-soft); }
 .fav__actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+
+/* Étape 13 : 10 d'un coup, nom de personnage */
+.generator__controls > .btn--small { justify-self: center; }
+.batch, .persona { margin-top: var(--sp-6); display: grid; gap: var(--sp-4); }
+.batch__list { padding-left: 1.6em; display: grid; gap: var(--sp-2); grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr)); }
+.batch__item { background: none; border: 0; padding: var(--sp-1) 0; text-align: left; font-family: var(--font-display); font-weight: 800; font-size: var(--fs-md); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; color: inherit; }
+.batch__item:hover { color: var(--accent); }
+.persona__form { display: grid; gap: var(--sp-3); grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); align-items: end; }
+.persona__out { display: grid; gap: var(--sp-3); grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+.persona__out:empty { display: none; }
+.persona__out > div { padding: var(--sp-3); background: var(--accent); color: var(--c-on-accent); border: var(--bw) solid var(--c-ink); border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); animation: pop-in var(--dur-slow) var(--ease-pop) both; }
+.persona__out dt { font-size: var(--fs-xs); font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; }
+.persona__out dd { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: var(--fs-lg); line-height: 1.15; }

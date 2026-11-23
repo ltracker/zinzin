@@ -124,6 +124,24 @@ main { flex: 1; padding-block: var(--sp-6) var(--sp-8); }
   .site-nav a { padding: var(--sp-2); }
 }
 
+/* Bouton de thème (injecté par ui.js) */
+.theme-toggle {
+  flex-shrink: 0;
+  display: grid; place-items: center;
+  width: 2.4rem; height: 2.4rem;
+  border: 2px solid var(--border); border-radius: 50%;
+  background: var(--surface); font-size: 1.1rem; line-height: 1;
+  transition: transform var(--dur) var(--ease-pop);
+}
+.theme-toggle:hover { transform: rotate(-20deg) scale(1.08); }
+.site-header__inner { gap: var(--sp-2); }
+.site-nav { margin-left: auto; }
+
+/* Easter egg Konami */
+.unicorn-rain { position: fixed; inset: 0; pointer-events: none; z-index: 160; overflow: hidden; }
+.unicorn-rain span { position: absolute; top: -3rem; animation: unicorn-fall 3s linear forwards; }
+@keyframes unicorn-fall { to { transform: translateY(110vh) rotate(540deg); } }
+
 /* ---------- Pied de page ---------- */
 .site-footer {
   border-top: var(--bw) solid var(--border);

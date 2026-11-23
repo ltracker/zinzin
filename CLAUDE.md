@@ -284,6 +284,21 @@ posés via JS (`el.style.x = …`) restent autorisés.
 - Composants communs ajoutés à `base.css` : `.pill` (pastille radio) et `.block-title`.
 - Pages générées une fois avec un gabarit (script temporaire, hors repo). Pour une nouvelle page, copier une page existante.
 
+**Améliorations (✅ étape 13)**
+- **Thème manuel :** `shared/theme.js` (script classique et bloquant, inséré dans le `<head>` de TOUTES les pages) lit
+  `zinzin:theme` et pose `<html data-theme="light|dark">` avant l'affichage. Dans `tokens.css`, le sombre s'applique si le système
+  le demande et que l'utilisateur ne force pas `light`, ou si `data-theme="dark"`. **Ne plus écrire de
+  `@media (prefers-color-scheme: dark)` dans les composants** : utiliser des variables de rôle (`--shape`, `--hero-stroke`…).
+  Bouton 🌗 injecté par `ui.js` dans `.site-header__inner` (automatique → clair → sombre), événement `zinzin:theme` (la roue redessine).
+- **Code Konami** (`ui.js`) : pluie de licornes + autocollant `licorne`.
+- **Ce jour-là** : `duoStats(a, b)` (écart, jours vécus en même temps, jour du double, jalons d'âge cumulé), `petYears` (barème
+  15/9/5 ou 4), `retirement(birth, âge 50-75)` ; URL `&d2=` pour le duo, âge de retraite dans `zinzin:cjl:retraite`.
+- **Noms** : `personaNames(prénom, date)` (pirate, catcheur, elfe ; « du Ouistiti » est correct car pas d'élision), « 10 d'un coup ».
+- **Roue** : mode tournoi (l'option tirée est éliminée, la dernière est championne), tirage d'équipes depuis les options
+  (`equipes.logic.js`), thèmes sonores `SOUND_THEMES` (cliquetis, bulles, arcade) dans `zinzin:roue:reglages`.
+- Tests : `tests/improve13.test.js`. Tests e2e (non commités) dans le dossier de travail de la session ; ils s'écrivent facilement
+  sur le modèle « playwright-core + scripts/serve.mjs » (voir les exemples dans l'historique git des étapes).
+
 **Finitions (✅ étape 6)**
 - **scripts/build-og.mjs** : génère (une fois, résultat commité) les images OG 1200×630 `public/assets/og/<slug>.png`
   (liste `OG_PAGES`, déjà prévue pour avent, pere-noel-secret et album) et les icônes `public/assets/icons/`
@@ -362,6 +377,7 @@ Déploiement : `git push` puis `npm run deploy` (voir §8). Le déploiement auto
 | D28 | Bloc SEO injecté par un script de maintenance, résultat commité | Respecte « zéro build » tout en évitant 9 copies manuelles des balises |
 | D29 | Apps secondaires dans « Encore plus » sur l'accueil, pas dans la nav | La nav doit rester lisible sur mobile (4 émojis) |
 | D30 | Scripts de modification écrits dans des fichiers (outil d'écriture), pas en ligne de commande | Un `\\b` passé par bash puis node est devenu un vrai caractère 0x08 dans une regex (bug silencieux, test faussement vert) |
+| D31 | Thème manuel par `data-theme` + script bloquant externe | Pas de flash au chargement, compatible CSP (pas d'inline), le thème automatique reste le défaut |
 | D17 | `404.html` avancée dès le branchement de Cloudflare | `not_found_handling: 404-page` l'exige ; évite que les apps pas encore codées renvoient l'accueil |
 
 ---
@@ -487,10 +503,10 @@ précache du service worker, vérif. `check-pages`, commit, `git push`, `npm run
 - [x] Générateur d'excuses bidon (moteur d'accords des noms)
 
 ### Étape 13 — Améliorations de l'existant
-- [ ] Ce jour-là : mode duo (deux dates), âge en années de chien/chat, compte à rebours retraite
-- [ ] Noms : « ton nom de pirate / catcheur / elfe » (prénom + date), mode « 10 d'un coup »
-- [ ] Roue : mode tournoi, tirage d'équipes, thèmes sonores
-- [ ] Partout : bouton clair/sombre manuel, easter egg (code Konami 🦄)
+- [x] Ce jour-là : mode duo (deux dates), âge en années de chien/chat, compte à rebours retraite
+- [x] Noms : « ton nom de pirate / catcheur / elfe » (prénom + date), mode « 10 d'un coup »
+- [x] Roue : mode tournoi, tirage d'équipes, thèmes sonores
+- [x] Partout : bouton clair/sombre manuel, easter egg (code Konami 🦄)
 
 ---
 
@@ -579,3 +595,4 @@ L'ordre réel suit d'abord les échéances : l'Avent avant le 1er décembre, le 
 - **2026-11-23** : **Étape 10 terminée : Album d'autocollants** en ligne (30 autocollants, déclencheurs dans toutes les apps). Non-régression complète : 11 pages, tests e2e jeu/roue/Père Noël secret, 91 tests unitaires. Prochaine étape : **11, nouveaux modes du jeu du jour**.
 - **2026-11-23** : **Étape 11 terminée : jeu du jour V2** en ligne (Émojichanson, Plus ou moins, archives, défis entre amis, mode difficile). Bug « null » corrigé dans le jeu et la roue. 96 tests. Prochaine étape : **12, nouvelles mini-apps** (horoscope, quiz, chrono, équipes et dés, excuses).
 - **2026-11-23** : **Étape 12 terminée : 5 mini-apps** en ligne (horoscope, quiz, chrono, équipes et dés, excuses). Testées de bout en bout, accords et élisions corrigés, référence à une franchise retirée. 102 tests. Prochaine étape : **13, améliorations de l'existant**.
+- **2026-11-23** : **Étape 13 terminée : la ROADMAP V2 est entièrement réalisée.** Thème clair/sombre manuel, Konami, duo/animaux/retraite, noms de personnage, 10 noms d'un coup, roue tournoi/équipes/sons. Non-régression complète : 106 tests unitaires, 16 pages × 4 configurations, 8 suites e2e. Prochaine piste : nouvelles idées (voir §9) ou déploiement auto au push (action dans le tableau de bord Cloudflare).

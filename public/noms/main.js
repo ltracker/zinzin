@@ -1,5 +1,5 @@
 // App B — Noms absurdes : interface. La génération est dans names.logic.js.
-import { CATEGORIES, generate, toText } from './names.logic.js';
+import { CATEGORIES, generate, toText, personaNames } from './names.logic.js';
 import { randomSeed } from '../shared/rng.js';
 import { load, save } from '../shared/storage.js';
 import { readParams, replaceUrlParams, buildUrl, copyText } from '../shared/share.js';
@@ -161,6 +161,36 @@ $('#favs-clear').addEventListener('click', () => {
   save(FAV_KEY, []);
   renderFavs();
   refreshFavButton();
+});
+
+/* ---------------- 10 d'un coup ---------------- */
+
+$('#batch-btn').addEventListener('click', () => {
+  const c = selectedCategory();
+  const cat = CATEGORIES.find((x) => x.id === c);
+  const results = Array.from({ length: 10 }, () => generate(c, String(randomSeed())));
+  $('#batch-cat').textContent = `${cat.emoji} ${cat.label}`;
+  $('#batch-list').replaceChildren(...results.map((r) => el('li', {},
+    el('button', { type: 'button', class: 'batch__item', title: 'Afficher le détail', onclick: () => {
+      seedInput.value = '';
+      replaceUrlParams({ c: r.category, s: r.seed });
+      show(r);
+      $('#result').scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' });
+    } }, r.name))));
+  $('#batch').hidden = false;
+  bump('noms', 10, { 10: 'noms-10', 100: 'noms-100' });
+  if (collect('noms-categories', c) >= CATEGORIES.length) unlock('noms-toutes');
+});
+
+/* ---------------- Nom de pirate / catcheur / elfe ---------------- */
+
+$('#persona-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const name = $('#persona-name').value.trim();
+  if (!name) { $('#persona-name').focus(); return; }
+  const p = personaNames(name, $('#persona-date').value);
+  $('#persona-out').replaceChildren(...[['🏴‍☠️ Pirate', p.pirate], ['🤼 Catcheur·se', p.catcheur], ['🧝 Elfe', p.elfe]].map(([k, v]) =>
+    el('div', {}, el('dt', {}, k), el('dd', {}, v))));
 });
 
 /* ---------------- Démarrage ---------------- */

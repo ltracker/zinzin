@@ -470,3 +470,52 @@ export function buildIcs({ title, description = '', date, uid, url, now = new Da
   ].filter(Boolean);
   return lines.map(foldLine).join('\r\n') + '\r\n';
 }
+
+
+/* ------------------------------------------------------------------ */
+/* Étape 13 : mode duo, années animales, retraite                      */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Statistiques pour deux dates de naissance.
+ * - gap : écart exact (a/m/j) et en jours ; together : jours vécus en même temps (depuis la naissance du cadet) ;
+ * - doubleDate : le jour où l'aîné·e avait exactement le double de l'âge du cadet (naissance du cadet + écart) ;
+ * - combined : jalons d'âge cumulé (somme des deux âges) avec leur date.
+ */
+export function duoStats(a, b, now = new Date()) {
+  const [older, younger] = a <= b ? [a, b] : [b, a];
+  const gapMs = younger - older;
+  const gap = ageBreakdown(older, younger);
+  const together = Math.max(0, Math.floor((now - younger) / DAY));
+  const doubleDate = new Date(younger.getTime() + gapMs);
+  const YEAR = YEAR_DAYS * DAY;
+  // âge cumulé = (now - older) + (now - younger) = X  ⇒  now = (X + older + younger) / 2
+  const combined = [
+    { label: '20 000 jours à deux', ms: 20000 * DAY },
+    { label: '50 ans à deux', ms: 50 * YEAR },
+    { label: '75 ans à deux', ms: 75 * YEAR },
+    { label: '100 ans à deux', ms: 100 * YEAR },
+    { label: '150 ans à deux', ms: 150 * YEAR },
+  ].map((m) => {
+    const date = new Date((m.ms + older.getTime() + younger.getTime()) / 2);
+    return { ...m, date, past: date <= now };
+  }).filter((m) => m.date >= younger);
+  return { older, younger, gap, gapDays: Math.round(gapMs / DAY), together, doubleDate, combined };
+}
+
+/**
+ * Âge « en années de chien et de chat », barème populaire : 15 ans la 1re année,
+ * +9 la 2e, puis +5 (chien) ou +4 (chat) par an. C'est une estimation rigolote, pas de la science.
+ */
+export function petYears(humanYears) {
+  const y = Math.max(0, humanYears);
+  const conv = (perYear) => (y <= 1 ? 15 * y : y <= 2 ? 15 + 9 * (y - 1) : 24 + perYear * (y - 2));
+  return { chien: Math.floor(conv(5)), chat: Math.floor(conv(4)) };
+}
+
+/** Date et temps restant avant l'anniversaire de l'âge de retraite choisi (âge entier, 50-75). */
+export function retirement(birth, age = 64, now = new Date()) {
+  const a = Math.min(75, Math.max(50, Math.round(age)));
+  const date = addMonths(birth, a * 12);
+  return { age: a, date, ms: date - now, past: date <= now };
+}

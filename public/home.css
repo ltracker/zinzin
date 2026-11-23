@@ -6,7 +6,7 @@
 .hero__word > span {
   display: inline-block;
   color: var(--c-ink);
-  -webkit-text-stroke: 0.035em var(--c-ink);
+  -webkit-text-stroke: 0.035em var(--hero-stroke);
   paint-order: stroke fill;
   text-shadow: 0.06em 0.06em 0 var(--shadow-color);
   animation: letter-in 700ms var(--ease-pop) both;
@@ -24,9 +24,6 @@
 .hero__word:hover > span:nth-child(2n) { animation-delay: 60ms; }
 @keyframes letter-bounce { 40% { translate: 0 -0.12em; } }
 
-@media (prefers-color-scheme: dark) {
-  .hero__word > span { -webkit-text-stroke-color: var(--border); }
-}
 
 .hero__tagline {
   margin: var(--sp-5) auto 0;

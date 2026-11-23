@@ -44,8 +44,7 @@
 /* Silhouette */
 .silhouette { margin: 0; display: grid; place-items: center; padding: var(--sp-3); background: var(--surface-2); border: var(--bw) dashed var(--border); border-radius: var(--radius); }
 .silhouette svg { width: min(100%, 22rem); aspect-ratio: 1; }
-.silhouette path { fill: var(--c-ink); fill-rule: evenodd; stroke: var(--c-ink); stroke-width: 0.4; stroke-linejoin: round; }
-@media (prefers-color-scheme: dark) { .silhouette path { fill: var(--c-mint); stroke: var(--c-mint); } }
+.silhouette path { fill: var(--shape); fill-rule: evenodd; stroke: var(--shape); stroke-width: 0.4; stroke-linejoin: round; }
 .silhouette.is-solved path { fill: var(--c-mint); stroke: var(--c-ink); animation: pop-in var(--dur-slow) var(--ease-pop); }
 
 /* Saisie */
@@ -140,9 +139,8 @@
 .pm-card { margin: 0; display: grid; gap: var(--sp-2); justify-items: center; padding: var(--sp-3); background: var(--surface-2); border: var(--bw) solid var(--border); border-radius: var(--radius); text-align: center; }
 .pm-card--mystery { border-style: dashed; }
 .pm-card svg { width: 100%; max-width: 11rem; aspect-ratio: 1; }
-.pm-card path { fill: var(--c-ink); fill-rule: evenodd; }
+.pm-card path { fill: var(--shape); fill-rule: evenodd; }
 .pm-card--mystery path { fill: var(--c-pool); stroke: var(--c-ink); stroke-width: 0.6; }
-@media (prefers-color-scheme: dark) { .pm-card path { fill: var(--c-mint); } .pm-card--mystery path { fill: var(--c-pool); } }
 .pm-card figcaption { display: grid; gap: var(--sp-1); }
 .pm-name { font-family: var(--font-display); font-weight: 800; line-height: 1.1; overflow-wrap: anywhere; }
 .pm-area { font-size: var(--fs-sm); font-weight: 700; font-variant-numeric: tabular-nums; }

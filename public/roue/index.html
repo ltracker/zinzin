@@ -30,6 +30,7 @@
   <link rel="preload" href="/assets/fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/shared/tokens.css">
   <link rel="stylesheet" href="/shared/base.css">
+  <script src="/shared/theme.js"></script>
   <link rel="stylesheet" href="/roue/style.css">
   <script type="module" src="/roue/main.js"></script>
 </head>
@@ -91,6 +92,25 @@
         <div class="settings">
           <label class="checkbox"><input type="checkbox" id="sound"> 🔊 Son de cliquetis</label>
           <label class="checkbox"><input type="checkbox" id="eliminate"> 🗑️ Éliminer l'option tirée</label>
+          <label class="checkbox"><input type="checkbox" id="tournoi"> 🏆 Mode tournoi (on élimine jusqu'au champion)</label>
+          <div class="row sound-theme">
+            <label for="sound-theme">🎵 Son</label>
+            <select class="select" id="sound-theme">
+              <option value="cliquetis">Cliquetis</option>
+              <option value="bulles">Bulles</option>
+              <option value="arcade">Arcade 8-bit</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="teams-split">
+          <div class="row">
+            <label for="teams-n">👥 Répartir les options en</label>
+            <input class="input teams-n" id="teams-n" type="number" min="2" max="10" value="2">
+            <span>équipes</span>
+            <button class="btn btn--small" type="button" id="teams-btn">Tirer</button>
+          </div>
+          <div class="roue-teams" id="roue-teams" aria-live="polite"></div>
         </div>
 
         <div class="row editor__actions">

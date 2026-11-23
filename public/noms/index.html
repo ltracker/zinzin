@@ -30,6 +30,7 @@
   <link rel="preload" href="/assets/fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/shared/tokens.css">
   <link rel="stylesheet" href="/shared/base.css">
+  <script src="/shared/theme.js"></script>
   <link rel="stylesheet" href="/noms/style.css">
   <script type="module" src="/noms/main.js"></script>
 </head>
@@ -69,6 +70,7 @@
           <p class="field__hint">Même graine = même nom, à chaque fois. Laisse vide pour du pur hasard.</p>
         </div>
         <button class="btn btn--primary btn--big generator__go" type="submit">Générer ✨</button>
+        <button class="btn btn--small" type="button" id="batch-btn">🎰 10 d'un coup</button>
       </form>
 
       <section class="result card card--accent" id="result" aria-live="polite" aria-atomic="true" aria-labelledby="result-name">
@@ -86,6 +88,27 @@
         </div>
       </section>
     </div>
+
+    <section class="batch card" id="batch" hidden aria-labelledby="batch-title" aria-live="polite">
+      <h2 id="batch-title" class="block-title">🎰 10 noms d'un coup <span class="chip" id="batch-cat"></span></h2>
+      <ol class="batch__list" id="batch-list"></ol>
+    </section>
+
+    <section class="persona card" aria-labelledby="persona-title">
+      <h2 id="persona-title" class="block-title">🏴‍☠️ Ton nom de pirate, de catcheur et d'elfe</h2>
+      <form class="persona__form" id="persona-form">
+        <div class="field">
+          <label for="persona-name">Ton prénom</label>
+          <input class="input" id="persona-name" type="text" maxlength="40" autocomplete="given-name" placeholder="Camille">
+        </div>
+        <div class="field">
+          <label for="persona-date">Ta date de naissance <span class="field__hint">(facultatif)</span></label>
+          <input class="input" id="persona-date" type="date">
+        </div>
+        <button class="btn btn--primary" type="submit">Révéler 🎭</button>
+      </form>
+      <dl class="persona__out" id="persona-out" aria-live="polite"></dl>
+    </section>
 
     <section class="favs" aria-labelledby="favs-title">
       <div class="favs__head">

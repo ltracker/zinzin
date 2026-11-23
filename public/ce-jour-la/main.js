@@ -2,7 +2,9 @@
 import {
   parseBirth, validateBirth, ageBreakdown, milestones, nextMilestone, nextBirthday, planetAges,
   countFullMoons, nextFullMoon, moonPhase, estimates, weekdayOf, westernZodiac, chineseZodiac, buildIcs,
+  duoStats, petYears, retirement,
 } from './life.logic.js';
+import { load, save } from '../shared/storage.js';
 import { formatNumber, formatLongDate } from '../shared/dates.js';
 import { readParams, replaceUrlParams, buildUrl, copyText, shareOrCopy, downloadText } from '../shared/share.js';
 import { renderCard, downloadCanvas } from '../shared/image.js';
@@ -69,6 +71,8 @@ function tick() {
   setLive('bdayCountdown', countdown(nextBirthday(birth, now).ms));
   const nm = nextMilestone(birth, now);
   setLive('msCountdown', nm ? countdown(nm.date - now) : '');
+  const ret = retirement(birth, Number($('#retire-age').value), now);
+  setLive('retireCountdown', ret.past ? 'Déjà là ! Profite bien 🏖️' : countdown(ret.ms));
   const e = estimates(birth, now);
   for (const [k, v] of Object.entries(e)) setLive(`est-${k}`, formatEstimate(k, v));
 }
@@ -147,7 +151,13 @@ function render() {
     item('📅', `Né·e un ${wd.name}`, wd.rhyme),
     item(z.emoji, `Signe : ${z.name}`, 'Zodiaque occidental (tropical)'),
     item(cz.emoji, `Signe chinois : ${cz.name} de ${cz.element}`, `Année lunaire commencée en ${cz.year}`),
+    item('🐶', `${petYears(ageBreakdown(birth, now).totalDays / 365.25).chien} ans en années de chien`,
+      `et ${petYears(ageBreakdown(birth, now).totalDays / 365.25).chat} ans en années de chat (barème populaire, pour rire)`),
   );
+
+  // Retraite et duo
+  renderRetirement();
+  renderDuo();
 
   // Estimations
   $('#estimates').replaceChildren(...ESTIMATES.map((e) => el('li', { class: 'card estimate' },
@@ -186,7 +196,7 @@ function compute({ scroll = true } = {}) {
   dateInput.setAttribute('aria-invalid', String(Boolean(err || !dateInput.value)));
   if (err || !dateInput.value) { dateInput.focus(); return; }
   birth = b;
-  replaceUrlParams({ d: dateInput.value, h: timeInput.value });
+  replaceUrlParams({ d: dateInput.value, h: timeInput.value, d2: duoBirth ? $('#duo-date').value : '' });
   render();
   if (scroll) results.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
 }
@@ -258,9 +268,58 @@ $('#ics-btn').addEventListener('click', () => {
   toast('Fichier calendrier téléchargé 📅');
 });
 
+/* ---------------- Retraite ---------------- */
+
+function renderRetirement() {
+  const ret = retirement(birth, Number($('#retire-age').value), new Date());
+  $('#retire-age').value = String(ret.age);
+  $('#retire-what').textContent = ret.past
+    ? `Tes ${ret.age} ans, c'était le ${longDate(ret.date)}.`
+    : `Tes ${ret.age} ans : le ${longDate(ret.date)}.`;
+}
+
+$('#retire-age').value = String(load('cjl:retraite', 64));
+$('#retire-age').addEventListener('change', () => {
+  save('cjl:retraite', Number($('#retire-age').value) || 64);
+  if (birth) { renderRetirement(); tick(); }
+});
+
+/* ---------------- Mode duo ---------------- */
+
+let duoBirth = null;
+
+function renderDuo() {
+  const out = $('#duo-results');
+  if (!birth || !duoBirth) { out.replaceChildren(); return; }
+  const now = new Date();
+  const s = duoStats(birth, duoBirth, now);
+  const same = s.gapDays === 0;
+  const lines = [
+    same ? ['🎎 Écart', 'Vous êtes né·es le même jour !'] : ['↔️ Écart', `${plural(s.gap.years, 'an')}, ${plural(s.gap.months, 'mois', 'mois')} et ${plural(s.gap.days, 'jour')} (${n0(s.gapDays)} jours)`],
+    ['🤝 Vécus en même temps', `${n0(s.together)} jours`],
+    same ? null : ['⚖️ Le jour du double', `Le ${longDate(s.doubleDate)}, l'aîné·e avait exactement le double de l'âge du cadet.`],
+    ...s.combined.map((m) => [`🎂 ${m.label}`, `${m.past ? 'C\'était' : 'Ce sera'} le ${longDate(m.date)}`]),
+  ].filter(Boolean);
+  out.replaceChildren(el('dl', {}, ...lines.map(([k, v]) => el('div', {}, el('dt', {}, k), el('dd', {}, v)))));
+}
+
+$('#duo-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const d = parseBirth($('#duo-date').value);
+  const err = validateBirth(d, new Date());
+  if (err) { toast(err); $('#duo-date').focus(); return; }
+  duoBirth = d;
+  replaceUrlParams({ d: dateInput.value, h: timeInput.value, d2: $('#duo-date').value });
+  renderDuo();
+});
+
 /* ---------------- Démarrage ---------------- */
 
 const params = readParams();
+if (params.d2 && parseBirth(params.d2)) {
+  $('#duo-date').value = params.d2;
+  duoBirth = parseBirth(params.d2);
+}
 if (params.d) {
   dateInput.value = params.d;
   timeInput.value = params.h || '';

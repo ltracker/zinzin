@@ -45,6 +45,8 @@
   --focus: #0057ff;
   --success: #138a52;
   --danger: #c4282f;
+  --shape: var(--c-ink);         /* silhouettes (jeu) */
+  --hero-stroke: var(--c-ink);   /* contour des lettres du logo */
 
   /* Couleurs signature des apps */
   --app-ce-jour-la: var(--c-lemon);
@@ -98,8 +100,10 @@
   --gutter: clamp(1rem, 4vw, 2rem);
 }
 
+/* Thème sombre : automatique (système) sauf si l'utilisateur force « clair »,
+   ou forcé via <html data-theme="dark"> (bouton 🌗, script /shared/theme.js). */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #160b2e;
     --bg-pattern: rgba(255, 246, 229, 0.06);
     --surface: #241448;
@@ -111,8 +115,27 @@
     --focus: #8fd3ff;
     --success: #5ef0a8;
     --danger: #ff8a8f;
+    --shape: var(--c-mint);
+    --hero-stroke: #0a0418;
   }
 }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #160b2e;
+  --bg-pattern: rgba(255, 246, 229, 0.06);
+  --surface: #241448;
+  --surface-2: #2f1c5c;
+  --text: #fff6e5;
+  --text-soft: #d9cdf5;
+  --border: #0a0418;
+  --shadow-color: #0a0418;
+  --focus: #8fd3ff;
+  --success: #5ef0a8;
+  --danger: #ff8a8f;
+  --shape: var(--c-mint);
+  --hero-stroke: #0a0418;
+}
+:root[data-theme="light"] { color-scheme: light; }
 
 body[data-app="ce-jour-la"] { --accent: var(--app-ce-jour-la); }
 body[data-app="noms"]       { --accent: var(--app-noms); }

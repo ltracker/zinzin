@@ -13,7 +13,11 @@
 | 🎂 | [**Ce jour-là**](https://zinzin.johan-saez-craponne.workers.dev/ce-jour-la/) | Ton âge à la seconde (en direct), tes jalons (10 000 jours, 1 milliard de secondes…), ton âge sur chaque planète, les pleines lunes vécues (calcul astronomique), tes signes, des estimations rigolotes, un export calendrier `.ics` et une image à partager. |
 | 🤪 | [**Noms absurdes**](https://zinzin.johan-saez-craponne.workers.dev/noms/) | Groupe de rock, startup, créature de poche, cocktail, super-vilain, bateau, wifi, avec un pitch généré. Accords en genre et en nombre, mode « graine » (ton prénom donne toujours le même nom), favoris. |
 | 🧩 | [**Le jeu du jour**](https://zinzin.johan-saez-craponne.workers.dev/jeu/) | **Émojifilm** : un film en émojis (221 films). **Silhouette** : un pays à sa forme (229 pays, distance, direction et proximité). Même puzzle pour tout le monde, nouveau chaque jour à minuit (heure de Paris), stats, séries, partage sans spoiler. |
-| 🎡 | [**La roue de la décision**](https://zinzin.johan-saez-craponne.workers.dev/roue/) | Roue animée avec options pondérées, cliquetis, confettis, listes prêtes à l'emploi, listes perso partageables par lien et mode « éliminer ». |
+| 🎡 | [**La roue de la décision**](https://zinzin.johan-saez-craponne.workers.dev/roue/) | Roue animée avec options pondérées, 3 thèmes sonores, confettis, listes prêtes à l'emploi, listes perso partageables par lien, modes « éliminer » et « tournoi », tirage d'équipes. |
+
+**Et aussi :** 🎄 [Calendrier de l'Avent](https://zinzin.johan-saez-craponne.workers.dev/avent/) · 🎅 [Père Noël secret](https://zinzin.johan-saez-craponne.workers.dev/pere-noel-secret/) (tirage sans serveur, liens chiffrés) · ⭐ [Album d'autocollants](https://zinzin.johan-saez-craponne.workers.dev/album/) (succès dans toutes les apps) · 🔮 [Horoscope absurde](https://zinzin.johan-saez-craponne.workers.dev/horoscope/) · 🧀 [Quiz](https://zinzin.johan-saez-craponne.workers.dev/quiz/) · ⏱️ [Chrono parfait](https://zinzin.johan-saez-craponne.workers.dev/chrono/) · 👥 [Équipes & dés](https://zinzin.johan-saez-craponne.workers.dev/equipes/) · 🙊 [Excuses bidon](https://zinzin.johan-saez-craponne.workers.dev/excuses/).
+
+Le jeu du jour compte aussi **Émojichanson** et **Plus ou moins**, des **archives**, des **défis entre amis** et un **mode difficile**. Thème clair/sombre automatique ou manuel (bouton 🌗), et un petit secret pour qui connaît le code Konami.
 
 | Ce jour-là | Noms absurdes |
 |---|---|
@@ -31,7 +35,7 @@
 - **Rapide** : Lighthouse ≥ 90 partout en performance, et 100 en bonnes pratiques et en SEO.
 - **Hors ligne** : service worker, installable comme une app (PWA).
 - **Sécurisé** : CSP stricte (`script-src 'self'`, `style-src 'self'`), aucun script ni style inline.
-- **Testé** : plus de 70 tests unitaires avec le test runner natif de Node (dates, astronomie, RNG à graine, accords, géographie, tirage pondéré…).
+- **Testé** : plus de 100 tests unitaires avec le test runner natif de Node (dates, astronomie, RNG à graine, accords, géographie, tirage pondéré…).
 
 ## Lancer en local
 

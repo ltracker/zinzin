@@ -68,3 +68,12 @@
 
 /* Confettis */
 .confetti { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 150; }
+
+/* Étape 13 : thème sonore, équipes */
+.sound-theme { gap: var(--sp-2); }
+.sound-theme .select { width: auto; min-height: 2.4rem; padding-block: var(--sp-1); }
+.teams-split { display: grid; gap: var(--sp-3); padding-top: var(--sp-3); border-top: 2px dashed var(--border); }
+.teams-split .row { gap: var(--sp-2); font-weight: 650; font-size: var(--fs-sm); }
+.teams-n { width: 4.2rem; text-align: center; min-height: 2.4rem; padding: var(--sp-1); }
+.roue-teams { display: grid; gap: var(--sp-2); }
+.roue-team { display: grid; padding: var(--sp-2) var(--sp-3); background: var(--surface-2); border: 2px solid var(--border); border-radius: var(--radius-sm); }

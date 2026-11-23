@@ -30,6 +30,7 @@
   <link rel="preload" href="/assets/fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/shared/tokens.css">
   <link rel="stylesheet" href="/shared/base.css">
+  <script src="/shared/theme.js"></script>
   <link rel="stylesheet" href="/ce-jour-la/style.css">
   <script type="module" src="/ce-jour-la/main.js"></script>
 </head>
@@ -137,6 +138,30 @@
         <p class="block__intro">Des moyennes au doigt mouillé, pas des données médicales : ton cœur et tes poumons font bien ce qu'ils veulent.</p>
         <ul class="estimates" id="estimates" role="list"></ul>
       </section>
+
+      <div class="duo">
+        <section class="card next-card" aria-labelledby="retire-title">
+          <h2 id="retire-title" class="card__title">🏖️ Compte à rebours retraite</h2>
+          <div class="row retire-row">
+            <label for="retire-age">Âge de départ choisi</label>
+            <input class="input retire-age" id="retire-age" type="number" min="50" max="75" step="1" value="64">
+          </div>
+          <p class="next-card__what" id="retire-what"></p>
+          <p class="countdown" data-live="retireCountdown"></p>
+          <p class="card__note">Âge purement indicatif, à choisir toi-même : les vraies règles dépendent de ta situation.</p>
+        </section>
+
+        <section class="card duo-card" aria-labelledby="duo-title">
+          <h2 id="duo-title" class="card__title">👫 Mode duo</h2>
+          <p>Compare avec la date de naissance de quelqu'un (ami·e, amoureux·se, frère, sœur, chat…).</p>
+          <form class="row" id="duo-form">
+            <label class="visually-hidden" for="duo-date">Autre date de naissance</label>
+            <input class="input duo-date" type="date" id="duo-date" min="1900-01-01">
+            <button class="btn btn--small" type="submit">Comparer</button>
+          </form>
+          <div id="duo-results" class="duo-results" aria-live="polite"></div>
+        </section>
+      </div>
 
       <section class="share-bar card" aria-labelledby="share-title">
         <h2 id="share-title" class="card__title">📣 Partager</h2>
