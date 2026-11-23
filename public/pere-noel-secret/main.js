@@ -6,6 +6,9 @@ import { load, save } from '../shared/storage.js';
 import { copyText, shareOrCopy } from '../shared/share.js';
 import { formatLongDate } from '../shared/dates.js';
 import { $, el, toast } from '../shared/ui.js';
+import { unlock, bump, collect, trackVisit } from '../shared/stickers.js';
+
+trackVisit('pere-noel-secret');
 
 const DRAFT_KEY = 'pns:brouillon';
 
@@ -39,6 +42,7 @@ async function revealMode(hash) {
     const idea = absurdGift(`${t.giver}>${t.receiver}`);
     $('#reveal-idea').textContent = `Idée cadeau (déconseillée) : ${idea.gift.toLowerCase()}. ${idea.usage}`;
     $('#reveal-result').hidden = false;
+    unlock('pns-revele');
     confetti();
   });
 }
@@ -158,6 +162,7 @@ async function runDraw() {
   $('#results').hidden = false;
   $('#results').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
   toast('Tirage effectué 🎲');
+  unlock('pns-tirage');
 }
 
 $('#draw-btn').addEventListener('click', runDraw);

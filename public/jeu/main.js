@@ -10,6 +10,9 @@ import { load, save } from '../shared/storage.js';
 import { shareOrCopy } from '../shared/share.js';
 import { attachAutocomplete } from '../shared/autocomplete.js';
 import { $, el, toast, everySecond } from '../shared/ui.js';
+import { unlock, bump, collect, trackVisit } from '../shared/stickers.js';
+
+trackVisit('jeu');
 
 let today = parisDateKey();
 let activeMode = load('jeu:mode', 'film') === 'pays' ? 'pays' : 'film';
@@ -55,6 +58,17 @@ for (const m of ['film', 'pays']) {
 function finish(mode, game) {
   const stats = recordResult(load(storeKey(mode, 'stats'), emptyStats()), game);
   save(storeKey(mode, 'stats'), stats);
+  // Autocollants
+  if (game.status === 'won') {
+    unlock('jeu-victoire');
+    if (game.guesses.length === 1) unlock('jeu-un-coup');
+    if (stats.streak >= 3) unlock('jeu-serie-3');
+    if (stats.streak >= 7) unlock('jeu-serie-7');
+    const other = load(storeKey(mode === 'film' ? 'pays' : 'film', 'partie'));
+    if (other && other.key === game.key && other.status === 'won') unlock('jeu-double');
+  } else {
+    unlock('jeu-defaite');
+  }
   setTimeout(() => openStats(mode, game), 1200);
 }
 

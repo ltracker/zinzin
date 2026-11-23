@@ -1,6 +1,9 @@
 // Page À propos : résumé des données stockées et bouton d'effacement.
 import { keys, clearAll } from '../shared/storage.js';
 import { toast } from '../shared/ui.js';
+import { trackVisit } from '../shared/stickers.js';
+
+trackVisit('a-propos');
 
 const summary = document.getElementById('storage-summary');
 const button = document.getElementById('clear-data');

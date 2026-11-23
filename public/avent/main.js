@@ -8,6 +8,9 @@ import { load, save } from '../shared/storage.js';
 import { shareOrCopy } from '../shared/share.js';
 import { renderCard, downloadCanvas } from '../shared/image.js';
 import { $, el, toast, everySecond } from '../shared/ui.js';
+import { unlock, bump, collect, trackVisit } from '../shared/stickers.js';
+
+trackVisit('avent');
 
 let today = parisDateKey();
 let state = adventState(today);
@@ -151,6 +154,8 @@ function openDoor(day, button) {
   }
   const o = opened();
   if (!o.has(day)) { o.add(day); save(storeKey(), [...o]); }
+  unlock('avent-1');
+  if ([...o].filter((d) => isUnlocked(d, today)).length >= DAYS) unlock('avent-24');
   const c = CALENDAR[day - 1];
   currentDay = day;
   $('#door-day').textContent = `${day} décembre`;

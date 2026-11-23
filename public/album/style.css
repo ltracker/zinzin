@@ -1,0 +1,26 @@
+/* Étape 10 — Album d'autocollants */
+body[data-app="album"] { --accent: var(--c-lemon); }
+
+.progress { display: grid; gap: var(--sp-3); justify-items: start; margin-bottom: var(--sp-6); max-width: 40rem; }
+.progress__title { font-size: var(--fs-xl); }
+.progress__bar { width: 100%; height: 1.4rem; background: var(--surface-2); border: var(--bw) solid var(--border); border-radius: var(--radius-pill); overflow: hidden; }
+.progress__bar span { display: block; height: 100%; width: 0; background: repeating-linear-gradient(-45deg, var(--c-lemon) 0 12px, var(--c-tomato) 12px 24px); transition: width var(--dur-slow) var(--ease-out); }
+
+.groups { display: grid; gap: var(--sp-6); }
+.group__title { font-size: var(--fs-lg); margin-bottom: var(--sp-3); }
+.stickers { list-style: none; padding: 0; display: grid; gap: var(--sp-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 9.5rem), 1fr)); }
+.sticker { display: grid; justify-items: center; gap: var(--sp-2); text-align: center; padding: var(--sp-3); }
+.sticker__disc {
+  display: grid; place-items: center; width: 5.2rem; height: 5.2rem; font-size: 2.6rem;
+  border-radius: 50%; border: var(--bw) solid var(--c-ink); background: var(--accent);
+  box-shadow: var(--shadow-sm);
+}
+.stickers > li:nth-child(3n + 1) .sticker__disc { transform: rotate(-8deg); background: var(--c-lemon); }
+.stickers > li:nth-child(3n + 2) .sticker__disc { transform: rotate(6deg); background: var(--c-candy); }
+.stickers > li:nth-child(3n + 3) .sticker__disc { transform: rotate(-3deg); background: var(--c-mint); }
+.sticker__name { font-family: var(--font-display); font-weight: 800; line-height: 1.1; }
+.sticker__hint { font-size: var(--fs-xs); color: var(--text-soft); }
+.sticker__date { font-size: var(--fs-xs); font-weight: 700; }
+.sticker.is-locked .sticker__disc { background: var(--surface-2) !important; border-style: dashed; box-shadow: none; filter: grayscale(1); opacity: 0.6; font-family: var(--font-display); font-weight: 800; color: var(--text-soft); }
+.sticker.is-locked .sticker__name { color: var(--text-soft); }
+.sticker.is-new .sticker__disc { animation: pop-in var(--dur-slow) var(--ease-pop); }

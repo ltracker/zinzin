@@ -7,6 +7,9 @@ import { formatNumber, formatLongDate } from '../shared/dates.js';
 import { readParams, replaceUrlParams, buildUrl, copyText, shareOrCopy, downloadText } from '../shared/share.js';
 import { renderCard, downloadCanvas } from '../shared/image.js';
 import { $, el, toast, everySecond } from '../shared/ui.js';
+import { unlock, bump, collect, trackVisit } from '../shared/stickers.js';
+
+trackVisit('ce-jour-la');
 
 const form = $('#birth-form');
 const dateInput = $('#birth-date');
@@ -159,6 +162,12 @@ function render() {
 
   stopTicker?.();
   stopTicker = everySecond(tick);
+
+  // Autocollants
+  unlock('cjl-calcul');
+  if (birth.getDay() === 5 && birth.getDate() === 13) unlock('cjl-vendredi13');
+  if (birth.getMonth() === 1 && birth.getDate() === 29) unlock('cjl-29fevrier');
+  if (nb.isToday) unlock('cjl-anniv');
 }
 
 $('#timeline-toggle').addEventListener('click', (e) => {
@@ -245,6 +254,7 @@ $('#ics-btn').addEventListener('click', () => {
     url: shareUrl(),
   });
   downloadText(ics, `zinzin-${nm.id}.ics`, 'text/calendar');
+  unlock('cjl-ics');
   toast('Fichier calendrier téléchargé 📅');
 });
 

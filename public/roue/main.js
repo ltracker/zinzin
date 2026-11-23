@@ -8,6 +8,9 @@ import { confetti } from './confetti.js';
 import { load, save } from '../shared/storage.js';
 import { readParams, buildUrl, copyText } from '../shared/share.js';
 import { $, el, toast, prefersReducedMotion } from '../shared/ui.js';
+import { unlock, bump, collect, trackVisit } from '../shared/stickers.js';
+
+trackVisit('roue');
 
 const CURRENT_KEY = 'roue:courante';
 const LISTS_KEY = 'roue:listes';
@@ -218,6 +221,7 @@ function spin() {
 
 function done(index) {
   rotation %= TAU;
+  bump('roue', 1, { 1: 'roue-1', 100: 'roue-100' });
   const winner = state.options[index];
   resultEl.textContent = `🎉 ${winner.label} !`;
   resultEl.classList.add('is-winner');
@@ -269,6 +273,7 @@ function renderEditor() {
       el('input', { class: 'input weight', type: 'number', min: '1', max: '10', step: '1', value: String(o.weight), 'aria-label': `Poids de « ${o.label} » (1 à 10)`,
         onchange: (e) => {
           state.options = sanitizeOptions(state.options.map((x, j) => (j === i ? { ...x, weight: e.target.value } : x)));
+          if (state.options[i]?.weight === 10) unlock('roue-poids');
           persist(); draw(); renderEditor();
         } }),
       el('button', { class: 'btn btn--small', type: 'button', 'aria-label': `Supprimer « ${o.label} »`,
@@ -346,6 +351,7 @@ $('#save-list').addEventListener('click', () => {
   renderPresetSelect('s0');
   renderEditor();
   toast(`Liste « ${title} » enregistrée 💾`);
+  unlock('roue-liste');
 });
 
 $('#delete-list').addEventListener('click', () => {

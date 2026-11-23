@@ -5,6 +5,9 @@ import { load, save } from '../shared/storage.js';
 import { readParams, replaceUrlParams, buildUrl, copyText } from '../shared/share.js';
 import { renderCard, downloadCanvas } from '../shared/image.js';
 import { $, el, toast, prefersReducedMotion } from '../shared/ui.js';
+import { unlock, bump, collect, trackVisit } from '../shared/stickers.js';
+
+trackVisit('noms');
 
 const FAV_KEY = 'noms:favoris';
 const MAX_FAVS = 60;
@@ -51,6 +54,8 @@ async function spinTo(categoryId, seed) {
     nameEl.classList.remove('is-spinning');
   }
   show(final);
+  bump('noms', 1, { 10: 'noms-10', 100: 'noms-100' });
+  if (collect('noms-categories', categoryId) >= CATEGORIES.length) unlock('noms-toutes');
   nameEl.classList.remove('is-landed');
   void nameEl.offsetWidth; // relance l'animation
   nameEl.classList.add('is-landed');
@@ -113,6 +118,7 @@ $('#fav-btn').addEventListener('click', () => {
     list = list.filter((f) => f.id !== favId(current));
     toast('Retiré des favoris');
   } else {
+    unlock('noms-fav');
     list.unshift({ id: favId(current), category: current.category, seed: current.seed, name: current.name, emoji: current.emoji, label: current.categoryLabel });
     list = list.slice(0, MAX_FAVS);
     toast('Ajouté aux favoris ⭐');

@@ -2,6 +2,9 @@
 import { parisDateKey, dayNumber, msUntilParisMidnight, formatHMS } from './shared/dates.js';
 import { SITE } from './shared/site.js';
 import { everySecond } from './shared/ui.js';
+import { trackVisit } from './shared/stickers.js';
+
+trackVisit('accueil');
 
 const numberEl = document.getElementById('daily-number');
 const countdownEl = document.getElementById('daily-countdown');

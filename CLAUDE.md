@@ -247,6 +247,15 @@ posés via JS (`el.style.x = …`) restent autorisés.
   cadeau absurde via `absurdGift`), sinon mode organisateur (collage d'une liste « a, b; c », exclusions dans les deux sens,
   copie des messages un par un ou tous ensemble, retirage avec confirmation).
 
+**Album d'autocollants (✅ étape 10, `/album/`)**
+- **shared/stickers.js** : `STICKERS` (30 autocollants `{id, app, emoji, name, hint}`), `APP_LABELS`, `unlock(id)` (une seule fois,
+  toast « Nouvel autocollant », méta-succès album-10/20/complet), `bump(compteur, n, {palier: id})`, `collect(ensemble, valeur)`,
+  `trackVisit(app)` (bienvenue, explorateur = 4 apps principales, noctambule avant 5 h), `progress()`, `setNotifier` (tests).
+  Stockage : `zinzin:album` (`{id: horodatage}`) et `zinzin:album:compteurs`.
+- **Ajouter un autocollant :** l'ajouter dans `STICKERS` (avec une `app` présente dans `APP_LABELS`), puis appeler `unlock('id')` dans l'app.
+  Chaque `main.js` appelle `trackVisit('<app>')` au chargement. Le succès `licorne` (code Konami) sera branché à l'étape 13.
+- **album/** : groupes par app, silhouettes « ? » + indice, date d'obtention, barre de progression, partage des émojis obtenus.
+
 **Finitions (✅ étape 6)**
 - **scripts/build-og.mjs** : génère (une fois, résultat commité) les images OG 1200×630 `public/assets/og/<slug>.png`
   (liste `OG_PAGES`, déjà prévue pour avent, pere-noel-secret et album) et les icônes `public/assets/icons/`
@@ -430,9 +439,9 @@ précache du service worker, vérif. `check-pages`, commit, `git push`, `npm run
 - [x] Tests : tirage valide avec exclusions, cas impossibles détectés, chiffrement aller-retour
 
 ### Étape 10 — Album d'autocollants (succès transverses, `/album/`)
-- [ ] Module `shared/stickers.js` : catalogue + `unlock(id)` (localStorage) + toast « Nouvel autocollant ! »
-- [ ] Succès dans toutes les apps (gagné en 1 essai, série de 7 jours, 100 tours de roue, né·e un vendredi 13…)
-- [ ] Page album (autocollants obtenus / silhouettes à découvrir)
+- [x] Module `shared/stickers.js` : catalogue + `unlock(id)` (localStorage) + toast « Nouvel autocollant ! »
+- [x] Succès dans toutes les apps (gagné en 1 essai, série de 7 jours, 100 tours de roue, né·e un vendredi 13…)
+- [x] Page album (autocollants obtenus / silhouettes à découvrir)
 
 ### Étape 11 — Nouveaux modes du jeu du jour
 - [ ] « Plus grand ou plus petit ? » (aires des pays, série, record) — réutilise `pays.json`
@@ -538,3 +547,4 @@ L'ordre réel suit d'abord les échéances : l'Avent avant le 1er décembre, le 
 - **2026-11-23** : ROADMAP V2 ajoutée (toutes les idées validées). **Étape 6 terminée** : OG, Twitter card, manifest, icônes, sitemap, robots, _headers (CSP stricte vérifiée en prod), _redirects, service worker (hors ligne vérifié), README avec captures. Lighthouse ≥ 90 partout. wrangler désormais local. Prochaine étape : **8, Calendrier de l'Avent** (avant le 1er décembre).
 - **2026-11-23** : **Étape 8 terminée : Calendrier de l'Avent** (`/avent/`) en ligne, prêt pour le 1er décembre. Vérifié par voyage dans le temps (avant, pendant, après) : les 24 cases s'ouvrent sans erreur. 79 tests. Prochaine étape : **9, Père Noël secret**.
 - **2026-11-23** : **Étape 9 terminée : Père Noël secret** en ligne. Vérifié de bout en bout : collage d'une liste, exclusion d'un couple, 6 liens ouverts un à un, tirage valide, lien falsifié rejeté. 86 tests. Prochaine étape : **10, Album d'autocollants**.
+- **2026-11-23** : **Étape 10 terminée : Album d'autocollants** en ligne (30 autocollants, déclencheurs dans toutes les apps). Non-régression complète : 11 pages, tests e2e jeu/roue/Père Noël secret, 91 tests unitaires. Prochaine étape : **11, nouveaux modes du jeu du jour**.
