@@ -136,8 +136,10 @@ if (typeof document !== 'undefined') {
 
 /* Mode hors ligne : enregistre le service worker (toutes les pages importent ce module). */
 if (typeof window !== 'undefined' && 'serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  // Différé : le précache (une centaine de fichiers) ne doit pas concurrencer le premier affichage.
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(() => { /* pas grave : le site marche sans */ });
+    const register = () => navigator.serviceWorker.register('/sw.js').catch(() => { /* pas grave : le site marche sans */ });
+    setTimeout(() => ('requestIdleCallback' in window ? requestIdleCallback(register, { timeout: 5000 }) : register()), 3000);
   });
 }
 

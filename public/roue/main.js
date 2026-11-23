@@ -9,7 +9,6 @@ import { load, save } from '../shared/storage.js';
 import { readParams, buildUrl, copyText } from '../shared/share.js';
 import { $, el, toast, prefersReducedMotion } from '../shared/ui.js';
 import { unlock, bump, collect, trackVisit } from '../shared/stickers.js';
-import { makeTeams, teamName } from '../equipes/equipes.logic.js';
 
 trackVisit('roue');
 
@@ -418,7 +417,9 @@ $('#sound-theme').addEventListener('change', () => {
 
 /* ---------- Tirage d'équipes à partir des options ---------- */
 
-$('#teams-btn').addEventListener('click', () => {
+$('#teams-btn').addEventListener('click', async () => {
+  // Import à la demande : ce module charge les dictionnaires des noms, inutiles au premier affichage.
+  const { makeTeams, teamName } = await import('../equipes/equipes.logic.js');
   const k = Math.max(2, Math.min(10, Number($('#teams-n').value) || 2));
   if (state.options.length < k) { toast(`Il faut au moins ${k} options`); return; }
   const rand = () => secureRandom();

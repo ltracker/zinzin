@@ -1,6 +1,5 @@
 // Horoscope absurde : interface.
-import { horoscope, SIGNS, starsText } from './horoscope.logic.js';
-import { westernZodiac } from '../ce-jour-la/life.logic.js';
+import { westernZodiac, ZODIAC } from '../ce-jour-la/life.logic.js';
 import { parisDateKey, formatLongDate } from '../shared/dates.js';
 import { load, save } from '../shared/storage.js';
 import { shareOrCopy } from '../shared/share.js';
@@ -9,6 +8,11 @@ import { $, el, toast } from '../shared/ui.js';
 import { unlock, trackVisit } from '../shared/stickers.js';
 
 trackVisit('horoscope');
+
+const SIGNS = ZODIAC.map((z, i) => ({ ...z, index: i }));
+// Moteur de textes (dictionnaires des noms) chargé après le premier affichage.
+let engine = null;
+const loadEngine = () => (engine ||= import('./horoscope.logic.js'));
 const today = parisDateKey();
 let current = load('horoscope:signe', null);
 
@@ -35,8 +39,9 @@ function choose(index, focus = false) {
   unlock('horo-1');
 }
 
-function renderHoroscope() {
+async function renderHoroscope() {
   if (current === null) return;
+  const { horoscope, starsText } = await loadEngine();
   const h = horoscope(current, today);
   $('#horo').hidden = false;
   $('#horo-date').textContent = formatLongDate(new Date(`${today}T12:00:00`));
@@ -64,16 +69,18 @@ $('#find-sign').addEventListener('submit', (e) => {
 });
 
 $('#horo-share').addEventListener('click', async () => {
+  const { horoscope } = await loadEngine();
   const h = horoscope(current, today);
   const r = await shareOrCopy({ title: 'Horoscope absurde', text: `🔮 ${h.sign.name} ${h.sign.emoji} aujourd'hui : « ${h.conseil} »`, url: `${location.origin}/horoscope/` });
   if (r === 'copied') toast('Copié 📋');
 });
 
 $('#horo-img').addEventListener('click', async () => {
+  const { horoscope } = await loadEngine();
   const h = horoscope(current, today);
   const canvas = await renderCard({ kicker: `Horoscope · ${h.sign.name}`, emoji: '🔮', title: h.conseil, lines: [`Humeur : ${h.mood}`, `Couleur : ${h.couleur}`], accent: '#b28dff' });
   downloadCanvas(canvas, `zinzin-horoscope-${h.sign.name.toLowerCase()}.png`);
 });
 
 renderSigns();
-renderHoroscope();
+requestAnimationFrame(() => setTimeout(renderHoroscope, 0));
