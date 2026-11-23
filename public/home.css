@@ -113,5 +113,20 @@
 }
 .app-card:hover .app-card__go { transform: translateX(4px) rotate(-10deg); }
 
+/* Encore plus (apps secondaires et saisonnières) */
+.more { margin-top: var(--sp-7); }
+.more__title { font-size: var(--fs-xl); margin-bottom: var(--sp-4); }
+.more__list { list-style: none; padding: 0; display: grid; gap: var(--sp-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); }
+.mini-card { display: grid; grid-template-columns: auto 1fr; gap: var(--sp-3); align-items: center; padding: var(--sp-4); text-decoration: none; height: 100%; }
+.mini-card__emoji {
+  display: grid; place-items: center; width: 3.2rem; height: 3.2rem; font-size: 1.7rem;
+  background: var(--card-accent, var(--c-lemon)); border: var(--bw) solid var(--c-ink); border-radius: 50%; transform: rotate(-6deg);
+}
+.mini-card[data-accent="avent"] { --card-accent: var(--c-tomato); }
+.mini-card[data-accent="pere-noel-secret"] { --card-accent: var(--c-candy); }
+.mini-card[data-accent="album"] { --card-accent: var(--c-lemon); }
+.mini-card__title { display: block; font-family: var(--font-display); font-weight: 800; font-size: var(--fs-lg); line-height: 1.1; }
+.mini-card__desc { display: block; color: var(--text-soft); font-size: var(--fs-sm); margin-top: var(--sp-1); }
+
 .promise { margin-top: var(--sp-7); text-align: center; background: var(--surface-2); }
 .promise__title { font-size: var(--fs-lg); margin-bottom: var(--sp-2); }

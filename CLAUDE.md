@@ -221,6 +221,20 @@ posés via JS (`el.style.x = …`) restent autorisés.
   après chargement). Espace = lancer.
 - **roue/confetti.js** : confettis en canvas plein écran, ignorés si reduced-motion.
 
+**Calendrier de l'Avent (✅ étape 8, `/avent/`)**
+- **avent/avent.logic.js** : `adventState(dateKey)` → `{phase: 'avant'|'pendant'|'apres', season, openUpTo, daysUntilStart}`
+  (du 25 décembre au 6 janvier, tout est ouvert ; la saison du 1er au 6 janvier = année précédente). `isUnlocked`, `doorOrder`
+  (permutation fixe, graine `zinzin-avent`), générateurs à graine qui réutilisent le moteur des noms : `elfName(prénom)`,
+  `absurdGift`, `absurdMenu` (participes accordés), `absurdWish`, plus `finalMessage`.
+- **avent/calendrier.js** : 24 cases `{day, type, emoji, title, …}`. Types : anecdote, blague, defi, lien (`href: 'roue-desserts'`
+  = roue encodée à la volée), lutin, cadeau, menu, carte (PNG), quiz, chrono, final (confettis + bilan). Les anecdotes sont des faits
+  bien établis (Sélestat 1521, Gemini 6, Strasbourg 1570, secrétariat de Libourne 1962…).
+- **avent/main.js** : grille de portes, `<dialog>` de contenu, cases ouvertes dans `zinzin:avent:<saison>`, compte à rebours
+  (avant décembre : jusqu'au 1er ; pendant : jusqu'à la case suivante), changement de jour détecté à la volée.
+- Test e2e avec `context.clock.install({ time })` de Playwright pour voyager dans le temps (23 nov., 5 déc., 26 déc.).
+  La case du jour pulse en continu : il faut `click({ force: true })` dans les tests.
+- Accueil : nouvelle section **« Encore plus de zinzin »** (`.more` + `.mini-card[data-accent]`), où ajouter les apps secondaires.
+
 **Finitions (✅ étape 6)**
 - **scripts/build-og.mjs** : génère (une fois, résultat commité) les images OG 1200×630 `public/assets/og/<slug>.png`
   (liste `OG_PAGES`, déjà prévue pour avent, pere-noel-secret et album) et les icônes `public/assets/icons/`
@@ -297,6 +311,7 @@ Déploiement : `git push` puis `npm run deploy` (voir §8). Le déploiement auto
 | D26 | Service worker « réseau d'abord » (et non « cache d'abord ») | Fichiers non versionnés : évite de servir un ancien JS avec un nouveau HTML ; le cache ne sert que hors ligne |
 | D27 | Ombre de la roue dessinée dans le canvas plutôt qu'en `filter: drop-shadow` | Le filtre recalculait toute l'image à chaque image de l'animation (TBT et fluidité sur mobile) |
 | D28 | Bloc SEO injecté par un script de maintenance, résultat commité | Respecte « zéro build » tout en évitant 9 copies manuelles des balises |
+| D29 | Apps secondaires dans « Encore plus » sur l'accueil, pas dans la nav | La nav doit rester lisible sur mobile (4 émojis) |
 | D17 | `404.html` avancée dès le branchement de Cloudflare | `not_found_handling: 404-page` l'exige ; évite que les apps pas encore codées renvoient l'accueil |
 
 ---
@@ -391,10 +406,10 @@ lien dans la nav si pertinent (sinon section « Encore plus » de l'accueil), en
 précache du service worker, vérif. `check-pages`, commit, `git push`, `npm run deploy`.
 
 ### Étape 8 — Calendrier de l'Avent zinzin (`/avent/`) — ⏰ en ligne avant le 1er décembre
-- [ ] 24 cases, déverrouillées à minuit Europe/Paris (1er-24 décembre) ; avant décembre : aperçu + compte à rebours
-- [ ] Contenu varié : blagues, défis absurdes, anecdotes, mini-jeux, cartes à partager (fichier de données)
-- [ ] Cases ouvertes mémorisées (localStorage), animation d'ouverture, partage
-- [ ] Tests : déverrouillage selon la date de Paris, complétude des 24 contenus
+- [x] 24 cases, déverrouillées à minuit Europe/Paris (1er-24 décembre) ; avant décembre : aperçu + compte à rebours
+- [x] Contenu varié : blagues, défis absurdes, anecdotes, mini-jeux, cartes à partager (fichier de données)
+- [x] Cases ouvertes mémorisées (localStorage), animation d'ouverture, partage
+- [x] Tests : déverrouillage selon la date de Paris, complétude des 24 contenus
 
 ### Étape 9 — Père Noël secret sans serveur (`/pere-noel-secret/`)
 - [ ] Saisie des participants + exclusions (couples), tirage en dérangement valide (personne ne se tire soi-même)
@@ -509,3 +524,4 @@ L'ordre réel suit d'abord les échéances : l'Avent avant le 1er décembre, le 
 - **2026-11-18** : **Étape 4 terminée : app C « Le jeu du jour »** en ligne (221 films, 229 pays). Parties complètes jouées dans Edge (essai raté, indice, autocomplétion au clavier sans accents, victoire, stats, rechargement, partage). 60 tests. Prochaine étape : **app D « Roue de la décision »**.
 - **2026-11-18** : **Étape 5 terminée : app D « Roue de la décision »** en ligne. Vérifié dans Edge : la part sous le pointeur = le résultat annoncé, édition, élimination, enregistrement, lien partagé. 69 tests. **Les 4 apps sont en ligne.** Prochaine étape : **étape 6, SEO et finitions** (OG, manifest, sitemap, _headers, Lighthouse, README, PWA).
 - **2026-11-23** : ROADMAP V2 ajoutée (toutes les idées validées). **Étape 6 terminée** : OG, Twitter card, manifest, icônes, sitemap, robots, _headers (CSP stricte vérifiée en prod), _redirects, service worker (hors ligne vérifié), README avec captures. Lighthouse ≥ 90 partout. wrangler désormais local. Prochaine étape : **8, Calendrier de l'Avent** (avant le 1er décembre).
+- **2026-11-23** : **Étape 8 terminée : Calendrier de l'Avent** (`/avent/`) en ligne, prêt pour le 1er décembre. Vérifié par voyage dans le temps (avant, pendant, après) : les 24 cases s'ouvrent sans erreur. 79 tests. Prochaine étape : **9, Père Noël secret**.
