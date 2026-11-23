@@ -125,6 +125,11 @@
 .mini-card[data-accent="avent"] { --card-accent: var(--c-tomato); }
 .mini-card[data-accent="pere-noel-secret"] { --card-accent: var(--c-candy); }
 .mini-card[data-accent="album"] { --card-accent: var(--c-lemon); }
+.mini-card[data-accent="horoscope"] { --card-accent: var(--c-grape); }
+.mini-card[data-accent="quiz"] { --card-accent: var(--c-lemon); }
+.mini-card[data-accent="chrono"] { --card-accent: var(--c-pool); }
+.mini-card[data-accent="equipes"] { --card-accent: var(--c-mint); }
+.mini-card[data-accent="excuses"] { --card-accent: var(--c-candy); }
 .mini-card__title { display: block; font-family: var(--font-display); font-weight: 800; font-size: var(--fs-lg); line-height: 1.1; }
 .mini-card__desc { display: block; color: var(--text-soft); font-size: var(--fs-sm); margin-top: var(--sp-1); }
 

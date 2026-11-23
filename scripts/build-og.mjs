@@ -19,6 +19,11 @@ export const OG_PAGES = [
   { slug: 'a-propos', emoji: '🍪', color: '#b28dff', kicker: 'À propos', title: 'Zéro cookie. Vraiment.', sub: 'Tout reste dans ton navigateur.' },
   { slug: 'avent', emoji: '🎄', color: '#ff7a45', kicker: 'Calendrier de l\'Avent', title: '24 cases zinzines', sub: 'Une surprise absurde chaque jour de décembre.' },
   { slug: 'pere-noel-secret', emoji: '🎅', color: '#ff6fae', kicker: 'Père Noël secret', title: 'Qui offre à qui ?', sub: 'Un tirage au sort sans serveur, un lien secret par personne.' },
+  { slug: 'horoscope', emoji: '🔮', color: '#b28dff', kicker: "Horoscope absurde", title: "Les astres ont parlé", sub: "Amour, travail, santé : l'horoscope le plus inutile du web." },
+  { slug: 'quiz', emoji: '🧀', color: '#ffd23f', kicker: "Quiz zinzins", title: "Quel fromage es-tu ?", sub: "Des quiz de personnalité scientifiquement infondés." },
+  { slug: 'chrono', emoji: '⏱️', color: '#4cc3ff', kicker: "Chrono parfait", title: "Pile 10 secondes ?", sub: "Le chrono disparaît après 3 secondes. Bonne chance." },
+  { slug: 'equipes', emoji: '👥', color: '#3ddc97', kicker: "Équipes & dés", title: "Que les jeux commencent", sub: "Équipes tirées au sort, noms ridicules et lancers de dés." },
+  { slug: 'excuses', emoji: '🙊', color: '#ff6fae', kicker: "Excuses bidon", title: "Ce n'est pas ma faute", sub: "Le générateur d'excuses absurdes, crédibilité non garantie." },
   { slug: 'album', emoji: '⭐', color: '#ffd23f', kicker: 'Album d\'autocollants', title: 'Collectionne-les tous', sub: 'Des succès zinzins à débloquer dans toutes les apps.' },
 ];
 

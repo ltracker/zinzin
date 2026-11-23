@@ -1,0 +1,21 @@
+body[data-app="chrono"] { --accent: var(--c-pool); }
+.tabs-lite { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-bottom: var(--sp-4); }
+.chrono { display: grid; justify-items: center; gap: var(--sp-4); text-align: center; padding-block: var(--sp-6); max-width: 36rem; }
+.chrono__target { font-size: var(--fs-lg); font-weight: 650; }
+.chrono__display {
+  font-family: var(--font-display); font-weight: 800; font-size: var(--fs-hero); line-height: 1;
+  font-variant-numeric: tabular-nums; letter-spacing: -0.03em;
+}
+.chrono__display.is-hidden { color: transparent; text-shadow: 0 0 0.4em var(--text-soft); user-select: none; }
+.chrono__btn {
+  width: 11rem; height: 11rem; border-radius: 50%;
+  border: var(--bw) solid var(--c-ink); background: var(--accent); color: var(--c-on-accent);
+  font-family: var(--font-display); font-weight: 800; font-size: var(--fs-xl);
+  box-shadow: var(--shadow); transition: transform var(--dur-fast) var(--ease-pop);
+}
+.chrono__btn:active { transform: scale(0.95); box-shadow: var(--shadow-sm); }
+.chrono__btn.is-running { background: var(--c-tomato); }
+.chrono__hint { font-size: var(--fs-xs); color: var(--text-soft); }
+.chrono__result { font-weight: 800; font-size: var(--fs-lg); min-height: 1.6em; }
+.chrono-stats { margin-top: var(--sp-5); display: grid; gap: var(--sp-3); max-width: 36rem; }
+.chrono-history { padding-left: 1.4em; display: grid; gap: var(--sp-1); font-variant-numeric: tabular-nums; max-height: 14rem; overflow-y: auto; }

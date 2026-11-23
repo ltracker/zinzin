@@ -1,0 +1,26 @@
+body[data-app="horoscope"] { --accent: var(--c-grape); }
+.signs-card { display: grid; gap: var(--sp-4); margin-bottom: var(--sp-6); }
+.signs { display: grid; gap: var(--sp-2); grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr)); }
+.sign {
+  display: grid; justify-items: center; gap: 0.1rem; padding: var(--sp-2);
+  border: 2px solid var(--border); border-radius: var(--radius-sm); background: var(--surface);
+  font-weight: 700; font-size: var(--fs-sm); transition: transform var(--dur-fast) var(--ease-pop);
+}
+.sign:hover { transform: translateY(-2px); }
+.sign[aria-checked="true"] { background: var(--accent); color: var(--c-on-accent); border-color: var(--c-ink); box-shadow: var(--shadow-sm); }
+.sign__emoji { font-size: 1.6rem; line-height: 1.2; }
+.find-sign { display: grid; gap: var(--sp-2); }
+.find-sign label { font-weight: 700; font-size: var(--fs-sm); }
+.find-sign .input { width: auto; flex: 1; }
+.horo { display: grid; gap: var(--sp-3); max-width: 44rem; }
+.horo__date { font-weight: 700; font-size: var(--fs-sm); }
+.horo__date::first-letter { text-transform: uppercase; }
+.horo__title { font-size: var(--fs-2xl); }
+.horo__emoji { font-family: "Segoe UI Symbol", "Apple Symbols", "Noto Sans Symbols", sans-serif; }
+.horo__list { display: grid; gap: var(--sp-3); }
+.horo__list div { padding: var(--sp-3); background: color-mix(in srgb, var(--c-paper) 75%, transparent); border: 2px solid var(--c-ink); border-radius: var(--radius-sm); }
+.horo__list dt { font-weight: 800; display: flex; justify-content: space-between; gap: var(--sp-2); }
+.horo__list dd { margin: var(--sp-1) 0 0; }
+.horo__stars { letter-spacing: 0.1em; }
+.horo__extra { font-weight: 650; }
+.horo .btn { --btn-bg: var(--c-paper); --btn-fg: var(--c-ink); border-color: var(--c-ink); }

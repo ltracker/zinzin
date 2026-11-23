@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Horoscope absurde du jour · Zinzin</title>
+  <meta name="description" content="L'horoscope le plus inutile du web : amour, travail, santé et conseil du jour pour les 12 signes. Le même pour tout le monde, nouveau chaque jour à minuit.">
+  <meta name="theme-color" content="#fff6e5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#160b2e" media="(prefers-color-scheme: dark)">
+  <!-- seo -->
+  <link rel="canonical" href="https://zinzin.johan-saez-craponne.workers.dev/horoscope/">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Zinzin">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:title" content="Horoscope absurde du jour · Zinzin">
+  <meta property="og:description" content="L'horoscope le plus inutile du web : amour, travail, santé et conseil du jour pour les 12 signes. Le même pour tout le monde, nouveau chaque jour à minuit.">
+  <meta property="og:url" content="https://zinzin.johan-saez-craponne.workers.dev/horoscope/">
+  <meta property="og:image" content="https://zinzin.johan-saez-craponne.workers.dev/assets/og/horoscope.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Horoscope absurde du jour · Zinzin">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Horoscope absurde du jour · Zinzin">
+  <meta name="twitter:description" content="L'horoscope le plus inutile du web : amour, travail, santé et conseil du jour pour les 12 signes. Le même pour tout le monde, nouveau chaque jour à minuit.">
+  <meta name="twitter:image" content="https://zinzin.johan-saez-craponne.workers.dev/assets/og/horoscope.png">
+  <!-- /seo -->
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="/assets/fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/shared/tokens.css">
+  <link rel="stylesheet" href="/shared/base.css">
+  <link rel="stylesheet" href="/horoscope/style.css">
+  <script type="module" src="/horoscope/main.js"></script>
+</head>
+<body data-app="horoscope">
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="logo" href="/" aria-label="Zinzin, accueil"><span class="logo__mark" aria-hidden="true">Z</span><span>Zinzin</span></a>
+      <nav class="site-nav" aria-label="Applications">
+        <ul>
+          <li><a href="/ce-jour-la/"><span class="site-nav__emoji" aria-hidden="true">🎂</span><span class="site-nav__label">Ce jour-là</span></a></li>
+          <li><a href="/noms/"><span class="site-nav__emoji" aria-hidden="true">🤪</span><span class="site-nav__label">Noms</span></a></li>
+          <li><a href="/jeu/"><span class="site-nav__emoji" aria-hidden="true">🧩</span><span class="site-nav__label">Jeu du jour</span></a></li>
+          <li><a href="/roue/"><span class="site-nav__emoji" aria-hidden="true">🎡</span><span class="site-nav__label">Roue</span></a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenu" class="container">
+    <header class="page-head">
+      <span class="page-head__kicker">🔮 Horoscope absurde</span>
+      <h1>Ce que les astres (n')ont (pas) prévu</h1>
+      <p>Choisis ton signe : les planètes ont rédigé ton horoscope du jour. Fiabilité scientifique garantie à 0 %.</p>
+    </header>
+
+    <section class="card signs-card" aria-labelledby="signs-title">
+      <h2 id="signs-title" class="block-title">Ton signe</h2>
+      <div class="signs" id="signs" role="radiogroup" aria-label="Signe du zodiaque"></div>
+      <form class="find-sign" id="find-sign">
+        <label for="birth">Tu ne connais pas ton signe ? Ta date de naissance :</label>
+        <div class="row"><input class="input" type="date" id="birth"><button class="btn btn--small" type="submit">Trouver</button></div>
+      </form>
+    </section>
+
+    <article class="card card--accent horo" id="horo" aria-live="polite" hidden>
+      <p class="horo__date" id="horo-date"></p>
+      <h2 class="horo__title"><span class="horo__emoji" id="horo-emoji" aria-hidden="true"></span> <span id="horo-sign"></span></h2>
+      <p class="horo__mood">Humeur du jour : <strong id="horo-mood"></strong></p>
+      <dl class="horo__list" id="horo-list"></dl>
+      <p class="horo__extra" id="horo-extra"></p>
+      <div class="row"><button class="btn btn--small" type="button" id="horo-share">📤 Partager</button><button class="btn btn--small" type="button" id="horo-img">🖼️ Image</button></div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>© Zinzin · fait main, sans cookie ni tracker</p>
+      <p><a href="/a-propos/">À propos &amp; vie privée</a></p>
+    </div>
+  </footer>
+</body>
+</html>

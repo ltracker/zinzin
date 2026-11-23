@@ -38,6 +38,14 @@ export const STICKERS = [
   { id: 'avent-24', app: 'avent', emoji: '🌟', name: 'Lutin·e d\'élite', hint: 'Ouvrir les 24 cases.' },
   { id: 'pns-tirage', app: 'pere-noel-secret', emoji: '🎅', name: 'Grand organisateur', hint: 'Organiser un Père Noël secret.' },
   { id: 'pns-revele', app: 'pere-noel-secret', emoji: '🎁', name: 'Paquet ouvert', hint: 'Découvrir à qui tu offres.' },
+  { id: 'horo-1', app: 'mini', emoji: '🔮', name: 'Astrologue', hint: 'Lire ton horoscope absurde.' },
+  { id: 'quiz-1', app: 'mini', emoji: '🧀', name: 'Connais-toi toi-même', hint: 'Terminer un quiz.' },
+  { id: 'quiz-tous', app: 'mini', emoji: '🥐', name: 'Personnalité multiple', hint: 'Terminer tous les quiz.' },
+  { id: 'chrono-1', app: 'mini', emoji: '⏱️', name: 'Chronométreur·se', hint: 'Arrêter le chrono une première fois.' },
+  { id: 'chrono-pile', app: 'mini', emoji: '🤯', name: 'Horloge atomique', hint: 'Arrêter le chrono à 1 centième près.' },
+  { id: 'equipes-1', app: 'mini', emoji: '👥', name: 'Capitaine', hint: 'Former des équipes.' },
+  { id: 'des-20', app: 'mini', emoji: '🎲', name: 'Coup critique', hint: 'Faire un 20 naturel sur un dé à 20 faces.' },
+  { id: 'excuses-10', app: 'mini', emoji: '🙊', name: 'Mauvaise foi', hint: 'Générer 10 excuses.' },
   { id: 'album-10', app: 'zinzin', emoji: '📒', name: 'Collectionneur·se', hint: 'Obtenir 10 autocollants.' },
   { id: 'album-20', app: 'zinzin', emoji: '📚', name: 'Archiviste', hint: 'Obtenir 20 autocollants.' },
   { id: 'album-complet', app: 'zinzin', emoji: '👑', name: 'Zinzin suprême', hint: 'Compléter tout l\'album.' },
@@ -45,7 +53,7 @@ export const STICKERS = [
 
 export const APP_LABELS = {
   zinzin: 'Zinzin', 'ce-jour-la': 'Ce jour-là', noms: 'Noms absurdes', jeu: 'Le jeu du jour',
-  roue: 'La roue', avent: 'Calendrier de l\'Avent', 'pere-noel-secret': 'Père Noël secret',
+  roue: 'La roue', avent: 'Calendrier de l\'Avent', 'pere-noel-secret': 'Père Noël secret', mini: 'Mini-apps',
 };
 
 const byId = new Map(STICKERS.map((s) => [s.id, s]));

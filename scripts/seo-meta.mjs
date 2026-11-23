@@ -18,6 +18,11 @@ export const PAGES = [
   ['/avent/', 'avent'],
   ['/pere-noel-secret/', 'pere-noel-secret'],
   ['/album/', 'album'],
+  ['/horoscope/', 'horoscope'],
+  ['/quiz/', 'quiz'],
+  ['/chrono/', 'chrono'],
+  ['/equipes/', 'equipes'],
+  ['/excuses/', 'excuses'],
 ];
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');

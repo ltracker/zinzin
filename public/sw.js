@@ -4,7 +4,7 @@
 // hors ligne, tout le site précaché reste utilisable.
 // ⚠️ Ajouter ici tout nouveau fichier servi (le test tests/sw.test.js le vérifie).
 
-const VERSION = 'zinzin-v5';
+const VERSION = 'zinzin-v6';
 
 const PRECACHE = [
   '/',
@@ -68,6 +68,27 @@ const PRECACHE = [
   '/album/',
   '/album/style.css',
   '/album/main.js',
+  '/horoscope/',
+  '/horoscope/style.css',
+  '/horoscope/main.js',
+  '/horoscope/horoscope.logic.js',
+  '/quiz/',
+  '/quiz/style.css',
+  '/quiz/main.js',
+  '/quiz/quiz.logic.js',
+  '/quiz/quizzes.js',
+  '/chrono/',
+  '/chrono/style.css',
+  '/chrono/main.js',
+  '/chrono/chrono.logic.js',
+  '/equipes/',
+  '/equipes/style.css',
+  '/equipes/main.js',
+  '/equipes/equipes.logic.js',
+  '/excuses/',
+  '/excuses/style.css',
+  '/excuses/main.js',
+  '/excuses/excuses.logic.js',
 ];
 
 self.addEventListener('install', (event) => {

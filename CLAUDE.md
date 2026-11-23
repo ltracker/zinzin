@@ -271,6 +271,19 @@ posés via JS (`el.style.x = …`) restent autorisés.
 - ⚠️ **Piège DOM :** `parent.replaceChildren(a, null)` insère le texte « null ». Filtrer avec `...[…].filter(Boolean)`
   (`el()` ignore déjà les enfants nuls, mais pas `replaceChildren`).
 
+**Mini-apps (✅ étape 12)** (dans « Encore plus » sur l'accueil, autocollants du groupe `mini`)
+- **horoscope/** : `horoscope(signe, dateKey)` à graine `horoscope#date#signe` (amour, travail, santé, conseil, étoiles, chiffre, couleur),
+  12 signes en `role="radio"` (flèches), signe retrouvé depuis une date (`westernZodiac`), signe dans `zinzin:horoscope:signe`.
+- **quiz/** : `quizzes.js` (fromage, viennoiserie, légume : `{results, questions:[{text, answers:[{label, points}]}]}`),
+  `computeResult` (égalité départagée par l'ordre des résultats). Le test parcourt TOUTES les combinaisons et vérifie que
+  chaque résultat est atteignable. URL partagée `?q=<quiz>&r=<résultat>`, derniers résultats dans `zinzin:quiz:resultats`.
+- **chrono/** : `dailyTarget(dateKey)` (4,00 à 15,00 s), `rate`, `formatSeconds`, `formatDiff`, `best` ; affichage masqué après 3 s,
+  `performance.now()`, Espace (seulement si le focus est sur la page), essais dans `zinzin:chrono:libre` et `zinzin:chrono:jour:<date>`.
+- **equipes/** : `makeTeams` (écart ≤ 1), `teamsForSize`, `teamName` (moteur des noms), `rollDice` (D4 à D20, crypto) ; 20 naturel = autocollant.
+- **excuses/** : `excuse(contexte, graine)` avec 6 contextes, participes accordés, élision « que un » → « qu'un ».
+- Composants communs ajoutés à `base.css` : `.pill` (pastille radio) et `.block-title`.
+- Pages générées une fois avec un gabarit (script temporaire, hors repo). Pour une nouvelle page, copier une page existante.
+
 **Finitions (✅ étape 6)**
 - **scripts/build-og.mjs** : génère (une fois, résultat commité) les images OG 1200×630 `public/assets/og/<slug>.png`
   (liste `OG_PAGES`, déjà prévue pour avent, pere-noel-secret et album) et les icônes `public/assets/icons/`
@@ -348,6 +361,7 @@ Déploiement : `git push` puis `npm run deploy` (voir §8). Le déploiement auto
 | D27 | Ombre de la roue dessinée dans le canvas plutôt qu'en `filter: drop-shadow` | Le filtre recalculait toute l'image à chaque image de l'animation (TBT et fluidité sur mobile) |
 | D28 | Bloc SEO injecté par un script de maintenance, résultat commité | Respecte « zéro build » tout en évitant 9 copies manuelles des balises |
 | D29 | Apps secondaires dans « Encore plus » sur l'accueil, pas dans la nav | La nav doit rester lisible sur mobile (4 émojis) |
+| D30 | Scripts de modification écrits dans des fichiers (outil d'écriture), pas en ligne de commande | Un `\\b` passé par bash puis node est devenu un vrai caractère 0x08 dans une regex (bug silencieux, test faussement vert) |
 | D17 | `404.html` avancée dès le branchement de Cloudflare | `not_found_handling: 404-page` l'exige ; évite que les apps pas encore codées renvoient l'accueil |
 
 ---
@@ -466,11 +480,11 @@ précache du service worker, vérif. `check-pages`, commit, `git push`, `npm run
 - [x] Mode difficile (silhouette pivotée/zoomée)
 
 ### Étape 12 — Nouvelles mini-apps
-- [ ] Horoscope absurde du jour (par signe, identique pour tous ce jour-là)
-- [ ] Quiz « Quel fromage / baguette / légume es-tu ? » + image de résultat
-- [ ] Chrono parfait (arrêter à 10,00 s) + défi quotidien
-- [ ] Formeur d'équipes + lanceur de dés
-- [ ] Générateur d'excuses bidon (moteur d'accords des noms)
+- [x] Horoscope absurde du jour (par signe, identique pour tous ce jour-là)
+- [x] Quiz « Quel fromage / baguette / légume es-tu ? » + image de résultat
+- [x] Chrono parfait (arrêter à 10,00 s) + défi quotidien
+- [x] Formeur d'équipes + lanceur de dés
+- [x] Générateur d'excuses bidon (moteur d'accords des noms)
 
 ### Étape 13 — Améliorations de l'existant
 - [ ] Ce jour-là : mode duo (deux dates), âge en années de chien/chat, compte à rebours retraite
@@ -564,3 +578,4 @@ L'ordre réel suit d'abord les échéances : l'Avent avant le 1er décembre, le 
 - **2026-11-23** : **Étape 9 terminée : Père Noël secret** en ligne. Vérifié de bout en bout : collage d'une liste, exclusion d'un couple, 6 liens ouverts un à un, tirage valide, lien falsifié rejeté. 86 tests. Prochaine étape : **10, Album d'autocollants**.
 - **2026-11-23** : **Étape 10 terminée : Album d'autocollants** en ligne (30 autocollants, déclencheurs dans toutes les apps). Non-régression complète : 11 pages, tests e2e jeu/roue/Père Noël secret, 91 tests unitaires. Prochaine étape : **11, nouveaux modes du jeu du jour**.
 - **2026-11-23** : **Étape 11 terminée : jeu du jour V2** en ligne (Émojichanson, Plus ou moins, archives, défis entre amis, mode difficile). Bug « null » corrigé dans le jeu et la roue. 96 tests. Prochaine étape : **12, nouvelles mini-apps** (horoscope, quiz, chrono, équipes et dés, excuses).
+- **2026-11-23** : **Étape 12 terminée : 5 mini-apps** en ligne (horoscope, quiz, chrono, équipes et dés, excuses). Testées de bout en bout, accords et élisions corrigés, référence à une franchise retirée. 102 tests. Prochaine étape : **13, améliorations de l'existant**.

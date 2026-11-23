@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quiz : quel fromage, quelle viennoiserie, quel légume es-tu ? · Zinzin</title>
+  <meta name="description" content="Des quiz de personnalité absurdes et scientifiquement infondés : quel fromage es-tu ? quelle viennoiserie ? quel légume ? Résultat à partager en image.">
+  <meta name="theme-color" content="#fff6e5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#160b2e" media="(prefers-color-scheme: dark)">
+  <!-- seo -->
+  <link rel="canonical" href="https://zinzin.johan-saez-craponne.workers.dev/quiz/">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Zinzin">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:title" content="Quiz : quel fromage, quelle viennoiserie, quel légume es-tu ? · Zinzin">
+  <meta property="og:description" content="Des quiz de personnalité absurdes et scientifiquement infondés : quel fromage es-tu ? quelle viennoiserie ? quel légume ? Résultat à partager en image.">
+  <meta property="og:url" content="https://zinzin.johan-saez-craponne.workers.dev/quiz/">
+  <meta property="og:image" content="https://zinzin.johan-saez-craponne.workers.dev/assets/og/quiz.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Quiz : quel fromage, quelle viennoiserie, quel légume es-tu ? · Zinzin">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Quiz : quel fromage, quelle viennoiserie, quel légume es-tu ? · Zinzin">
+  <meta name="twitter:description" content="Des quiz de personnalité absurdes et scientifiquement infondés : quel fromage es-tu ? quelle viennoiserie ? quel légume ? Résultat à partager en image.">
+  <meta name="twitter:image" content="https://zinzin.johan-saez-craponne.workers.dev/assets/og/quiz.png">
+  <!-- /seo -->
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="/assets/fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/shared/tokens.css">
+  <link rel="stylesheet" href="/shared/base.css">
+  <link rel="stylesheet" href="/quiz/style.css">
+  <script type="module" src="/quiz/main.js"></script>
+</head>
+<body data-app="quiz">
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="logo" href="/" aria-label="Zinzin, accueil"><span class="logo__mark" aria-hidden="true">Z</span><span>Zinzin</span></a>
+      <nav class="site-nav" aria-label="Applications">
+        <ul>
+          <li><a href="/ce-jour-la/"><span class="site-nav__emoji" aria-hidden="true">🎂</span><span class="site-nav__label">Ce jour-là</span></a></li>
+          <li><a href="/noms/"><span class="site-nav__emoji" aria-hidden="true">🤪</span><span class="site-nav__label">Noms</span></a></li>
+          <li><a href="/jeu/"><span class="site-nav__emoji" aria-hidden="true">🧩</span><span class="site-nav__label">Jeu du jour</span></a></li>
+          <li><a href="/roue/"><span class="site-nav__emoji" aria-hidden="true">🎡</span><span class="site-nav__label">Roue</span></a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenu" class="container">
+    <header class="page-head">
+      <span class="page-head__kicker">🧀 Quiz zinzins</span>
+      <h1>Qui es-tu vraiment ?</h1>
+      <p>Quelques questions, un résultat profondément vrai (ou pas). Choisis ton quiz.</p>
+    </header>
+
+    <section class="quiz-list" id="quiz-list" aria-label="Choisir un quiz"></section>
+
+    <section class="card quiz-run" id="quiz-run" hidden aria-live="polite">
+      <p class="quiz-run__progress" id="quiz-progress"></p>
+      <div class="quiz-run__bar" aria-hidden="true"><span id="quiz-bar"></span></div>
+      <h2 class="quiz-run__question" id="quiz-question" tabindex="-1"></h2>
+      <div class="quiz-run__answers" id="quiz-answers"></div>
+    </section>
+
+    <section class="card card--accent quiz-result" id="quiz-result" hidden aria-live="polite">
+      <p class="quiz-result__kicker" id="result-quiz"></p>
+      <p class="quiz-result__emoji" id="result-emoji" aria-hidden="true"></p>
+      <h2 class="quiz-result__name" id="result-name"></h2>
+      <p class="quiz-result__text" id="result-text"></p>
+      <div class="row">
+        <button class="btn btn--small" type="button" id="result-share">📤 Partager</button>
+        <button class="btn btn--small" type="button" id="result-img">🖼️ Image</button>
+        <button class="btn btn--small" type="button" id="result-again">🔁 Un autre quiz</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>© Zinzin · fait main, sans cookie ni tracker</p>
+      <p><a href="/a-propos/">À propos &amp; vie privée</a></p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,28 @@
+body[data-app="equipes"] { --accent: var(--c-mint); }
+.eq-grid { display: grid; gap: var(--sp-5); align-items: start; }
+@media (min-width: 56rem) { .eq-grid { grid-template-columns: 1fr 1fr; } }
+.eq-block { display: grid; gap: var(--sp-4); }
+.eq-options { gap: var(--sp-2); }
+.eq-n { width: 5rem; text-align: center; }
+.eq-faces { width: auto; }
+textarea.input { resize: vertical; }
+.teams { display: grid; gap: var(--sp-3); justify-items: stretch; }
+.teams > .btn { justify-self: start; }
+.team { padding: var(--sp-3); border: var(--bw) solid var(--c-ink); border-radius: var(--radius-sm); animation: pop-in var(--dur-slow) var(--ease-pop) both; }
+.teams > .team:nth-of-type(4n + 1) { background: var(--c-lemon); color: var(--c-on-accent); }
+.teams > .team:nth-of-type(4n + 2) { background: var(--c-candy); color: var(--c-on-accent); }
+.teams > .team:nth-of-type(4n + 3) { background: var(--c-mint); color: var(--c-on-accent); }
+.teams > .team:nth-of-type(4n + 4) { background: var(--c-pool); color: var(--c-on-accent); }
+.team__name { font-family: var(--font-display); font-weight: 800; font-size: var(--fs-lg); }
+.team__members { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--sp-1) var(--sp-3); font-weight: 650; }
+.dice { display: flex; flex-wrap: wrap; gap: var(--sp-3); justify-content: center; min-height: 4.5rem; }
+.die {
+  display: grid; place-items: center; width: 4rem; height: 4rem;
+  background: var(--surface); border: var(--bw) solid var(--c-ink); border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm); font-family: var(--font-display); font-weight: 800; font-size: var(--fs-xl);
+}
+.die.is-rolling { animation: roll 500ms var(--ease-out); }
+.die.is-crit { background: var(--c-lemon); color: var(--c-on-accent); }
+@keyframes roll { 0% { transform: rotate(-200deg) scale(0.5); } 70% { transform: rotate(15deg) scale(1.1); } }
+.dice__total { text-align: center; font-family: var(--font-display); font-weight: 800; font-size: var(--fs-xl); min-height: 1.4em; }
+.dice__history { padding-left: 1.4em; font-size: var(--fs-sm); color: var(--text-soft); display: grid; gap: var(--sp-1); }
