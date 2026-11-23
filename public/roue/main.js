@@ -32,7 +32,9 @@ function css(name) {
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 }
 
+let shadowColor = '#24104f';
 function resize() {
+  shadowColor = css('--shadow-color') || '#24104f';
   const dpr = Math.min(3, window.devicePixelRatio || 1);
   const size = canvas.clientWidth;
   canvas.width = Math.round(size * dpr);
@@ -55,6 +57,11 @@ function draw() {
   ctx.clearRect(0, 0, W, W);
   ctx.save();
   ctx.translate(R, R);
+  // Ombre pleine décalée (style « sticker »), fixe : dessinée avant la rotation.
+  ctx.beginPath();
+  ctx.arc(W * 0.022, W * 0.022, r, 0, TAU);
+  ctx.fillStyle = shadowColor;
+  ctx.fill();
 
   const opts = state.options;
   if (!opts.length) {
@@ -379,7 +386,7 @@ if (shared) {
   if (saved && sanitizeOptions(saved.options).length) state = { title: String(saved.title || ''), options: sanitizeOptions(saved.options) };
 }
 persist();
-renderPresetSelect();
-renderEditor();
 new ResizeObserver(resize).observe(canvas);
 document.fonts?.ready.then(draw);
+// L'éditeur (sous la roue sur mobile) est construit dans une tâche séparée, après le premier affichage.
+requestAnimationFrame(() => setTimeout(() => { renderPresetSelect(); renderEditor(); }, 0));

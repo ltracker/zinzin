@@ -276,3 +276,7 @@ film.init();
 if (location.hash === '#silhouette') activeMode = 'pays';
 else if (location.hash === '#emojifilm') activeMode = 'film';
 selectMode(activeMode);
+window.addEventListener('hashchange', () => {
+  if (location.hash === '#silhouette') selectMode('pays');
+  else if (location.hash === '#emojifilm') selectMode('film');
+});

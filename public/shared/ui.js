@@ -48,6 +48,13 @@ export function prefersReducedMotion() {
   return globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 }
 
+/* Mode hors ligne : enregistre le service worker (toutes les pages importent ce module). */
+if (typeof window !== 'undefined' && 'serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => { /* pas grave : le site marche sans */ });
+  });
+}
+
 /** Lance une fonction toutes les secondes, calée sur le changement de seconde. */
 export function everySecond(fn) {
   let timer;

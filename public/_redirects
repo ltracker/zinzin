@@ -1,0 +1,10 @@
+# Raccourcis faciles à retenir (redirections permanentes).
+/jeu-du-jour      /jeu/          301
+/emojifilm        /jeu/#emojifilm 301
+/silhouette       /jeu/#silhouette 301
+/wordle           /jeu/          301
+/anniversaire     /ce-jour-la/   301
+/age              /ce-jour-la/   301
+/generateur       /noms/         301
+/roue-de-la-decision /roue/      301
+/apropos          /a-propos/     301

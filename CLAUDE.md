@@ -221,6 +221,27 @@ posés via JS (`el.style.x = …`) restent autorisés.
   après chargement). Espace = lancer.
 - **roue/confetti.js** : confettis en canvas plein écran, ignorés si reduced-motion.
 
+**Finitions (✅ étape 6)**
+- **scripts/build-og.mjs** : génère (une fois, résultat commité) les images OG 1200×630 `public/assets/og/<slug>.png`
+  (liste `OG_PAGES`, déjà prévue pour avent, pere-noel-secret et album) et les icônes `public/assets/icons/`
+  (192, 512, maskable-512, apple-touch-icon). La police est intégrée en data: URL.
+- **scripts/seo-meta.mjs** : **à relancer après chaque nouvelle page** (ajouter la page à `PAGES`). Il insère ou remplace le
+  bloc `<!-- seo -->…<!-- /seo -->` (canonical, manifest, apple-touch-icon, Open Graph, Twitter card) en
+  réutilisant le `<title>` et la description de la page, puis réécrit `sitemap.xml` et `robots.txt`.
+- **public/manifest.webmanifest** : PWA (standalone, raccourcis vers les 4 apps).
+- **public/sw.js** : service worker « réseau d'abord, cache en secours » pour TOUT (pas de mélange de versions
+  après un déploiement), précache complet. **Ajouter chaque nouveau fichier à `PRECACHE` et incrémenter
+  `VERSION`** (`tests/sw.test.js` échoue sinon). Enregistré depuis `shared/ui.js` (importé par toutes les pages).
+- **public/_headers** : CSP stricte `default-src 'self'` (pas d'inline), nosniff, X-Frame-Options DENY,
+  Referrer-Policy, Permissions-Policy, HSTS, cache 7 j pour `/assets/*`, 1 j pour `/jeu/data/*`, `no-cache` pour `sw.js`.
+- **public/_redirects** : raccourcis (/wordle, /emojifilm, /silhouette, /age, /generateur…).
+- **tests/sw.test.js** : précache = fichiers servis ; chaque page a titre, description, bloc SEO, entrée dans le
+  sitemap, image OG et aucun inline ; manifest valide.
+- **README.md** + `docs/captures/*.jpg` (prises sur la prod avec playwright).
+- **Résultats Lighthouse (mobile, prod, 2026-11-23)** : accessibilité, bonnes pratiques et SEO = 100 partout ;
+  performance de 97 à 100, roue de 90 à 97 (TBT bruité). Commande :
+  `CHROME_PATH="C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe" npx lighthouse@12 <url> --chrome-flags="--headless=new"`.
+
 ---
 
 ## 5. Commandes utiles
@@ -232,7 +253,9 @@ npm run serve            # serveur local → http://localhost:3000 (scripts/serv
 npm run check            # vérif. navigateur de toutes les pages (Edge headless) + captures dans tmp/screens/
 node scripts/check-pages.mjs / /roue/   # vérifier seulement certaines pages
 npm run data             # (re)génère public/jeu/data/pays.json depuis world-atlas
-npm run deploy           # envoie public/ sur le Worker Cloudflare (wrangler, déjà connecté)
+npm run deploy           # envoie public/ sur le Worker Cloudflare (wrangler local, déjà connecté)
+node scripts/seo-meta.mjs   # balises SEO + sitemap + robots (après ajout de page)
+node scripts/build-og.mjs   # images OG + icônes (après ajout de page)
 ```
 
 Déploiement : `git push` puis `npm run deploy` (voir §8). Le déploiement auto au push n'est pas encore branché.
@@ -270,6 +293,10 @@ Déploiement : `git push` puis `npm run deploy` (voir §8). Le déploiement auto
 | D22 | Partage natif réservé au tactile | Sur ordinateur, Edge ouvre le panneau de partage Windows au lieu de copier : pas pratique pour coller un score façon Wordle |
 | D23 | Silhouettes en SVG (tracés pré-calculés) plutôt qu'en canvas | Net à toutes les tailles, stylable en CSS (thème sombre), aucun calcul au chargement |
 | D24 | Après un déploiement, attendre 1 à 2 min avant de vérifier la prod | Les nouveaux fichiers se propagent progressivement sur le réseau Cloudflare (404 temporaires constatés) |
+| D25 | wrangler en devDependency (version fixe) au lieu de `npx wrangler@4` | Le paquet téléchargé par npx était incomplet (`workerd-windows-64` manquant) |
+| D26 | Service worker « réseau d'abord » (et non « cache d'abord ») | Fichiers non versionnés : évite de servir un ancien JS avec un nouveau HTML ; le cache ne sert que hors ligne |
+| D27 | Ombre de la roue dessinée dans le canvas plutôt qu'en `filter: drop-shadow` | Le filtre recalculait toute l'image à chaque image de l'animation (TBT et fluidité sur mobile) |
+| D28 | Bloc SEO injecté par un script de maintenance, résultat commité | Respecte « zéro build » tout en évitant 9 copies manuelles des balises |
 | D17 | `404.html` avancée dès le branchement de Cloudflare | `not_found_handling: 404-page` l'exige ; évite que les apps pas encore codées renvoient l'accueil |
 
 ---
@@ -338,21 +365,21 @@ Déploiement : `git push` puis `npm run deploy` (voir §8). Le déploiement auto
 - [x] Vérification navigateur + commit
 
 ### Étape 6 — SEO et finitions
-- [ ] Meta, Open Graph et Twitter card par page + images OG (stockées dans le repo)
-- [ ] `manifest.webmanifest`, `robots.txt`, `sitemap.xml`, page `404.html`
-- [ ] `_headers` (cache + sécurité, CSP stricte) et `_redirects`
-- [ ] Audit accessibilité (clavier, contrastes, ARIA)
-- [ ] Lighthouse > 90 partout
-- [ ] README.md complet (captures, lancement, déploiement)
-- [ ] Bonus : service worker (PWA hors ligne)
-- [ ] Commit
+- [x] Meta, Open Graph et Twitter card par page + images OG (stockées dans le repo)
+- [x] `manifest.webmanifest`, `robots.txt`, `sitemap.xml`, page `404.html`
+- [x] `_headers` (cache + sécurité, CSP stricte) et `_redirects`
+- [x] Audit accessibilité (clavier, contrastes, ARIA)
+- [x] Lighthouse > 90 partout
+- [x] README.md complet (captures, lancement, déploiement)
+- [x] Bonus : service worker (PWA hors ligne)
+- [x] Commit
 
 ### Étape 7 — Déploiement
 - [x] `gh auth login` (compte `ltracker`) + création du repo GitHub public `ltracker/zinzin` + push sur `main`
 - [x] Worker Cloudflare `zinzin` créé (URL workers.dev) + `wrangler.jsonc` (assets statiques `./public`)
 - [x] wrangler connecté (`wrangler login`) + premier `npm run deploy` réussi
 - [x] Vérification de l'URL de production (accueil 200, 404 OK, police OK, aucune erreur console)
-- [ ] (Optionnel) Déploiement auto à chaque push : Worker → Settings → Builds → Connect, voir §8
+- [ ] (Optionnel, action de l'utilisateur dans le tableau de bord) Déploiement auto à chaque push : Worker → Settings → Builds → Connect, voir §8
 
 ---
 
@@ -481,3 +508,4 @@ L'ordre réel suit d'abord les échéances : l'Avent avant le 1er décembre, le 
 - **2026-11-18** : **Étape 3 terminée : app B « Noms absurdes »** en ligne. Accords corrigés grâce au fuzzing (h aspiré, « toutes les », « le nouvel », « d'avaler », « du Mans »). 44 tests au total. Prochaine étape : **app C « Le jeu du jour »**.
 - **2026-11-18** : **Étape 4 terminée : app C « Le jeu du jour »** en ligne (221 films, 229 pays). Parties complètes jouées dans Edge (essai raté, indice, autocomplétion au clavier sans accents, victoire, stats, rechargement, partage). 60 tests. Prochaine étape : **app D « Roue de la décision »**.
 - **2026-11-18** : **Étape 5 terminée : app D « Roue de la décision »** en ligne. Vérifié dans Edge : la part sous le pointeur = le résultat annoncé, édition, élimination, enregistrement, lien partagé. 69 tests. **Les 4 apps sont en ligne.** Prochaine étape : **étape 6, SEO et finitions** (OG, manifest, sitemap, _headers, Lighthouse, README, PWA).
+- **2026-11-23** : ROADMAP V2 ajoutée (toutes les idées validées). **Étape 6 terminée** : OG, Twitter card, manifest, icônes, sitemap, robots, _headers (CSP stricte vérifiée en prod), _redirects, service worker (hors ligne vérifié), README avec captures. Lighthouse ≥ 90 partout. wrangler désormais local. Prochaine étape : **8, Calendrier de l'Avent** (avant le 1er décembre).

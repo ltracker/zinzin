@@ -1,0 +1,23 @@
+# En-têtes HTTP servis par Cloudflare (Workers assets / Pages).
+# Sécurité : CSP stricte possible car aucun script ni style inline dans le HTML.
+
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()
+  Cross-Origin-Opener-Policy: same-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+
+# Polices, icônes et images OG : changent rarement → une semaine de cache.
+/assets/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+# Données du jeu : un jour.
+/jeu/data/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=86400
+
+# Le service worker doit toujours être revalidé pour que les mises à jour arrivent.
+/sw.js
+  Cache-Control: no-cache
