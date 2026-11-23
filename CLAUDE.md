@@ -356,6 +356,52 @@ Déploiement : `git push` puis `npm run deploy` (voir §8). Le déploiement auto
 
 ---
 
+## 7 bis. ROADMAP V2 (validée par l'utilisateur le 2026-11-23 : « je les veux toutes »)
+
+Ordre de réalisation : étape 6 (finitions V1) → 8 (échéance 1er décembre) → 9 → 10 → 11 → 12 → 13.
+Chaque nouvelle app suit les conventions V1 : `*.logic.js` pur + tests, page `/slug/`, carte sur l'accueil,
+lien dans la nav si pertinent (sinon section « Encore plus » de l'accueil), entrée dans `sitemap.xml` et
+précache du service worker, vérif. `check-pages`, commit, `git push`, `npm run deploy`.
+
+### Étape 8 — Calendrier de l'Avent zinzin (`/avent/`) — ⏰ en ligne avant le 1er décembre
+- [ ] 24 cases, déverrouillées à minuit Europe/Paris (1er-24 décembre) ; avant décembre : aperçu + compte à rebours
+- [ ] Contenu varié : blagues, défis absurdes, anecdotes, mini-jeux, cartes à partager (fichier de données)
+- [ ] Cases ouvertes mémorisées (localStorage), animation d'ouverture, partage
+- [ ] Tests : déverrouillage selon la date de Paris, complétude des 24 contenus
+
+### Étape 9 — Père Noël secret sans serveur (`/pere-noel-secret/`)
+- [ ] Saisie des participants + exclusions (couples), tirage en dérangement valide (personne ne se tire soi-même)
+- [ ] Un lien par participant qui ne révèle que SON destinataire (chiffré dans le fragment `#`, jamais envoyé au serveur)
+- [ ] Budget, date de l'échange, message ; copie et partage des liens
+- [ ] Tests : tirage valide avec exclusions, cas impossibles détectés, chiffrement aller-retour
+
+### Étape 10 — Album d'autocollants (succès transverses, `/album/`)
+- [ ] Module `shared/stickers.js` : catalogue + `unlock(id)` (localStorage) + toast « Nouvel autocollant ! »
+- [ ] Succès dans toutes les apps (gagné en 1 essai, série de 7 jours, 100 tours de roue, né·e un vendredi 13…)
+- [ ] Page album (autocollants obtenus / silhouettes à découvrir)
+
+### Étape 11 — Nouveaux modes du jeu du jour
+- [ ] « Plus grand ou plus petit ? » (aires des pays, série, record) — réutilise `pays.json`
+- [ ] Archives : rejouer les puzzles passés
+- [ ] Défi entre amis : lien « bats mon score sur le n° X »
+- [ ] « Chanson en émojis » (nouvelle base de titres)
+- [ ] Mode difficile (silhouette pivotée/zoomée)
+
+### Étape 12 — Nouvelles mini-apps
+- [ ] Horoscope absurde du jour (par signe, identique pour tous ce jour-là)
+- [ ] Quiz « Quel fromage / baguette / légume es-tu ? » + image de résultat
+- [ ] Chrono parfait (arrêter à 10,00 s) + défi quotidien
+- [ ] Formeur d'équipes + lanceur de dés
+- [ ] Générateur d'excuses bidon (moteur d'accords des noms)
+
+### Étape 13 — Améliorations de l'existant
+- [ ] Ce jour-là : mode duo (deux dates), âge en années de chien/chat, compte à rebours retraite
+- [ ] Noms : « ton nom de pirate / catcheur / elfe » (prénom + date), mode « 10 d'un coup »
+- [ ] Roue : mode tournoi, tirage d'équipes, thèmes sonores
+- [ ] Partout : bouton clair/sombre manuel, easter egg (code Konami 🦄)
+
+---
+
 ## 8. Déploiement (procédure)
 
 > **Hébergement réel : Cloudflare Workers (assets statiques), pas Cloudflare Pages.**
@@ -396,7 +442,31 @@ il faut le faire dans le tableau de bord, car l'installation de l'app GitHub ne 
 
 ## 9. Idées pour la suite
 
-*(Section à compléter et classer par rapport impact/effort à la fin de la V1.)*
+Toutes ces idées sont **validées** et planifiées dans la ROADMAP V2 (§7 bis). Classement par rapport
+impact/effort (I et E notés de 1 à 5 ; ratio = I/E, le plus haut en premier) :
+
+| # | Idée | Impact | Effort | Ratio | Étape |
+|---|------|:-:|:-:|:-:|:-:|
+| 1 | Chrono parfait (10,00 s) + défi du jour | 3 | 1 | 3,0 | 12 |
+| 2 | Archives du jeu du jour | 3 | 1 | 3,0 | 11 |
+| 3 | Défi entre amis (score dans l'URL) | 3 | 1 | 3,0 | 11 |
+| 4 | « Plus grand ou plus petit ? » (pays) | 4 | 2 | 2,0 | 11 |
+| 5 | Horoscope absurde du jour | 4 | 2 | 2,0 | 12 |
+| 6 | Quiz « Quel fromage es-tu ? » | 4 | 2 | 2,0 | 12 |
+| 7 | Calendrier de l'Avent zinzin (saisonnier) | 5 | 3 | 1,7 | 8 |
+| 8 | Père Noël secret sans serveur (saisonnier, viral) | 5 | 3 | 1,7 | 9 |
+| 9 | Mode difficile (silhouette pivotée) | 2 | 1 | 2,0 | 11 |
+| 10 | Bouton clair/sombre + easter egg Konami | 2 | 1 | 2,0 | 13 |
+| 11 | Excuses bidon | 3 | 2 | 1,5 | 12 |
+| 12 | Équipes + dés | 3 | 2 | 1,5 | 12 |
+| 13 | Album d'autocollants (fidélisation transverse) | 4 | 3 | 1,3 | 10 |
+| 14 | Ce jour-là : duo, chien/chat, retraite | 3 | 2 | 1,5 | 13 |
+| 15 | Noms : pirate/catcheur/elfe, « 10 d'un coup » | 3 | 2 | 1,5 | 13 |
+| 16 | Roue : tournoi, équipes, thèmes sonores | 3 | 3 | 1,0 | 13 |
+| 17 | Chanson en émojis (grosse base à saisir) | 3 | 3 | 1,0 | 11 |
+| 18 | Déploiement auto à chaque push (tableau de bord Cloudflare) | 2 | 1 | 2,0 | 7 |
+
+L'ordre réel suit d'abord les échéances : l'Avent avant le 1er décembre, le Père Noël secret avant mi-décembre.
 
 ---
 
