@@ -318,11 +318,11 @@ $('#restore').addEventListener('click', () => {
 
 function renderPresetSelect(selected = '') {
   const saved = load(LISTS_KEY, []);
-  $('#preset').replaceChildren(
+  $('#preset').replaceChildren(...[
     el('option', { value: '' }, '— Choisir une liste —'),
     el('optgroup', { label: 'Prêtes à l\'emploi' }, ...PRESETS.map((p, i) => el('option', { value: `p${i}` }, `${p.emoji} ${p.title}`))),
     saved.length ? el('optgroup', { label: 'Mes listes' }, ...saved.map((l, i) => el('option', { value: `s${i}` }, `⭐ ${l.title}`))) : null,
-  );
+  ].filter(Boolean)); // replaceChildren(null) insérerait le texte « null »
   $('#preset').value = selected;
 }
 

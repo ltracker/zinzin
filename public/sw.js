@@ -4,7 +4,7 @@
 // hors ligne, tout le site précaché reste utilisable.
 // ⚠️ Ajouter ici tout nouveau fichier servi (le test tests/sw.test.js le vérifie).
 
-const VERSION = 'zinzin-v4';
+const VERSION = 'zinzin-v5';
 
 const PRECACHE = [
   '/',
@@ -49,6 +49,7 @@ const PRECACHE = [
   '/jeu/game.logic.js',
   '/jeu/geo.logic.js',
   '/jeu/data/films.js',
+  '/jeu/data/chansons.js',
   '/jeu/data/pays.json',
   '/roue/style.css',
   '/roue/main.js',

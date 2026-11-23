@@ -256,6 +256,21 @@ posés via JS (`el.style.x = …`) restent autorisés.
   Chaque `main.js` appelle `trackVisit('<app>')` au chargement. Le succès `licorne` (code Konami) sera branché à l'étape 13.
 - **album/** : groupes par app, silhouettes « ? » + indice, date d'obtention, barre de progression, partage des émojis obtenus.
 
+**Jeu du jour V2 (✅ étape 11)**
+- **jeu/data/chansons.js** : environ 135 chansons `[titre, émojis, année, langue, interprète, [alias]]` (même règle : ajouter en fin de liste).
+- **game.logic.js**, ajouts : `MODE_TITLES`, `scoreOf`, `shareText(mode, game, n, details, url)` (l'URL est passée telle quelle,
+  🔥 si `game.hard`), `itemHints(item, errors, 'film'|'chanson')`, `puzzleKey(n)`, `challengeUrl`, `parseChallenge(params, nDuJour)`
+  (`?m=film|pays|chanson&n=…&defi=1-6|X`, refuse les puzzles du futur), `challengeVerdict`, `recordHistory`,
+  `dailyRotation(dateKey)` (90, 180 ou 270°), `nextOpponent` (écart d'aire ≥ 5 %), `biggerOrSmaller`. Tests dans `tests/game2.test.js`.
+- **jeu/main.js** (réécrit) : 4 onglets (`#emojifilm`, `#silhouette`, `#emojichanson`, `#plus-ou-moins`, flèches gauche et droite).
+  La fabrique `guessMode(cfg)` est commune aux 3 modes devinettes. Archive (`n` ≠ n° du jour) : partie dans `jeu:<mode>:archive`, sans
+  stats ni série. Historique de toutes les parties terminées dans `jeu:<mode>:historique`, ce qui alimente le dialogue « Archives ».
+  Le partage contient toujours un lien de défi. Mode difficile = case à cocher avant le 1er essai (`game.hard`, silhouette pivotée).
+  Plus ou moins : partie infinie (crypto), record dans `jeu:plusmoins:record`.
+- Nouveaux autocollants : `jeu-archive`, `jeu-defi`, `jeu-geographe` (33 au total).
+- ⚠️ **Piège DOM :** `parent.replaceChildren(a, null)` insère le texte « null ». Filtrer avec `...[…].filter(Boolean)`
+  (`el()` ignore déjà les enfants nuls, mais pas `replaceChildren`).
+
 **Finitions (✅ étape 6)**
 - **scripts/build-og.mjs** : génère (une fois, résultat commité) les images OG 1200×630 `public/assets/og/<slug>.png`
   (liste `OG_PAGES`, déjà prévue pour avent, pere-noel-secret et album) et les icônes `public/assets/icons/`
@@ -444,11 +459,11 @@ précache du service worker, vérif. `check-pages`, commit, `git push`, `npm run
 - [x] Page album (autocollants obtenus / silhouettes à découvrir)
 
 ### Étape 11 — Nouveaux modes du jeu du jour
-- [ ] « Plus grand ou plus petit ? » (aires des pays, série, record) — réutilise `pays.json`
-- [ ] Archives : rejouer les puzzles passés
-- [ ] Défi entre amis : lien « bats mon score sur le n° X »
-- [ ] « Chanson en émojis » (nouvelle base de titres)
-- [ ] Mode difficile (silhouette pivotée/zoomée)
+- [x] « Plus grand ou plus petit ? » (aires des pays, série, record) — réutilise `pays.json`
+- [x] Archives : rejouer les puzzles passés
+- [x] Défi entre amis : lien « bats mon score sur le n° X »
+- [x] « Chanson en émojis » (nouvelle base de titres)
+- [x] Mode difficile (silhouette pivotée/zoomée)
 
 ### Étape 12 — Nouvelles mini-apps
 - [ ] Horoscope absurde du jour (par signe, identique pour tous ce jour-là)
@@ -548,3 +563,4 @@ L'ordre réel suit d'abord les échéances : l'Avent avant le 1er décembre, le 
 - **2026-11-23** : **Étape 8 terminée : Calendrier de l'Avent** (`/avent/`) en ligne, prêt pour le 1er décembre. Vérifié par voyage dans le temps (avant, pendant, après) : les 24 cases s'ouvrent sans erreur. 79 tests. Prochaine étape : **9, Père Noël secret**.
 - **2026-11-23** : **Étape 9 terminée : Père Noël secret** en ligne. Vérifié de bout en bout : collage d'une liste, exclusion d'un couple, 6 liens ouverts un à un, tirage valide, lien falsifié rejeté. 86 tests. Prochaine étape : **10, Album d'autocollants**.
 - **2026-11-23** : **Étape 10 terminée : Album d'autocollants** en ligne (30 autocollants, déclencheurs dans toutes les apps). Non-régression complète : 11 pages, tests e2e jeu/roue/Père Noël secret, 91 tests unitaires. Prochaine étape : **11, nouveaux modes du jeu du jour**.
+- **2026-11-23** : **Étape 11 terminée : jeu du jour V2** en ligne (Émojichanson, Plus ou moins, archives, défis entre amis, mode difficile). Bug « null » corrigé dans le jeu et la roue. 96 tests. Prochaine étape : **12, nouvelles mini-apps** (horoscope, quiz, chrono, équipes et dés, excuses).

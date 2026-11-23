@@ -4,7 +4,10 @@ import { readFileSync } from 'node:fs';
 import {
   puzzleNumber, dailyIndex, permutation, normalize, matches, findEntry, suggest, newGame, restoreGame,
   addGuess, recordResult, emptyStats, currentStreak, shareText, filmHints, MAX_GUESSES,
+  itemHints, puzzleKey, challengeUrl, parseChallenge, challengeVerdict, recordHistory, dailyRotation, nextOpponent, biggerOrSmaller, scoreOf,
 } from '../public/jeu/game.logic.js';
+import { CHANSONS } from '../public/jeu/data/chansons.js';
+import { mulberry32 } from '../public/shared/rng.js';
 import { haversine, bearing, direction8, proximity, compareCountries, proximitySquares, simplify, ringArea } from '../public/jeu/geo.logic.js';
 import { FILMS } from '../public/jeu/data/films.js';
 import { parisDateKey, addDaysToKey } from '../public/shared/dates.js';
@@ -189,13 +192,14 @@ test('statistiques et séries', () => {
 test('texte de partage sans spoiler', () => {
   const film = FILMS[0];
   const g = { key: '2026-11-18', guesses: ['x', 'y', film.title], status: 'won' };
-  const txt = shareText('film', g, 12, [], 'https://exemple.test');
-  assert.equal(txt, '🎬 Zinzin Émojifilm n° 12 — 3/6\n🟥🟥🟩⬛⬛⬛\nhttps://exemple.test/jeu/');
+  const txt = shareText('film', g, 12, [], 'https://exemple.test/jeu/?m=film&n=12&defi=3');
+  assert.equal(txt, '🎬 Zinzin Émojifilm n° 12 — 3/6\n🟥🟥🟩⬛⬛⬛\nhttps://exemple.test/jeu/?m=film&n=12&defi=3');
   assert.ok(!txt.includes(film.title));
   const lost = { key: 'k', guesses: ['a', 'b', 'c', 'd', 'e', 'f'], status: 'lost' };
   assert.match(shareText('film', lost, 3), /X\/6\n🟥🟥🟥🟥🟥🟥/);
-  const p = shareText('pays', { key: 'k', guesses: ['ES', 'FR'], status: 'won' }, 5, [{ proximity: 95, arrow: '↗️' }, { proximity: 100, arrow: '🎯' }], 'https://x.test');
-  assert.equal(p, '🗺️ Zinzin Silhouette n° 5 — 2/6\n🟩🟩🟩🟩🟨↗️\n🟩🟩🟩🟩🟩🎉\nhttps://x.test/jeu/');
+  const p = shareText('pays', { key: 'k', guesses: ['ES', 'FR'], status: 'won', hard: true }, 5, [{ proximity: 95, arrow: '↗️' }, { proximity: 100, arrow: '🎯' }], 'https://x.test/jeu/');
+  assert.equal(p, '🗺️ Zinzin Silhouette n° 5 🔥 — 2/6\n🟩🟩🟩🟩🟨↗️\n🟩🟩🟩🟩🟩🎉\nhttps://x.test/jeu/');
+  assert.match(shareText('chanson', g, 2, [], 'u'), /^🎵 Zinzin Émojichanson n° 2 — 3\/6/);
   assert.ok(!/France|Espagne/.test(p));
 });
 

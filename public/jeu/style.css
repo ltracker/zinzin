@@ -115,3 +115,49 @@
 }
 .histogram li.is-today .histogram__bar { background: var(--accent); color: var(--c-on-accent); border-color: var(--c-ink); }
 .stats__next { margin-top: var(--sp-5); text-align: center; font-weight: 650; }
+
+/* ---------- Étape 11 : 4 onglets, bandeau, difficile, plus ou moins, archives ---------- */
+.tabs { flex-wrap: wrap; }
+.tab { flex: 1 1 calc(50% - var(--sp-2)); font-size: var(--fs-sm); padding: var(--sp-2) var(--sp-3); }
+@media (min-width: 40rem) { .tab { flex: 1 1 0; } }
+
+.banner {
+  margin-bottom: var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--c-lemon); color: var(--c-ink);
+  border: var(--bw) solid var(--c-ink); border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm); font-weight: 700;
+}
+.banner a { font-weight: 800; }
+
+.hard-toggle { font-size: var(--fs-sm); }
+.hard-toggle:has(input:disabled) { opacity: 0.6; }
+.silhouette svg { transition: transform var(--dur-slow) var(--ease-pop); }
+
+.pm-score { text-align: center; font-weight: 650; }
+.pm-score strong { font-family: var(--font-display); font-size: var(--fs-lg); }
+.pm-duel { display: grid; grid-template-columns: 1fr auto 1fr; gap: var(--sp-3); align-items: center; }
+.pm-card { margin: 0; display: grid; gap: var(--sp-2); justify-items: center; padding: var(--sp-3); background: var(--surface-2); border: var(--bw) solid var(--border); border-radius: var(--radius); text-align: center; }
+.pm-card--mystery { border-style: dashed; }
+.pm-card svg { width: 100%; max-width: 11rem; aspect-ratio: 1; }
+.pm-card path { fill: var(--c-ink); fill-rule: evenodd; }
+.pm-card--mystery path { fill: var(--c-pool); stroke: var(--c-ink); stroke-width: 0.6; }
+@media (prefers-color-scheme: dark) { .pm-card path { fill: var(--c-mint); } .pm-card--mystery path { fill: var(--c-pool); } }
+.pm-card figcaption { display: grid; gap: var(--sp-1); }
+.pm-name { font-family: var(--font-display); font-weight: 800; line-height: 1.1; overflow-wrap: anywhere; }
+.pm-area { font-size: var(--fs-sm); font-weight: 700; font-variant-numeric: tabular-nums; }
+.pm-vs { font-family: var(--font-display); font-weight: 800; font-size: var(--fs-lg); transform: rotate(-8deg); }
+.pm-actions { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
+.pm-actions .btn { padding-inline: var(--sp-3); font-size: var(--fs-md); }
+.pm-card.is-right { background: color-mix(in srgb, var(--c-mint) 40%, var(--surface)); }
+.pm-card.is-wrong { background: color-mix(in srgb, var(--danger) 18%, var(--surface)); }
+
+.archives { list-style: none; padding: 0; margin-top: var(--sp-4); display: grid; gap: var(--sp-2); grid-template-columns: repeat(auto-fill, minmax(4.4rem, 1fr)); max-height: 50vh; overflow-y: auto; }
+.archives a {
+  display: grid; justify-items: center; gap: 0.1rem; padding: var(--sp-2);
+  border: 2px solid var(--border); border-radius: var(--radius-sm); background: var(--surface);
+  text-decoration: none; font-weight: 800; font-variant-numeric: tabular-nums;
+}
+.archives a:hover { background: var(--accent); color: var(--c-on-accent); }
+.archives small { font-size: var(--fs-xs); font-weight: 650; }
+.outcome__verdict { font-weight: 800; padding: var(--sp-2) var(--sp-3); background: var(--c-paper); color: var(--c-ink); border: 2px solid var(--c-ink); border-radius: var(--radius-sm); }

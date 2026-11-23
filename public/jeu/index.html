@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Le jeu du jour : Émojifilm et Silhouette · Zinzin</title>
-  <meta name="description" content="Chaque jour, un film à deviner en émojis et un pays à reconnaître à sa silhouette. Six essais, le même puzzle pour tout le monde, des séries à défendre.">
+  <title>Le jeu du jour : Émojifilm, Silhouette, Émojichanson · Zinzin</title>
+  <meta name="description" content="Chaque jour, un film et une chanson à deviner en émojis, un pays à reconnaître à sa silhouette. Six essais, le même puzzle pour tout le monde, des défis entre amis et des archives.">
   <meta name="theme-color" content="#fff6e5" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#160b2e" media="(prefers-color-scheme: dark)">
   <!-- seo -->
@@ -14,16 +14,16 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Zinzin">
   <meta property="og:locale" content="fr_FR">
-  <meta property="og:title" content="Le jeu du jour : Émojifilm et Silhouette · Zinzin">
-  <meta property="og:description" content="Chaque jour, un film à deviner en émojis et un pays à reconnaître à sa silhouette. Six essais, le même puzzle pour tout le monde, des séries à défendre.">
+  <meta property="og:title" content="Le jeu du jour : Émojifilm, Silhouette, Émojichanson · Zinzin">
+  <meta property="og:description" content="Chaque jour, un film et une chanson à deviner en émojis, un pays à reconnaître à sa silhouette. Six essais, le même puzzle pour tout le monde, des défis entre amis et des archives.">
   <meta property="og:url" content="https://zinzin.johan-saez-craponne.workers.dev/jeu/">
   <meta property="og:image" content="https://zinzin.johan-saez-craponne.workers.dev/assets/og/jeu.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Le jeu du jour : Émojifilm et Silhouette · Zinzin">
+  <meta property="og:image:alt" content="Le jeu du jour : Émojifilm, Silhouette, Émojichanson · Zinzin">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Le jeu du jour : Émojifilm et Silhouette · Zinzin">
-  <meta name="twitter:description" content="Chaque jour, un film à deviner en émojis et un pays à reconnaître à sa silhouette. Six essais, le même puzzle pour tout le monde, des séries à défendre.">
+  <meta name="twitter:title" content="Le jeu du jour : Émojifilm, Silhouette, Émojichanson · Zinzin">
+  <meta name="twitter:description" content="Chaque jour, un film et une chanson à deviner en émojis, un pays à reconnaître à sa silhouette. Six essais, le même puzzle pour tout le monde, des défis entre amis et des archives.">
   <meta name="twitter:image" content="https://zinzin.johan-saez-craponne.workers.dev/assets/og/jeu.png">
   <!-- /seo -->
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -59,12 +59,17 @@
       <div class="game__meta">
         <p class="game__next">Prochain dans <time id="countdown" class="tabular">--:--:--</time></p>
         <button class="btn btn--small" type="button" id="stats-btn">📊 Stats</button>
+        <button class="btn btn--small" type="button" id="archives-btn">📚 Archives</button>
       </div>
     </header>
 
+    <p class="banner" id="banner" hidden></p>
+
     <div class="tabs" role="tablist" aria-label="Mode de jeu">
-      <button class="tab" role="tab" type="button" id="tab-film" aria-controls="panel-film" aria-selected="true">🎬 Émojifilm</button>
-      <button class="tab" role="tab" type="button" id="tab-pays" aria-controls="panel-pays" aria-selected="false" tabindex="-1">🗺️ Silhouette</button>
+      <button class="tab" role="tab" type="button" id="tab-film" aria-controls="panel-film" aria-selected="true"><span aria-hidden="true">🎬</span> Émojifilm</button>
+      <button class="tab" role="tab" type="button" id="tab-pays" aria-controls="panel-pays" aria-selected="false" tabindex="-1"><span aria-hidden="true">🗺️</span> Silhouette</button>
+      <button class="tab" role="tab" type="button" id="tab-chanson" aria-controls="panel-chanson" aria-selected="false" tabindex="-1"><span aria-hidden="true">🎵</span> Émojichanson</button>
+      <button class="tab" role="tab" type="button" id="tab-plusmoins" aria-controls="panel-plusmoins" aria-selected="false" tabindex="-1"><span aria-hidden="true">⚖️</span> Plus ou moins</button>
     </div>
 
     <!-- Mode Émojifilm -->
@@ -75,9 +80,7 @@
         <ul class="hints" id="film-hints" role="list" aria-live="polite"></ul>
         <form class="guess" id="film-form" autocomplete="off">
           <label class="visually-hidden" for="film-input">Titre du film</label>
-          <div class="guess__field">
-            <input class="input" id="film-input" type="text" placeholder="Tape un titre de film…" spellcheck="false">
-          </div>
+          <div class="guess__field"><input class="input" id="film-input" type="text" placeholder="Tape un titre de film…" spellcheck="false"></div>
           <button class="btn btn--primary" type="submit">Valider</button>
         </form>
         <ol class="attempts" id="film-attempts" aria-label="Tes essais"></ol>
@@ -89,18 +92,57 @@
     <section class="panel" role="tabpanel" id="panel-pays" aria-labelledby="tab-pays" hidden>
       <div class="board card">
         <p class="board__rules">Quel pays a cette forme ? À chaque erreur : distance, direction et proximité.</p>
-        <figure class="silhouette">
+        <label class="checkbox hard-toggle"><input type="checkbox" id="pays-hard"> 🔥 Mode difficile (silhouette pivotée, à choisir avant le 1er essai)</label>
+        <figure class="silhouette" id="pays-figure">
           <svg id="pays-shape" viewBox="0 0 100 100" role="img" aria-label="Silhouette du pays mystère"><path d=""/></svg>
         </figure>
         <form class="guess" id="pays-form" autocomplete="off">
           <label class="visually-hidden" for="pays-input">Nom du pays</label>
-          <div class="guess__field">
-            <input class="input" id="pays-input" type="text" placeholder="Tape un nom de pays…" spellcheck="false">
-          </div>
+          <div class="guess__field"><input class="input" id="pays-input" type="text" placeholder="Tape un nom de pays…" spellcheck="false"></div>
           <button class="btn btn--primary" type="submit">Valider</button>
         </form>
         <ol class="attempts attempts--geo" id="pays-attempts" aria-label="Tes essais"></ol>
         <div class="outcome" id="pays-outcome" hidden aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- Mode Émojichanson -->
+    <section class="panel" role="tabpanel" id="panel-chanson" aria-labelledby="tab-chanson" hidden>
+      <div class="board card">
+        <p class="board__rules">Devine la chanson cachée derrière ces émojis. Six essais ; chaque erreur débloque un indice.</p>
+        <p class="emoji-clue" id="chanson-emojis" aria-label="Émojis de la chanson">🎵</p>
+        <ul class="hints" id="chanson-hints" role="list" aria-live="polite"></ul>
+        <form class="guess" id="chanson-form" autocomplete="off">
+          <label class="visually-hidden" for="chanson-input">Titre de la chanson</label>
+          <div class="guess__field"><input class="input" id="chanson-input" type="text" placeholder="Tape un titre de chanson…" spellcheck="false"></div>
+          <button class="btn btn--primary" type="submit">Valider</button>
+        </form>
+        <ol class="attempts" id="chanson-attempts" aria-label="Tes essais"></ol>
+        <div class="outcome" id="chanson-outcome" hidden aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- Plus ou moins -->
+    <section class="panel" role="tabpanel" id="panel-plusmoins" aria-labelledby="tab-plusmoins" hidden>
+      <div class="board card">
+        <p class="board__rules">Le pays mystère est-il plus grand ou plus petit que le pays de référence ? Enchaîne les bonnes réponses (partie illimitée, hors puzzle du jour).</p>
+        <p class="pm-score">Série : <strong id="pm-score">0</strong> · Record : <strong id="pm-record">0</strong></p>
+        <div class="pm-duel">
+          <figure class="pm-card">
+            <svg id="pm-ref-shape" viewBox="0 0 100 100" aria-hidden="true"><path d=""/></svg>
+            <figcaption><span class="pm-name" id="pm-ref-name"></span><span class="pm-area" id="pm-ref-area"></span></figcaption>
+          </figure>
+          <span class="pm-vs" aria-hidden="true">VS</span>
+          <figure class="pm-card pm-card--mystery">
+            <svg id="pm-mys-shape" viewBox="0 0 100 100" aria-hidden="true"><path d=""/></svg>
+            <figcaption><span class="pm-name" id="pm-mys-name"></span><span class="pm-area" id="pm-mys-area">? km²</span></figcaption>
+          </figure>
+        </div>
+        <div class="pm-actions" id="pm-actions">
+          <button class="btn btn--primary btn--big" type="button" id="pm-plus">⬆️ Plus grand</button>
+          <button class="btn btn--primary btn--big" type="button" id="pm-moins">⬇️ Plus petit</button>
+        </div>
+        <div class="outcome" id="pm-outcome" hidden aria-live="polite"></div>
       </div>
     </section>
 
@@ -111,6 +153,13 @@
       <h3 class="stats__sub">Répartition des essais</h3>
       <ol class="histogram" id="histogram"></ol>
       <p class="stats__next">Prochain puzzle dans <time id="countdown-2" class="tabular">--:--:--</time></p>
+    </dialog>
+
+    <dialog class="stats card" id="archives-dialog" aria-labelledby="archives-title">
+      <form method="dialog" class="stats__close"><button class="btn btn--small btn--icon" aria-label="Fermer">✕</button></form>
+      <h2 id="archives-title" class="stats__title">📚 Archives <span id="archives-mode"></span></h2>
+      <p class="field__hint">Rejoue les puzzles des jours passés (sans effet sur tes statistiques ni ta série).</p>
+      <ol class="archives" id="archives-list"></ol>
     </dialog>
   </main>
 
